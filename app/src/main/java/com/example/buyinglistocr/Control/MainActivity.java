@@ -1,8 +1,10 @@
-package com.example.buyinglistocr;
+package com.example.buyinglistocr.Control;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.example.buyinglistocr.R;
 
 public class MainActivity extends AppCompatActivity {
 
