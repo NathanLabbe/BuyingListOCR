@@ -58,6 +58,7 @@ public class AppareilPhoto extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 takeAPhoto();
+
             }
         });
     }
@@ -98,7 +99,7 @@ public class AppareilPhoto extends AppCompatActivity {
     }
 
     /**
-     * return pf the camera call (startActivityForResult)
+     * return of the camera call (startActivityForResult)
      * @param requestCode
      * @param resultCode
      * @param data
