@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.Control;
+package com.example.buyinglistocr.controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
