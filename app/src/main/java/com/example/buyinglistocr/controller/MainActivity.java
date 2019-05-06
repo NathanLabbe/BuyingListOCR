@@ -8,13 +8,13 @@ import com.example.buyinglistocr.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mGreetingText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mGreetingText.setText("Bonjour");
+
     }
     //test
 }
