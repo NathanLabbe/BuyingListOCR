@@ -16,5 +16,5 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mGreetingText.setText("Bonjour");
     }
-    //testf
+    //test
 }
