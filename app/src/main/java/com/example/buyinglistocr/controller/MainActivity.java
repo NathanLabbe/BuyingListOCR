@@ -14,10 +14,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*
+
         // Allows to open directly the AppareilPhoto activity (comment if not needed)
         Intent appareilPhotoActivityIntent = new Intent(MainActivity.this, AppareilPhoto.class);
         startActivity(appareilPhotoActivityIntent);
-        */
+
     }
 }
