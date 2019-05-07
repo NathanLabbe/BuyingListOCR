@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(appareilPhotoActivityIntent);
         */
 
-        TessOCR mTessOCR = new TessOCR(this , "fra");
 
     }
 
