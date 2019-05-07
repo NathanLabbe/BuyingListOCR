@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
+import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
@@ -43,6 +45,7 @@ public class AppareilPhoto extends AppCompatActivity {
     private TessBaseAPI tessBaseAPI;
     private Uri outputFileDir;
     private String mCurrentPhotoPath;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +53,10 @@ public class AppareilPhoto extends AppCompatActivity {
         setContentView(R.layout.activity_appareil_photo);
 
         textView = (TextView) this.findViewById(R.id.textView);
+        mImageView = this.findViewById(R.id.imageView);
         final Activity activity = this;
         checkPermission();
-        this.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        this.findViewById(R.id.buttonTakePhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkPermission();
@@ -163,6 +167,7 @@ public class AppareilPhoto extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, options);
             String result = this.getText(bitmap);
             textView.setText(result);
+            textView.setMovementMethod(new ScrollingMovementMethod());
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -177,12 +182,16 @@ public class AppareilPhoto extends AppCompatActivity {
         String dataPath = getExternalFilesDir("/").getPath() + "/";
         tessBaseAPI.init(dataPath, "fra");
         tessBaseAPI.setImage(bitmap);
+        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890\',.?;/ ");
+
         String retStr = "No result";
         try {
             retStr = tessBaseAPI.getUTF8Text();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+        Bitmap bitmap1 = WriteFile.writeBitmap(tessBaseAPI.getThresholdedImage());
+        mImageView.setImageBitmap(bitmap1);
         tessBaseAPI.end();
         return retStr;
     }
