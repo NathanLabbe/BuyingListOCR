@@ -16,11 +16,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         System.out.println(this.getFilesDir()+"");
-        /*
+
         // Allows to open directly the AppareilPhoto activity (comment if not needed)
         Intent appareilPhotoActivityIntent = new Intent(MainActivity.this, AppareilPhoto.class);
         startActivity(appareilPhotoActivityIntent);
-        */
+
 
 
     }
