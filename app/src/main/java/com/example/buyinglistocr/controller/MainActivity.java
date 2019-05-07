@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.TessOCR;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,10 +15,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        System.out.println(this.getFilesDir()+"");
 
         // Allows to open directly the AppareilPhoto activity (comment if not needed)
         Intent appareilPhotoActivityIntent = new Intent(MainActivity.this, AppareilPhoto.class);
         startActivity(appareilPhotoActivityIntent);
 
+
+
     }
+
 }
