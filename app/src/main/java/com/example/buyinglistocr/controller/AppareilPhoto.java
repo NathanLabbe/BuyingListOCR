@@ -171,6 +171,7 @@ public class AppareilPhoto extends AppCompatActivity {
 
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, options);
             String result = this.getText(bitmap);
+
             textView.setText(result);
             textView.setMovementMethod(new ScrollingMovementMethod());
         } catch (Exception e) {
@@ -196,7 +197,7 @@ public class AppareilPhoto extends AppCompatActivity {
         }
         String dataPath = getExternalFilesDir("/").getPath() + "/";
         tessBaseAPI.init(dataPath, "fra",TessBaseAPI.OEM_TESSERACT_ONLY);
-        tessBaseAPI.setImage(rotateBitmap(bitmap, 90));
+        tessBaseAPI.setImage(bitmap);
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aàAbBcçCdDeEéèêfFgGhHiIjJkKlLmMnNoôOpPqQrRsStTuùUvVwWxXyYzZ1234567890\',.?;/ ");
 
 
