@@ -200,8 +200,11 @@ public class AppareilPhoto extends AppCompatActivity {
         String dataPath = getExternalFilesDir("/").getPath() + "/";
         tessBaseAPI.init(dataPath, "fra",TessBaseAPI.OEM_TESSERACT_ONLY);
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aàAbBcçCdDeEéèêfFgGhHiIjJkKlLmMnNoôOpPqQrRsStTuùUvVwWxXyYzZ1234567890\',.;+-_%/ ");
-        tessBaseAPI.setImage(rotateBitmap(bitmap, 90));
-
+        /**
+         * Selon le téléphone commentez
+         */
+        //tessBaseAPI.setImage(rotateBitmap(bitmap, 90));
+        tessBaseAPI.setImage(bitmap);
 
 
         String retStr = "No result";
