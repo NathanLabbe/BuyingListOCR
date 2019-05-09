@@ -16,15 +16,18 @@ public class AnalyseData {
     public  String clean(String text){
         String res="";
         Boolean keep = false;
-        String[] tokens = text.split(" ");
+        String[] tokens = text.split("[ \\n]+");
 
-        for (String t : tokens){
-            if( keep ==false && t.equals("TEL") ){
+        for (int i =0; i<tokens.length ; i++){
+            if( keep ==false && tokens[i].startsWith("TEL") && !tokens[i].equals("TEL")){
                 keep=true;
-
-            }else if(keep==true && !t.equals("MONTANT")){
-                res+=" "+t;
-            }else if(keep==true && t.equals("MONTANT")){
+            }if( keep ==false && tokens[i].equals("TEL") ) {
+                keep = true;
+                i++;
+            }else if(keep==true && !tokens[i].equals("MONTANT")){
+                res+=" "+tokens[i];
+                System.out.println(tokens[i]);
+            }else if(keep==true && tokens[i].equals("MONTANT")){
                 keep=false;
             }
 
