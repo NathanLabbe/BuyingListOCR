@@ -20,7 +20,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:text="L'AFFICHAGE DU TEXTE CE FERA ICI" />
+        android:text="Prenez une photo à analyser" />
 
     <Button
         android:id="@+id/buttonTakePhoto"
