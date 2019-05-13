@@ -48,7 +48,11 @@ public class ProductDAO extends DAOBase {
         // Specify the values which wil be inserted
         ContentValues value = new ContentValues();
         value.put(ProductDAO.PRODUCT_NAME, product.getName());
-
+        value.put(ProductDAO.PRODUCT_QUANTITY_BASE, product.getQuantityBase());
+        value.put(ProductDAO.PRODUCT_QUANTITY_ACT, product.getQuantityAct());
+        value.put(ProductDAO.PRODUCT_NOTE, product.getNote());
+        value.put(ProductDAO.PRODUCT_STATUT, product.getStatut());
+        value.put(ProductDAO.PRODUCT_KEY_LIST, product.getIdList());
         // Insert the data in the database
         mDb.insert(ProductDAO.PRODUCT_TABLE_NAME, null, value);
 
