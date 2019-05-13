@@ -36,7 +36,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class AppareilPhoto extends AppCompatActivity {
 
@@ -48,6 +50,7 @@ public class AppareilPhoto extends AppCompatActivity {
     private Uri outputFileDir;
     private String mCurrentPhotoPath;
     private ImageView mImageView;
+    HashMap<String, ArrayList<String>> listProduit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +174,6 @@ public class AppareilPhoto extends AppCompatActivity {
 
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, options);
             String result = this.getText(bitmap);
-
             textView.setText(result);
             textView.setMovementMethod(new ScrollingMovementMethod());
         } catch (Exception e) {
@@ -197,9 +199,12 @@ public class AppareilPhoto extends AppCompatActivity {
         }
         String dataPath = getExternalFilesDir("/").getPath() + "/";
         tessBaseAPI.init(dataPath, "fra",TessBaseAPI.OEM_TESSERACT_ONLY);
+        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aàAbBcçCdDeEéèêfFgGhHiIjJkKlLmMnNoôOpPqQrRsStTuùUvVwWxXyYzZ1234567890\',.;+-_%/ ");
+        /**
+         * Selon le téléphone commentez
+         */
+        //tessBaseAPI.setImage(rotateBitmap(bitmap, 90));
         tessBaseAPI.setImage(bitmap);
-        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aàAbBcçCdDeEéèêfFgGhHiIjJkKlLmMnNoôOpPqQrRsStTuùUvVwWxXyYzZ1234567890\',.?;/ ");
-
 
 
         String retStr = "No result";
@@ -212,6 +217,8 @@ public class AppareilPhoto extends AppCompatActivity {
         mImageView.setImageBitmap(bitmapfinal);
 
         tessBaseAPI.end();
+        AnalyseData test = new AnalyseData(retStr);
+        System.out.println(test.clean(retStr));
         return retStr;
     }
 }

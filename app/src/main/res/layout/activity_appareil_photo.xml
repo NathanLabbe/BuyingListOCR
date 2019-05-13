@@ -20,7 +20,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:text="L'AFFICHAGE DU TEXTE CE FERA ICI" />
+        android:text="Prenez une photo à analyser" />
 
     <Button
         android:id="@+id/buttonTakePhoto"
@@ -34,7 +34,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher" />
+         />
 
 
 </LinearLayout>
