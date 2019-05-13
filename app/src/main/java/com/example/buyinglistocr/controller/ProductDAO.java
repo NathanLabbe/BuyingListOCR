@@ -10,14 +10,14 @@ import com.example.buyinglistocr.model.Product;
 import java.util.ArrayList;
 
 /**
- * Allow to interact with the "List" table
+ * Allow to interact with the "Product" table
  */
 public class ProductDAO extends DAOBase {
 
-    // "Produit" table
+    // "Product" table
     public static final String PRODUCT_TABLE_NAME = "Product";
 
-    // Attributes of "Produit" table
+    // Attributes of "Product" table
     public static final String PRODUCT_KEY = "idProduit";
     public static final String PRODUCT_NAME = "name";
     public static final String PRODUCT_QUANTITY_BASE = "quantityBase";
@@ -37,7 +37,7 @@ public class ProductDAO extends DAOBase {
     }
 
     /**
-     * Allow to add a product in the "List" table
+     * Allow to add a product in the "Product" table
      * @param product - The product
      */
     public void add(Product product) {
@@ -47,10 +47,10 @@ public class ProductDAO extends DAOBase {
 
         // Specify the values which wil be inserted
         ContentValues value = new ContentValues();
-        value.put(ProductDAO.PRODUIT_NAME, product.getName());
+        value.put(ProductDAO.PRODUCT_NAME, product.getName());
 
         // Insert the data in the database
-        mDb.insert(ListDAO.PRODUCT_TABLE_NAME, null, value);
+        mDb.insert(ProductDAO.PRODUCT_TABLE_NAME, null, value);
 
         // Close the connection with the database
         mDb.close();
@@ -69,7 +69,9 @@ public class ProductDAO extends DAOBase {
         // Open the connection with the database
         mDb = open();
 
-        Cursor cursor = mDb.rawQuery("select " + PRODUIT_NAME + " from " + PRODUIT_TABLE_NAME, null);
+        String query = "select " + PRODUCT_NAME + " from " + PRODUCT_TABLE_NAME";
+
+        Cursor cursor = mDb.rawQuery(query, null);
 
         if(cursor.getCount() > 0) {
 
@@ -91,6 +93,5 @@ public class ProductDAO extends DAOBase {
         return ret;
 
     }
-
 }
 
