@@ -15,16 +15,16 @@ import java.util.ArrayList;
 public class ProductDAO extends DAOBase {
 
     // "Produit" table
-    public static final String PRODUIT_TABLE_NAME = "Produit";
+    public static final String PRODUCT_TABLE_NAME = "Product";
 
     // Attributes of "Produit" table
-    public static final String PRODUIT_KEY = "idProduit";
-    public static final String PRODUIT_NAME = "name";
-    public static final String PRODUIT_QUANTITY_BASE = "quantityBase";
-    public static final String PRODUIT_QUANTITY_ACT = "quantityAct";
-    public static final String PRODUIT_NOTE = "note";
-    public static final String PRODUIT_STATUT = "statut";
-    public static final String PRODUIT_KEY_LIST = "idList";
+    public static final String PRODUCT_KEY = "idProduit";
+    public static final String PRODUCT_NAME = "name";
+    public static final String PRODUCT_QUANTITY_BASE = "quantityBase";
+    public static final String PRODUCT_QUANTITY_ACT = "quantityAct";
+    public static final String PRODUCT_NOTE = "note";
+    public static final String PRODUCT_STATUT = "statut";
+    public static final String PRODUCT_KEY_LIST = "idList";
 
     /**
      * The constructor of the class
@@ -50,7 +50,7 @@ public class ProductDAO extends DAOBase {
         value.put(ProductDAO.PRODUIT_NAME, product.getName());
 
         // Insert the data in the database
-        mDb.insert(ListDAO.LIST_TABLE_NAME, null, value);
+        mDb.insert(ListDAO.PRODUCT_TABLE_NAME, null, value);
 
         // Close the connection with the database
         mDb.close();
