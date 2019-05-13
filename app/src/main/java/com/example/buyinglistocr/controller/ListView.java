@@ -70,18 +70,10 @@ public class ListView extends AppCompatActivity {
     }
 
     private void viewData() {
-        Cursor cursor = accesBD.viewData();
 
-        if (cursor.getCount() == 0) {
-            Toast.makeText(this, "No data to show", Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                //listItems.add(String.valueOf(cursor.getInt(0)));
-                listItems.add(cursor.getString(1));
-            }
             adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
             listView.setAdapter(adapter);
-        }
+
     }
 
 

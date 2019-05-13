@@ -65,7 +65,7 @@ public class ProductDAO extends DAOBase {
      * Allow to get all name of course
      * @return - The ArrayList<String> of the name courses
      */
-    public ArrayList<String> get() {
+    public ArrayList<String> getNames() {
 
         // The return value
         ArrayList<String> ret = new ArrayList<>();
@@ -98,12 +98,5 @@ public class ProductDAO extends DAOBase {
 
     }
 
-    public long getIdProduct() {
-
-        // The return value
-        long idProduct = -1;
-
-        return idProduct;
-    }
 }
 

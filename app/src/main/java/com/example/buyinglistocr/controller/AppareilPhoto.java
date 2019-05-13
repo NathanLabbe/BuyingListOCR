@@ -218,7 +218,7 @@ public class AppareilPhoto extends AppCompatActivity {
 
         tessBaseAPI.end();
         AnalyseData test = new AnalyseData(retStr);
-        System.out.println(test.clean(retStr));
+        //retStr = test.clean(retStr);
         return retStr;
     }
 }
