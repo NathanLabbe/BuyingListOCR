@@ -14,7 +14,7 @@ import com.example.buyinglistocr.R;
 public class AddElement extends AppCompatActivity {
 
     //ACCES A LA BASE DE DONNEE
-    AccesLocal accesBD;
+    ProductDAO accesBD;
 
     //REFERENCE
     EditText nameInput;
