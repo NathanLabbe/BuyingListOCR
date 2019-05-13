@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ListView extends AppCompatActivity {
 
     //ACCES A LA BASE DE DONNEE
-    AccesLocal accesBD;
+    private ProductDAO productDAO;
 
     //REFERENCE
     Button addNewItem;
@@ -37,7 +37,7 @@ public class ListView extends AppCompatActivity {
         super.onCreate(icicle);
         setContentView(R.layout.activity_list_view);
 
-        accesBD = new AccesLocal(this.getBaseContext());
+        productDAO = new ProductDAO(this.getBaseContext());
 
         //AFFICHAGE DES REFERENCES
         addNewItem = (Button) findViewById(R.id.activity_main_activity_add_new_item);
@@ -48,9 +48,11 @@ public class ListView extends AppCompatActivity {
         //AFFICHAGE DES ELEMENTS DE NOTRE LISTE
         viewData();
 
+        /*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
 
                 //INFORMATION SUR L'ITEM
                 String str = listView.getItemAtPosition(position).toString();
@@ -64,6 +66,7 @@ public class ListView extends AppCompatActivity {
                 startActivity(ModifyElementIntent);
             }
         });
+        */
     }
 
     private void viewData() {

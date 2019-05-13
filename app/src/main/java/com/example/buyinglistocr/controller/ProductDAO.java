@@ -97,5 +97,13 @@ public class ProductDAO extends DAOBase {
         return ret;
 
     }
+
+    public long getIdProduct() {
+
+        // The return value
+        long idProduct = -1;
+
+        return idProduct;
+    }
 }
 
