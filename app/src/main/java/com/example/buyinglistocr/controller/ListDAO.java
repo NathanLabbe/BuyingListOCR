@@ -3,10 +3,10 @@ package com.example.buyinglistocr.controller;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import java.util.ArrayList;
+import android.util.Pair;
 
 import com.example.buyinglistocr.model.List;
-
-import java.util.ArrayList;
 
 /**
  * Allow to interact with the "List" table
@@ -17,6 +17,7 @@ public class ListDAO extends DAOBase {
     public static final String LIST_TABLE_NAME = "List";
 
     // Attributes of "List" table
+    public static final String LIST_KEY = "idList";
     public static final String LIST_NAME = "name";
     public static final String LIST_SPENT = "spent";
 
@@ -33,8 +34,12 @@ public class ListDAO extends DAOBase {
     /**
      * Allow to add a list in the "List" table
      * @param list - The list
+     * @return - The id of the list
      */
-    public void add(List list) {
+    public long add(List list) {
+
+        // The id of the list
+        long ret;
 
         // Open the connection with the database
         mDb = open();
@@ -45,10 +50,12 @@ public class ListDAO extends DAOBase {
         value.put(ListDAO.LIST_SPENT, list.getSpent());
 
         // Insert the data in the database
-        mDb.insert(ListDAO.LIST_TABLE_NAME, null, value);
+        ret = mDb.insert(ListDAO.LIST_TABLE_NAME, null, value);
 
         // Close the connection with the database
         mDb.close();
+
+        return ret;
 
     }
 
@@ -56,23 +63,24 @@ public class ListDAO extends DAOBase {
      * Allow to get all name of course
      * @return - The ArrayList<String> of the name courses
      */
-    public ArrayList<String> get() {
+    public ArrayList<Pair<Long, String>> get() {
 
         // The return value
-        ArrayList<String> ret = new ArrayList<>();
+        ArrayList<Pair<Long, String>> ret = new ArrayList<>();
 
         // Open the connection with the database
         mDb = open();
 
-        Cursor cursor = mDb.rawQuery("select " + LIST_NAME + " from " + LIST_TABLE_NAME, null);
+        Cursor cursor = mDb.rawQuery("select " + LIST_KEY + ',' + LIST_NAME + " from " + LIST_TABLE_NAME, null);
 
         if(cursor.getCount() > 0) {
 
             while (cursor.moveToNext()) {
 
-                String name = cursor.getString(0);
+                Long idList = cursor.getLong(0);
+                String name = cursor.getString(1);
 
-                ret.add(name);
+                ret.add(Pair.create(idList, name));
 
             }
 

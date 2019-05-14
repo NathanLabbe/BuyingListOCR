@@ -1,73 +1,142 @@
 package com.example.buyinglistocr.controller;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import java.util.ArrayList;
+import android.util.Pair;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.buyinglistocr.model.List;
 
 import com.example.buyinglistocr.R;
 
-import java.util.ArrayList;
-
+/**
+ * Allow to represent the main activity
+ */
 public class MainActivity extends AppCompatActivity {
 
+    // The recycler view
+    private RecyclerView rv;
+
+    // The list DAO
     private ListDAO listDAO;
 
-    private ArrayList<String> test;
+    // The ArrayList of list
+    private ArrayList<Pair<Long, String>> lists;
 
-    private Button button2;
-
+    /**
+     * Method that be executed during the creation of the activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Get the list DAO
         listDAO = new ListDAO(this);
 
-        test = listDAO.get();
+        // Get the data
+        lists = listDAO.get();
 
-        final RecyclerView rv = findViewById(R.id.list);
+        // Define the recycler view
+        rv = findViewById(R.id.list);
         rv.setLayoutManager(new GridLayoutManager(this, 2));
-        rv.setAdapter(new MyAdapter(test));
+        rv.setAdapter(new MyAdapter(MainActivity.this, lists));
 
-        Button button = findViewById(R.id.test);
-        button.setOnClickListener(new View.OnClickListener() {
+        // Define the buttonAdd
+        FloatingActionButton buttonAdd = findViewById(R.id.buttonAdd);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                List list = new List(0, "Luffy", 0);
-
-                listDAO.add(list);
-
-                test.add(list.getName());
-
-                rv.getAdapter().notifyItemInserted(test.size() - 1);
-
+                // Launch the alert dialog
+                showAlertDialogButtonClicked(view);
 
             }
 
         });
 
-        button2 = findViewById(R.id.test2);
-        button2.setOnClickListener(new View.OnClickListener() {
+        // Define the buttonCamera
+        FloatingActionButton buttonCamera = findViewById(R.id.buttonCamera);
+        buttonCamera.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this, ListView.class);
+                // Start the new activity
+                Intent intent = new Intent(MainActivity.this, AppareilPhoto.class);
                 startActivity(intent);
 
 
             }
 
         });
+
+    }
+
+    /**
+     * Method that be executed during the resume of the activity
+     */
+    @Override
+    public void onResume(){
+
+        super.onResume();
+
+        // Notify the data set changed
+        rv.getAdapter().notifyDataSetChanged();
+
+    }
+
+    /**
+     * Allow to define the alert dialog
+     * @param view - The view
+     */
+    public void showAlertDialogButtonClicked(View view) {
+
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
+        builder.setView(customLayout);
+
+        // Define the positive button
+        builder.setPositiveButton("Créer", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                EditText editText = customLayout.findViewById(R.id.name);
+
+                // Create the new list with the data of the edit text
+                List list = new List(0, editText.getText().toString(), 0);
+
+                // Add this list to the database and get it id
+                long idList = listDAO.add(list);
+
+                // Add this list to the ArrayList
+                lists.add(Pair.create(idList, list.getName()));
+
+                // Notify the recycler view that a data is inserted
+                rv.getAdapter().notifyItemInserted(lists.size() - 1);
+
+            }
+
+        });
+
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 
