@@ -13,6 +13,15 @@ public class Product {
     private static int idList;
 
 
+    public Product(String name, int quantityBase, int quantityAct, String note, int statut, int idList) {
+        this.name = name;
+        this.quantityBase = quantityBase;
+        this.quantityAct = quantityAct;
+        this.note = note;
+        this.statut = statut;
+        this.idList = idList;
+    }
+
     /**
      * The constructor of the class
      * @param idProduit
