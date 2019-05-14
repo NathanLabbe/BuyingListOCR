@@ -18,8 +18,12 @@
         <activity
             android:name=".controller.ListView"
             />
-        <activity android:name=".controller.ModifyElement" />
-        <activity android:name=".controller.AddElement" />
+        <activity android:name=".controller.ModifyElement"
+            android:parentActivityName=".controller.ListView"
+            />
+        <activity android:name=".controller.AddElement"
+            android:parentActivityName=".controller.ListView"
+            />
         <activity android:name=".controller.AppareilPhoto" />
         <activity android:name=".controller.MainActivity">
             <intent-filter>
