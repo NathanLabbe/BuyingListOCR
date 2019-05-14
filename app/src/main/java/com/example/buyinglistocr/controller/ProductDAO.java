@@ -73,7 +73,7 @@ public class ProductDAO extends DAOBase {
         // Open the connection with the database
         mDb = open();
 
-        String query = "select " + PRODUCT_NAME + " from " + PRODUCT_TABLE_NAME";
+        String query = "select " + PRODUCT_NAME + " from " + PRODUCT_TABLE_NAME;
 
         Cursor cursor = mDb.rawQuery(query, null);
 

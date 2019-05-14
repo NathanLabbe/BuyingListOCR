@@ -12,7 +12,7 @@ import android.widget.EditText;
 import com.example.buyinglistocr.R;
 
 public class ModifyElement extends AppCompatActivity {
-
+    /**
     //ACCES DE LA BASE DE DONNEE
     AccesLocal accesBD;
 
@@ -82,4 +82,5 @@ public class ModifyElement extends AppCompatActivity {
         Intent MainActivityIntent = new Intent(ModifyElement.this, MainActivity.class);
         startActivity(MainActivityIntent);
     }
+    */
 }

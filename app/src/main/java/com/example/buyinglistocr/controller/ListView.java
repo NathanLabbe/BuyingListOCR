@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.buyinglistocr.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ListView extends AppCompatActivity {
 
@@ -33,11 +34,11 @@ public class ListView extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
 
-        productDAO = new ProductDAO(this.getBaseContext());
+        productDAO = new ProductDAO(ListView.this);
 
         //AFFICHAGE DES REFERENCES
         addNewItem = (Button) findViewById(R.id.activity_main_activity_add_new_item);
@@ -71,6 +72,13 @@ public class ListView extends AppCompatActivity {
 
     private void viewData() {
 
+            ArrayList<String> names = productDAO.getNames();
+            Iterator<String> it = names.iterator();
+
+            while(it.hasNext()){
+                listItems.add(it.next());
+            }
+
             adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
             listView.setAdapter(adapter);
 
@@ -79,7 +87,7 @@ public class ListView extends AppCompatActivity {
 
     //METHOD WHICH WILL HANDLE DYNAMIC INSERTION
     public void addItemsView(View v) {
-        Intent AddElementIntent = new Intent(MainActivity.this, AddElement.class);
+        Intent AddElementIntent = new Intent(ListView.this, AddElement.class);
         startActivity(AddElementIntent);
     }
 }

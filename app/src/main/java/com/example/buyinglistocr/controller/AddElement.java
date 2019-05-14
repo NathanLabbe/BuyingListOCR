@@ -13,7 +13,8 @@ import com.example.buyinglistocr.R;
 
 public class AddElement extends AppCompatActivity {
 
-    //ACCES A LA BASE DE DONNEE
+    /**
+     * //ACCES A LA BASE DE DONNEE
     ProductDAO accesBD;
 
     //REFERENCE
@@ -63,4 +64,5 @@ public class AddElement extends AppCompatActivity {
         Intent MainActivityIntent = new Intent(AddElement.this, MainActivity.class);
         startActivity(MainActivityIntent);
     }
+    */
 }
