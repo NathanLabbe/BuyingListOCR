@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.Product;
 
 public class AddElement extends AppCompatActivity {
 
-    /**
-     * //ACCES A LA BASE DE DONNEE
-    ProductDAO accesBD;
+    //ACCES A LA BASE DE DONNEE
+    ProductDAO productDAO;
 
     //REFERENCE
     EditText nameInput;
@@ -26,7 +26,7 @@ public class AddElement extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_element);
 
-        accesBD = new AccesLocal(this.getBaseContext());
+        productDAO = new ProductDAO(this);
 
         //AFFICHE LE BOUTON SUR L'ACTIONBAR
         getSupportActionBar().setTitle("AddElement");
@@ -58,11 +58,10 @@ public class AddElement extends AppCompatActivity {
 
     public void addItems(View v) {
         String str = nameInput.getText().toString();
-        Element elt = new Element(str);
-        accesBD.add(elt);
+        Product product = new Product(str, 0, 0, "", 0, 0);
+        productDAO.add(product);
 
-        Intent MainActivityIntent = new Intent(AddElement.this, MainActivity.class);
-        startActivity(MainActivityIntent);
+        Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
+        startActivity(ListViewIntent);
     }
-    */
 }
