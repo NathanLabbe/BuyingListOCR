@@ -76,6 +76,10 @@ public class ModifyElement extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @param view
+     */
     public void deleteElt(View view) {
 
         productDAO.delete(idProduct);
