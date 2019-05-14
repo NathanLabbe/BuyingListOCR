@@ -3,6 +3,7 @@ package com.example.buyinglistocr.controller;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -32,9 +33,23 @@ public class ModifyElement extends AppCompatActivity {
 
         productDAO = new ProductDAO(ModifyElement.this);
 
-        //AFFICHE LE BOUTON SUR L'ACTIONBAR
+        /*//AFFICHE LE BOUTON SUR L'ACTIONBAR
         getSupportActionBar().setTitle("ModifyElement");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        */
+        Toolbar toolbar = findViewById(R.id.toolbarModify);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new         Intent(getApplicationContext(),MainActivity.class));
+                Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
+                ListViewIntent.putExtra("idList", idList);
+                startActivity(ListViewIntent);
+            }
+        });
 
         //AFFICHAGE DES REFERENCES
         nameInput = (EditText) findViewById(R.id.activity_modify_element_name_input);

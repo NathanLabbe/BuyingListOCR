@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,6 +55,7 @@ public class ListView extends AppCompatActivity {
     ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<String> adapter;
 
+
     /**
      * Partie photo
      */
@@ -74,12 +76,17 @@ public class ListView extends AppCompatActivity {
 
         productDAO = new ProductDAO(ListView.this);
 
-        //AFFICHE LE BOUTON SUR L'ACTIONBAR
+       /* //AFFICHE LE BOUTON SUR L'ACTIONBAR
         getSupportActionBar().setTitle("ListView");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+       //gestion toolbar
+        Toolbar toolbar = findViewById(R.id.toolbarList);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         //AFFICHAGE DES REFERENCES
-        addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
+        //addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
         listView = (android.widget.ListView) findViewById(R.id.activity_main_list_view);
 
         //RECUPERE L'ID DE LA LISTE
@@ -92,7 +99,17 @@ public class ListView extends AppCompatActivity {
         viewData(idList);
 
 
+        FloatingActionButton buttonAddEl = findViewById(R.id.activity_main_activity_add_new_item);
+        buttonAddEl.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+
+                addItemsView(view);
+
+            }
+
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

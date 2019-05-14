@@ -7,6 +7,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -20,6 +25,7 @@
         android:layout_margin="15dp"
         app:srcCompat="@android:drawable/ic_input_add"
         app:borderWidth="0dp"
+        android:elevation="4dp"
         android:tint="@android:color/white"
         android:backgroundTint="@android:color/holo_red_light"/>
 

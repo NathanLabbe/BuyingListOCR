@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
+
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ToolbarWidgetWrapper;
 import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
@@ -52,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(new GridLayoutManager(this, 2));
         rv.setAdapter(new MyAdapter(MainActivity.this, lists));
 
+        //Gestion Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // Define the buttonAdd
         FloatingActionButton buttonAdd = findViewById(R.id.buttonAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+
 
 
     }

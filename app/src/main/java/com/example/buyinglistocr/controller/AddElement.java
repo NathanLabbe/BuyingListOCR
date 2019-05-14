@@ -3,6 +3,7 @@ package com.example.buyinglistocr.controller;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -29,9 +30,22 @@ public class AddElement extends AppCompatActivity {
         productDAO = new ProductDAO(this);
 
         //AFFICHE LE BOUTON SUR L'ACTIONBAR
-        getSupportActionBar().setTitle("AddElement");
+        // getSupportActionBar().setTitle("AddElement");
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = findViewById(R.id.toolbarAdd);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new         Intent(getApplicationContext(),MainActivity.class));
+                Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
+                ListViewIntent.putExtra("idList", idList);
+                startActivity(ListViewIntent);
+            }
+        });
+        
 
         nameInput = (EditText) findViewById(R.id.activity_add_element_name_input);
         addElementBtn = (Button) findViewById(R.id.activity_add_element_add_button);
@@ -72,4 +86,6 @@ public class AddElement extends AppCompatActivity {
         ListViewIntent.putExtra("idList",idList);
         startActivity(ListViewIntent);
     }
+
+
 }
