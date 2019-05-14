@@ -102,7 +102,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 @Override
                 public void onClick(View view) {
 
-                    Intent intent = new Intent(context, AppareilPhoto.class);
+                    Intent intent = new Intent(context, ListView.class);
                     intent.putExtra("idList", currentPair.first);
                     context.startActivity(intent);
 
