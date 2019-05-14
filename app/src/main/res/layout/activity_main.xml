@@ -18,14 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="15dp"
-        app:srcCompat="@android:drawable/ic_menu_add" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/buttonCamera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_margin="15dp"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:borderWidth="0dp"
+        android:tint="@android:color/white"
+        android:backgroundTint="@android:color/holo_red_light"/>
 
 </android.support.design.widget.CoordinatorLayout>

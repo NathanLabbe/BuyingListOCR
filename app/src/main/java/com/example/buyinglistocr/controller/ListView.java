@@ -49,6 +49,7 @@ public class ListView extends AppCompatActivity {
     android.widget.ListView listView;
 
 
+
     //LISTE DE STRING QUI SERVIRA COMME LISTE D'ITEMS
     ArrayList<String> listItems = new ArrayList<String>();
 
@@ -74,6 +75,10 @@ public class ListView extends AppCompatActivity {
         setContentView(R.layout.activity_list_view);
 
         productDAO = new ProductDAO(ListView.this);
+
+        //AFFICHE LE BOUTON SUR L'ACTIONBAR
+        getSupportActionBar().setTitle("ListView");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //AFFICHAGE DES REFERENCES
         addNewItem = findViewById(R.id.activity_main_activity_add_new_item);

@@ -66,21 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        // Define the buttonCamera
-        FloatingActionButton buttonCamera = findViewById(R.id.buttonCamera);
-        buttonCamera.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                // Start the new activity
-                Intent intent = new Intent(MainActivity.this, AppareilPhoto.class);
-                startActivity(intent);
-
-
-            }
-
-        });
 
     }
 
