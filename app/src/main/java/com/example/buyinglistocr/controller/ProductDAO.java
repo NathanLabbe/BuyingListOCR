@@ -65,7 +65,7 @@ public class ProductDAO extends DAOBase {
      * Allow to get all name of a list
      * @return - The ArrayList<String> of the name courses
      */
-    public ArrayList<String> getNames() {
+    public ArrayList<String> getNames(long id) {
 
         // The return value
         ArrayList<String> ret = new ArrayList<>();
@@ -73,7 +73,7 @@ public class ProductDAO extends DAOBase {
         // Open the connection with the database
         mDb = open();
 
-        String query = "select " + PRODUCT_NAME + " from " + PRODUCT_TABLE_NAME;
+        String query = " SELECT " + PRODUCT_NAME + " FROM " + PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_KEY_LIST + " = " + id;
 
         Cursor cursor = mDb.rawQuery(query, null);
 

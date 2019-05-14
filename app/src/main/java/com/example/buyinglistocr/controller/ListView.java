@@ -48,12 +48,9 @@ public class ListView extends AppCompatActivity {
     FloatingActionButton addNewItem;
     android.widget.ListView listView;
 
-
-
-    //LISTE DE STRING QUI SERVIRA COMME LISTE D'ITEMS
+    //PROPRIETE
+    long idList;
     ArrayList<String> listItems = new ArrayList<String>();
-
-    //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     ArrayAdapter<String> adapter;
 
     /**
@@ -76,19 +73,16 @@ public class ListView extends AppCompatActivity {
 
         productDAO = new ProductDAO(ListView.this);
 
-        //AFFICHE LE BOUTON SUR L'ACTIONBAR
-        getSupportActionBar().setTitle("ListView");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         //AFFICHAGE DES REFERENCES
         addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
         listView = (android.widget.ListView) findViewById(R.id.activity_main_list_view);
 
-
+        //RECUPERE L'ID DE LA LISTE
+        Intent intent = getIntent();
+        idList = intent.getLongExtra("idList", 0);
 
         //AFFICHAGE DES ELEMENTS DE NOTRE LISTE
-        viewData();
-
+        viewData(idList);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,9 +113,13 @@ public class ListView extends AppCompatActivity {
         });
     }
 
-    private void viewData() {
+    /**
+     *
+     * @param id
+     */
+    private void viewData(long id) {
 
-        ArrayList<String> names = productDAO.getNames();
+        ArrayList<String> names = productDAO.getNames(id);
         Iterator<String> it = names.iterator();
 
         while(it.hasNext()){
@@ -134,10 +132,16 @@ public class ListView extends AppCompatActivity {
     }
 
 
-    //METHOD WHICH WILL HANDLE DYNAMIC INSERTION
+    /**
+     *
+     * @param v
+     */
     public void addItemsView(View v) {
+
         Intent AddElementIntent = new Intent(ListView.this, AddElement.class);
+        AddElementIntent.putExtra("idList", idList);
         startActivity(AddElementIntent);
+
     }
 
 

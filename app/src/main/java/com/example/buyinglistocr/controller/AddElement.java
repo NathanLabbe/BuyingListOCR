@@ -21,6 +21,9 @@ public class AddElement extends AppCompatActivity {
     EditText nameInput;
     Button addElementBtn;
 
+    //PROPRIETE
+    long idList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +35,13 @@ public class AddElement extends AppCompatActivity {
         getSupportActionBar().setTitle("AddElement");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //AFFICHAGE DES REFERENCES
         nameInput = (EditText) findViewById(R.id.activity_add_element_name_input);
         addElementBtn = (Button) findViewById(R.id.activity_add_element_add_button);
+
+        //RECUPERE L'IDLIST
+        Intent intent = getIntent();
+        idList = intent.getLongExtra("idList", 0);
 
         addElementBtn.setEnabled(false);
 
@@ -56,9 +64,13 @@ public class AddElement extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @param v
+     */
     public void addItems(View v) {
         String str = nameInput.getText().toString();
-        Product product = new Product(str, 0, 0, "", 0, 0);
+        Product product = new Product(str, 0, 0, "", 0, (int) idList);
         productDAO.add(product);
 
         Intent ListViewIntent = new Intent(AddElement.this, ListView.class);

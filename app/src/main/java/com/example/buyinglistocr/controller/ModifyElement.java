@@ -21,7 +21,9 @@ public class ModifyElement extends AppCompatActivity {
     Button modifyElementBtn;
     Button deleteElementBtn;
 
+    //PROPIETE
     long idProduct;
+    long idList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class ModifyElement extends AppCompatActivity {
 
         Intent intent = getIntent();
         idProduct = intent.getLongExtra("idProduct", 0);
+        idList = intent.getLongExtra("idList", 0);
 
         modifyElementBtn.setEnabled(false);
 
