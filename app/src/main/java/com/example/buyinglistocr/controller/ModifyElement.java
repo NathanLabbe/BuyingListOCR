@@ -66,7 +66,7 @@ public class ModifyElement extends AppCompatActivity {
 
     public void modifyElt(View view) {
 
-        productDAO.update(idProduct, nameInput.getText().toString());
+        productDAO.updateName(idProduct, nameInput.getText().toString());
 
         Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
         startActivity(ListViewIntent);
