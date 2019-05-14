@@ -12,24 +12,23 @@ import android.widget.EditText;
 import com.example.buyinglistocr.R;
 
 public class ModifyElement extends AppCompatActivity {
-    /**
+
     //ACCES DE LA BASE DE DONNEE
-    AccesLocal accesBD;
+    ProductDAO productDAO;
 
     //REFERENCE
     EditText nameInput;
     Button modifyElementBtn;
     Button deleteElementBtn;
 
-    long idElt;
-
+    long idProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_element);
 
-        accesBD = new AccesLocal(this.getBaseContext());
+        productDAO = new ProductDAO(ModifyElement.this);
 
         //AFFICHE LE BOUTON SUR L'ACTIONBAR
         getSupportActionBar().setTitle("ModifyElement");
@@ -41,7 +40,7 @@ public class ModifyElement extends AppCompatActivity {
         deleteElementBtn = (Button) findViewById(R.id.activity_modify_element_delete_btn);
 
         Intent intent = getIntent();
-        idElt = intent.getLongExtra("idElt", 0);
+        idProduct = intent.getLongExtra("idProduct", 0);
 
         modifyElementBtn.setEnabled(false);
 
@@ -66,21 +65,20 @@ public class ModifyElement extends AppCompatActivity {
     }
 
     public void modifyElt(View view) {
-        accesBD.updateId(idElt, nameInput.getText().toString());
 
-        Intent MainActivityIntent = new Intent(ModifyElement.this, MainActivity.class);
-        startActivity(MainActivityIntent);
+        productDAO.update(idProduct, nameInput.getText().toString());
+
+        Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
+        startActivity(ListViewIntent);
+
     }
 
     public void deleteElt(View view) {
-        if (accesBD.deleteId(idElt)) {
-            System.out.println("sucess");
-        } else {
-            System.out.println("fail");
-        }
 
-        Intent MainActivityIntent = new Intent(ModifyElement.this, MainActivity.class);
-        startActivity(MainActivityIntent);
+        productDAO.delete(idProduct);
+
+        Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
+        startActivity(ListViewIntent);
+
     }
-    */
 }
