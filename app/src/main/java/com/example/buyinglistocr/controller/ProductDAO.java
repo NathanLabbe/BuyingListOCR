@@ -62,7 +62,7 @@ public class ProductDAO extends DAOBase {
     }
 
     /**
-     * Allow to get all name of course
+     * Allow to get all name of a list
      * @return - The ArrayList<String> of the name courses
      */
     public ArrayList<String> getNames() {
@@ -99,9 +99,9 @@ public class ProductDAO extends DAOBase {
     }
 
     /**
-     *
-     * @param str
-     * @return
+     * Allow to get the idProduct of the product
+     * @param str - The name
+     * @return - The idProduct
      */
     public long getId(String str) {
 
@@ -126,22 +126,27 @@ public class ProductDAO extends DAOBase {
     }
 
     /**
-     *
-     * @param idProduct
+     *  Allow to delete a product with this idProduct
+     * @param id - The idProduct of the product
      */
-    public void delete(long idProduct) {
+    public void delete(long id) {
 
         // Open the connection with the database
         mDb = open();
 
-        mDb.delete(ProductDAO.PRODUCT_TABLE_NAME, ProductDAO.PRODUCT_KEY + " = ?", new String[]{String.valueOf(idProduct)} );
+        mDb.delete(ProductDAO.PRODUCT_TABLE_NAME, ProductDAO.PRODUCT_KEY + " = ?", new String[]{String.valueOf(id)} );
 
         // Close the connection with the database
         mDb.close();
 
     }
 
-    public void update(long idProduct, String str) {
+    /**
+     * Allow to update the name of the product
+     * @param id - The idProduct
+     * @param str - The new name
+     */
+    public void updateName(long id, String str) {
 
         // Open the connection with the database
         mDb = open();
@@ -149,11 +154,13 @@ public class ProductDAO extends DAOBase {
         ContentValues cv = new ContentValues();
         cv.put(ProductDAO.PRODUCT_NAME, str);
 
-        mDb.update(ProductDAO.PRODUCT_TABLE_NAME, cv, ProductDAO.PRODUCT_KEY + " = ?", new String[]{String.valueOf(idProduct)});
+        mDb.update(ProductDAO.PRODUCT_TABLE_NAME, cv, ProductDAO.PRODUCT_KEY + " = ?", new String[]{String.valueOf(id)});
 
         // Close the connection with the database
         mDb.close();
     }
+
+
 
 }
 
