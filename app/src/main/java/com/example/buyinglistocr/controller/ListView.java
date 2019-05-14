@@ -48,6 +48,7 @@ public class ListView extends AppCompatActivity {
     FloatingActionButton addNewItem;
     android.widget.ListView listView;
 
+
     //PROPRIETE
     long idList;
     ArrayList<String> listItems = new ArrayList<String>();
@@ -73,6 +74,10 @@ public class ListView extends AppCompatActivity {
 
         productDAO = new ProductDAO(ListView.this);
 
+        //AFFICHE LE BOUTON SUR L'ACTIONBAR
+        getSupportActionBar().setTitle("ListView");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //AFFICHAGE DES REFERENCES
         addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
         listView = (android.widget.ListView) findViewById(R.id.activity_main_list_view);
@@ -81,8 +86,13 @@ public class ListView extends AppCompatActivity {
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
 
+        System.out.println("ListView : " + idList);
+
         //AFFICHAGE DES ELEMENTS DE NOTRE LISTE
         viewData(idList);
+
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,6 +108,8 @@ public class ListView extends AppCompatActivity {
 
                 Intent ModifyElementIntent = new Intent(ListView.this, ModifyElement.class);
                 ModifyElementIntent.putExtra("idProduct", idProduct);
+                ModifyElementIntent.putExtra("idList", idList);
+
                 startActivity(ModifyElementIntent);
             }
         });

@@ -10,10 +10,10 @@ public class Product {
     private static int quantityAct;
     private static String note;
     private static int statut;
-    private static int idList;
+    private static long idList;
 
 
-    public Product(String name, int quantityBase, int quantityAct, String note, int statut, int idList) {
+    public Product(String name, int quantityBase, int quantityAct, String note, int statut, long idList) {
         this.name = name;
         this.quantityBase = quantityBase;
         this.quantityAct = quantityAct;
@@ -32,7 +32,7 @@ public class Product {
      * @param statut
      * @param idList
      */
-    public Product(long idProduit, String name, int quantityBase, int quantityAct, String note, int statut, int idList) {
+    public Product(long idProduit, String name, int quantityBase, int quantityAct, String note, int statut, long idList) {
         super();
         this.idProduit = idProduit;
         this.name = name;
@@ -95,7 +95,7 @@ public class Product {
         Product.statut = statut;
     }
 
-    public static int getIdList() {
+    public static long getIdList() {
         return idList;
     }
 

@@ -72,6 +72,8 @@ public class ModifyElement extends AppCompatActivity {
         productDAO.updateName(idProduct, nameInput.getText().toString());
 
         Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
+        ListViewIntent.putExtra("idList", idList);
+
         startActivity(ListViewIntent);
 
     }
@@ -85,6 +87,8 @@ public class ModifyElement extends AppCompatActivity {
         productDAO.delete(idProduct);
 
         Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
+        ListViewIntent.putExtra("idList", idList);
+
         startActivity(ListViewIntent);
 
     }

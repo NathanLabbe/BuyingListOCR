@@ -16,13 +16,10 @@ public class AddElement extends AppCompatActivity {
 
     //ACCES A LA BASE DE DONNEE
     ProductDAO productDAO;
-
+    private long idList;
     //REFERENCE
     EditText nameInput;
     Button addElementBtn;
-
-    //PROPRIETE
-    long idList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +32,15 @@ public class AddElement extends AppCompatActivity {
         getSupportActionBar().setTitle("AddElement");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //AFFICHAGE DES REFERENCES
+
         nameInput = (EditText) findViewById(R.id.activity_add_element_name_input);
         addElementBtn = (Button) findViewById(R.id.activity_add_element_add_button);
 
         //RECUPERE L'IDLIST
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
+
+        System.out.println("AddElement : " + idList);
 
         addElementBtn.setEnabled(false);
 
@@ -64,17 +63,13 @@ public class AddElement extends AppCompatActivity {
 
     }
 
-    /**
-     *
-     * @param v
-     */
-    //lol
     public void addItems(View v) {
         String str = nameInput.getText().toString();
-        Product product = new Product(str, 0, 0, "", 0, (int) idList);
+        Product product = new Product(str, 0, 0, "", 0, idList);
         productDAO.add(product);
 
         Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
+        ListViewIntent.putExtra("idList",idList);
         startActivity(ListViewIntent);
     }
 }

@@ -65,6 +65,10 @@ public class ProductDAO extends DAOBase {
      * Allow to get all name of a list
      * @return - The ArrayList<String> of the name courses
      */
+    /**
+     * Allow to get all name of a list
+     * @return - The ArrayList<String> of the name courses
+     */
     public ArrayList<String> getNames(long id) {
 
         // The return value
