@@ -68,6 +68,7 @@ public class AddElement extends AppCompatActivity {
      *
      * @param v
      */
+    //lol
     public void addItems(View v) {
         String str = nameInput.getText().toString();
         Product product = new Product(str, 0, 0, "", 0, (int) idList);
