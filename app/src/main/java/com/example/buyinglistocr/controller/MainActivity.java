@@ -18,7 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ListDAO listDAO;
 
-    ArrayList<String> test;
+    private ArrayList<String> test;
+
+    private Button button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        Button button2 = findViewById(R.id.test2);
+        button2 = findViewById(R.id.test2);
         button2.setOnClickListener(new View.OnClickListener() {
 
             @Override

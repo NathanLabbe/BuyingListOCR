@@ -18,6 +18,7 @@
         <activity android:name=".controller.ModifyElement"></activity>
         <activity android:name=".controller.AddElement" />
         <activity android:name=".controller.AppareilPhoto" />
+        <activity android:name=".controller.ListView" />
 
         <activity android:name=".controller.MainActivity">
 
