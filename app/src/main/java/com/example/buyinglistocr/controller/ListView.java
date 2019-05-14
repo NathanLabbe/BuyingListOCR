@@ -5,27 +5,22 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
@@ -50,7 +45,7 @@ public class ListView extends AppCompatActivity {
     private ProductDAO productDAO;
 
     //REFERENCE
-    Button addNewItem;
+    FloatingActionButton addNewItem;
     android.widget.ListView listView;
 
 
@@ -81,7 +76,7 @@ public class ListView extends AppCompatActivity {
         productDAO = new ProductDAO(ListView.this);
 
         //AFFICHAGE DES REFERENCES
-        addNewItem = (Button) findViewById(R.id.activity_main_activity_add_new_item);
+        addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
         listView = (android.widget.ListView) findViewById(R.id.activity_main_list_view);
 
 
@@ -89,7 +84,7 @@ public class ListView extends AppCompatActivity {
         //AFFICHAGE DES ELEMENTS DE NOTRE LISTE
         viewData();
 
-        /*
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -98,16 +93,16 @@ public class ListView extends AppCompatActivity {
                 //INFORMATION SUR L'ITEM
                 String str = listView.getItemAtPosition(position).toString();
                 System.out.println("NAME : " + str);
-                System.out.println("ID : " + accesBD.getId(str));
+                System.out.println("ID : " + productDAO.getId(str));
 
-                long idElt = accesBD.getId(str);
+                long idProduct = productDAO.getId(str);
 
-                Intent ModifyElementIntent = new Intent(MainActivity.this, ModifyElement.class);
-                ModifyElementIntent.putExtra("idElt", idElt);
+                Intent ModifyElementIntent = new Intent(ListView.this, ModifyElement.class);
+                ModifyElementIntent.putExtra("idProduct", idProduct);
                 startActivity(ModifyElementIntent);
             }
         });
-        */
+
         final Activity activity = this;
         checkPermission();
         this.findViewById(R.id.buttonTakePhoto).setOnClickListener(new View.OnClickListener() {
@@ -121,15 +116,15 @@ public class ListView extends AppCompatActivity {
 
     private void viewData() {
 
-            ArrayList<String> names = productDAO.getNames();
-            Iterator<String> it = names.iterator();
+        ArrayList<String> names = productDAO.getNames();
+        Iterator<String> it = names.iterator();
 
-            while(it.hasNext()){
-                listItems.add(it.next());
-            }
+        while(it.hasNext()){
+            listItems.add(it.next());
+        }
 
-            adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
-            listView.setAdapter(adapter);
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
+        listView.setAdapter(adapter);
 
     }
 
@@ -148,8 +143,8 @@ public class ListView extends AppCompatActivity {
     private void checkPermission() {
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 122);
         }
