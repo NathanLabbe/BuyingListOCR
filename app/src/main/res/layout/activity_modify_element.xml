@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".controller.ModifyElement">
+
+    <include
+        android:id="@+id/toolbarModify"
+        layout="@layout/toolbar"/>
+
+    <EditText
+        android:layout_marginTop="50dp"
+
+        android:id="@+id/activity_modify_element_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Name of your element"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/activity_modify_element_modify_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Modify"
+            android:onClick="modifyElt"/>
+
+        <Button
+            android:id="@+id/activity_modify_element_delete_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="Delete"
+            android:onClick="deleteElt"/>
+
+    </LinearLayout>
+
+</LinearLayout>

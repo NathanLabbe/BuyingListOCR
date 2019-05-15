@@ -1,28 +1,27 @@
 package com.example.buyinglistocr.controller;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
@@ -39,26 +38,99 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
-public class AppareilPhoto extends AppCompatActivity {
+public class ListView extends AppCompatActivity {
+
+    //ACCES A LA BASE DE DONNEE
+    private ProductDAO productDAO;
+
+    //REFERENCE
+    FloatingActionButton addNewItem;
+    android.widget.ListView listView;
+
+
+    //PROPRIETE
+    long idList;
+    ArrayList<String> listItems = new ArrayList<String>();
+    ArrayAdapter<String> adapter;
+
+
+    /**
+     * Partie photo
+     */
 
     public static final String TESS_DATA = "/tessdata";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/Tess";
-    private TextView textView;
     private TessBaseAPI tessBaseAPI;
     private Uri outputFileDir;
     private String mCurrentPhotoPath;
-    private ImageView mImageView;
     HashMap<String, ArrayList<String>> listProduit;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_appareil_photo);
+        setContentView(R.layout.activity_list_view);
 
-        textView = (TextView) this.findViewById(R.id.textView);
-        mImageView = this.findViewById(R.id.imageView);
+        productDAO = new ProductDAO(ListView.this);
+
+       /* //AFFICHE LE BOUTON SUR L'ACTIONBAR
+        getSupportActionBar().setTitle("ListView");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+       //gestion toolbar
+        Toolbar toolbar = findViewById(R.id.toolbarList);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        //AFFICHAGE DES REFERENCES
+        //addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
+        listView = (android.widget.ListView) findViewById(R.id.activity_main_list_view);
+
+        //RECUPERE L'ID DE LA LISTE
+        Intent intent = getIntent();
+        idList = intent.getLongExtra("idList", 0);
+
+        System.out.println("ListView : " + idList);
+
+        //AFFICHAGE DES ELEMENTS DE NOTRE LISTE
+        viewData(idList);
+
+
+        FloatingActionButton buttonAddEl = findViewById(R.id.activity_main_activity_add_new_item);
+        buttonAddEl.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                addItemsView(view);
+
+            }
+
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                //INFORMATION SUR L'ITEM
+                String str = listView.getItemAtPosition(position).toString();
+                System.out.println("NAME : " + str);
+                System.out.println("ID : " + productDAO.getId(str));
+
+                long idProduct = productDAO.getId(str);
+
+                Intent ModifyElementIntent = new Intent(ListView.this, ModifyElement.class);
+                ModifyElementIntent.putExtra("idProduct", idProduct);
+                ModifyElementIntent.putExtra("idList", idList);
+
+                startActivity(ModifyElementIntent);
+            }
+        });
+
         final Activity activity = this;
         checkPermission();
         this.findViewById(R.id.buttonTakePhoto).setOnClickListener(new View.OnClickListener() {
@@ -70,17 +142,52 @@ public class AppareilPhoto extends AppCompatActivity {
         });
     }
 
+    /**
+     *
+     * @param id
+     */
+    private void viewData(long id) {
+
+        ArrayList<String> names = productDAO.getNames(id);
+        Iterator<String> it = names.iterator();
+
+        while(it.hasNext()){
+            listItems.add(it.next());
+        }
+
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
+        listView.setAdapter(adapter);
+
+    }
+
+
+    /**
+     *
+     * @param v
+     */
+    public void addItemsView(View v) {
+
+        Intent AddElementIntent = new Intent(ListView.this, AddElement.class);
+        AddElementIntent.putExtra("idList", idList);
+        startActivity(AddElementIntent);
+
+    }
+
+
+    /**
+     * PARTIE PHOTO
+     */
     //Gestion Des Permissions
     private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 120);
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 122);
         }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 121);
-        }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 122);
-        }
+
+
     }
 
 
@@ -174,8 +281,6 @@ public class AppareilPhoto extends AppCompatActivity {
 
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, options);
             String result = this.getText(bitmap);
-            textView.setText(result);
-            textView.setMovementMethod(new ScrollingMovementMethod());
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -214,11 +319,11 @@ public class AppareilPhoto extends AppCompatActivity {
             Log.e(TAG, e.getMessage());
         }
         Bitmap bitmapfinal = WriteFile.writeBitmap(tessBaseAPI.getThresholdedImage());
-        mImageView.setImageBitmap(bitmapfinal);
 
         tessBaseAPI.end();
         AnalyseData test = new AnalyseData(retStr);
         //retStr = test.clean(retStr);
+        System.out.println(retStr);
         return retStr;
     }
 }

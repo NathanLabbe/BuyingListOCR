@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.buyinglistocr">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -13,7 +15,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".controller.ListView"
+            android:parentActivityName=".controller.MainActivity"
+
+            />
+        <activity android:name=".controller.ModifyElement"
+            android:parentActivityName=".controller.ListView"
+            />
+        <activity android:name=".controller.AddElement"
+            android:parentActivityName=".controller.ListView"
+            />
         <activity android:name=".controller.AppareilPhoto" />
         <activity android:name=".controller.MainActivity">
             <intent-filter>

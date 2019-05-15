@@ -24,13 +24,19 @@ public class AnalyseData {
             }if( keep ==false && tokens[i].equals("TEL") ) {
                 keep = true;
                 i++;
+            }
+            if(keep == true && tokens[i].equals("SIRET")){
+                keep = true;
+                i++;
             }else if(keep==true && !tokens[i].equals("MONTANT")){
                 res+=" "+tokens[i];
+                if(keep==true && (tokens[i].equals("A") || tokens[i].equals("B"))){
+                    res+="\n";
+                }
                 System.out.println(tokens[i]);
-            }else if(keep==true && tokens[i].equals("MONTANT")){
-                keep=false;
+            }else if(keep==true && tokens[i].equals("MONTANT")) {
+                keep = false;
             }
-
         }
 
         return res;
