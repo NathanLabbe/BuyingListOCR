@@ -19,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -87,6 +89,8 @@ public class ListView extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+
+
         //AFFICHAGE DES REFERENCES
         //addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
         listView = (android.widget.ListView) findViewById(R.id.activity_main_list_view);
@@ -142,6 +146,31 @@ public class ListView extends AppCompatActivity {
                 dispatchTakePictureIntent();
             }
         });
+    }
+
+
+    //Affichage du menu dans la barre d'action
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_listview,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //Actions liées à chaque items
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String msg = "";
+        switch (item.getItemId()){
+            case R.id.delete:
+                msg = "delete";
+                break;
+            case R.id.settings:
+                msg = "settings";
+                break;
+
+        }
+        Toast.makeText(this, msg+" Checked", Toast.LENGTH_LONG).show();
+        return super.onOptionsItemSelected(item);
     }
 
     /**
