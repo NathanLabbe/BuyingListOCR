@@ -5,7 +5,7 @@ A shared shoping list application with an OCR feature.
 A android mobile with android marshmalow (5.0) or better.
 Or an android 5.0 (or better) emulator.
 ## Build with
-Android studio - devellopement
+Android studio - devellopement  
 TessTwo - OCR
 ## Autors
 Nathan Labbe  
