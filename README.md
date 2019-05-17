@@ -2,7 +2,7 @@
 A shared shoping list application with an OCR feature.
 ## Getting started
 ### Prerequisites
-A android mobile with android marshmalow (5.0) or better.
+A android mobile with android Lolipop (5.0) or better.
 Or an android 5.0 (or better) emulator.
 ## Build with
 Android studio - devellopement  
@@ -13,3 +13,4 @@ Bastien Ricard
 Chi Linh Pham  
 Thomas Brochot  
 Robinson Sablons de Gélis  
+
