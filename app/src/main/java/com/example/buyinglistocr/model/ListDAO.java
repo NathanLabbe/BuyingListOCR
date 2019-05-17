@@ -1,12 +1,10 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import java.util.ArrayList;
 import android.util.Pair;
-
-import com.example.buyinglistocr.model.List;
 
 /**
  * Allow to interact with the "List" table

@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.model.ProductDAO;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 

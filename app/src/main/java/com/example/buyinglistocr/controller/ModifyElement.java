@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.ProductDAO;
 
 public class ModifyElement extends AppCompatActivity {
 

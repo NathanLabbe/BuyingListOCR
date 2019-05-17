@@ -1,11 +1,8 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
-import com.example.buyinglistocr.model.List;
-import com.example.buyinglistocr.model.Product;
 
 import java.util.ArrayList;
 

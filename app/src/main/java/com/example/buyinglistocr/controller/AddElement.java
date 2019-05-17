@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.Product;
+import com.example.buyinglistocr.model.ProductDAO;
 
 public class AddElement extends AppCompatActivity {
 
