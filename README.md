@@ -6,7 +6,7 @@ A android mobile with android marshmalow (5.0) or better.
 Or an android 5.0 (or better) emulator.
 ## Build with
 Android studio - devellopement  
-TessTwo - OCR
+TessTwo (Tesseract fork) - OCR
 ## Autors
 Nathan Labbe  
 Bastien Ricard  
