@@ -98,7 +98,7 @@ public class ListView extends AppCompatActivity {
         // display products of our current list
         viewData(idList);
 
-        //
+        // TODO
         FloatingActionButton addElementBtn = findViewById(R.id.activity_list_view_add_new_elt);
         addElementBtn.setOnClickListener(new View.OnClickListener() {
 

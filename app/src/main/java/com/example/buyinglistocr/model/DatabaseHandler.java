@@ -28,7 +28,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // SQL request for the update of the "List" table
     public static final String LIST_TABLE_DROP = "DROP TABLE IF EXISTS " + LIST_TABLE_NAME + ";";
 
-    // "Produit" table
+    // "Product" table
     public static final String PRODUCT_TABLE_NAME = "Product";
 
     // Attributes of "Product" table
