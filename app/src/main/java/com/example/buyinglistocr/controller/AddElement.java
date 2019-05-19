@@ -16,10 +16,11 @@ import com.example.buyinglistocr.model.ProductDAO;
 
 public class AddElement extends AppCompatActivity {
 
-    //ACCES A LA BASE DE DONNEE
+    // access to the database
     ProductDAO productDAO;
     private long idList;
-    //REFERENCE
+
+    // reference
     EditText nameInput;
     Button addElementBtn;
 
@@ -28,11 +29,14 @@ public class AddElement extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_element);
 
+        // access to the database
         productDAO = new ProductDAO(this);
 
-        //AFFICHE LE BOUTON SUR L'ACTIONBAR
-        // getSupportActionBar().setTitle("AddElement");
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // display the actionbar
+        /*
+        getSupportActionBar().setTitle("AddElement");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        */
         Toolbar toolbar = findViewById(R.id.toolbarAdd);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,14 +51,14 @@ public class AddElement extends AppCompatActivity {
             }
         });
         
-
+        // displays references on the activity view
         nameInput = (EditText) findViewById(R.id.activity_add_element_name_input);
         addElementBtn = (Button) findViewById(R.id.activity_add_element_add_button);
 
-        //RECUPERE L'IDLIST
+        // get the idList from our current list
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
-
+        // TEST
         System.out.println("AddElement : " + idList);
 
         addElementBtn.setEnabled(false);
@@ -78,7 +82,11 @@ public class AddElement extends AppCompatActivity {
 
     }
 
-    public void addItems(View v) {
+    /**
+     * Add a product to our list
+     * @param v
+     */
+    public void addElement(View v) {
         String str = nameInput.getText().toString();
         Product product = new Product(str, 0, 0, "", 0, idList);
         productDAO.add(product);
