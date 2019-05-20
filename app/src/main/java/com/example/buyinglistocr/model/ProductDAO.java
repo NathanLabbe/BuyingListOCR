@@ -100,19 +100,15 @@ public class ProductDAO extends DAOBase {
      * @param id
      * @return
      */
-    public ArrayList<Product> getAllProducts (long id) {
+    public ArrayList<Product> getAllProducts(long id) {
 
         // The return value
         ArrayList<Product> ret = new ArrayList<>();
 
-        Product product;
-
         // Open the connection with the database
         mDb = open();
 
-        String query = " SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_KEY_LIST + " = " + id;
-
-        Cursor cursor = mDb.rawQuery(query, null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_KEY_LIST + " = " + id, null);
 
         if(cursor.getCount() > 0) {
 
@@ -124,12 +120,10 @@ public class ProductDAO extends DAOBase {
                 String note = cursor.getString(4);
                 int statut = cursor.getInt(5);
 
-                product = new Product(name, quantityBase, quantityAct, note, statut, id);
-
                 // TEST
-                System.out.println("PRODUCT : " + product.getName());
+                System.out.println("PRODUCT : " + name);
 
-                ret.add(product);
+                ret.add(new Product(name, quantityBase, quantityAct, note, statut, id));
 
             }
 
