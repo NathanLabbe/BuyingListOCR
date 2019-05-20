@@ -176,15 +176,15 @@ public class ProductDAO extends DAOBase {
      * @param str - The name
      * @return - The idProduct
      */
-    public long getId(String str) {
+    public int getId(String str) {
 
         // The return value
-        long ret = 0;
+        int ret = 0;
 
         // Open the connection with the database
         mDb = open();
 
-        String query = "SELECT " + PRODUCT_KEY + " FROM " + ProductDAO.PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_NAME + " = \"" + str + "\"";
+        String query = "SELECT * FROM " + ProductDAO.PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_NAME + " = \"" + str + "\"";
         Cursor cursor = mDb.rawQuery(query, null);
         cursor.moveToFirst();
 
@@ -255,6 +255,18 @@ public class ProductDAO extends DAOBase {
         mDb.close();
 
         return ret;
+
+    }
+
+    public void deleteAll() {
+
+        // Open the connection with the database
+        mDb = open();
+
+        mDb.delete(ProductDAO.PRODUCT_TABLE_NAME, null, null);
+
+        // Close the connection with the database
+        mDb.close();
 
     }
 

@@ -99,7 +99,7 @@ public class ListView extends AppCompatActivity {
         // display products of our current list
         viewData(idList);
         // TEST
-        viewData2(idList);
+        //viewData2(idList);
 
         // TODO
         FloatingActionButton addElementBtn = findViewById(R.id.activity_list_view_add_new_elt);
@@ -178,7 +178,7 @@ public class ListView extends AppCompatActivity {
         ArrayList<String> names = productDAO.getNames(id);
         Iterator<String> it = names.iterator();
         while(it.hasNext()){
-            listItems.add(it.next() + " (2/2)");
+            listItems.add(it.next());
         }
         // TODO
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
@@ -189,15 +189,18 @@ public class ListView extends AppCompatActivity {
     private void viewData2(long id) {
 
         ArrayList<Product> listProducts = productDAO.getAllProducts(id);
-        /*
+
         Iterator<Product> it = listProducts.iterator();
         System.out.println("VIEWDATA2 : ");
+        if(it.hasNext()){
+            it.next();
+        }
         while(it.hasNext()) {
             //listItems.add(it.next().getName() + " (" + it.next().getQuantityAct() + "/" + it.next().getQuantityBase() + ")");
             Product product = it.next();
             System.out.println(product.getName());
         }
-        */
+
         for (Product pdt : listProducts) {
             System.out.println(pdt.getName());
         }
