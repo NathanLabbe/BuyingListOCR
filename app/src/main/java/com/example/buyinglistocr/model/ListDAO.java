@@ -57,6 +57,17 @@ public class ListDAO extends DAOBase {
 
     }
 
+    public void delete(long id) {
+
+        // Open the connection with the database
+        mDb = open();
+
+        mDb.delete(ListDAO.LIST_TABLE_NAME, ListDAO.LIST_KEY + " = ?", new String[]{String.valueOf(id)} );
+
+        // Close the connection with the database
+        mDb.close();
+    }
+
     /**
      * Allow to get all name of course
      * @return - The ArrayList<String> of the name courses

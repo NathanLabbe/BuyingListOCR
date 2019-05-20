@@ -3,6 +3,7 @@ package com.example.buyinglistocr.controller;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.model.ListDAO;
 import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductDAO;
 import com.googlecode.leptonica.android.WriteFile;
@@ -49,6 +52,7 @@ public class ListView extends AppCompatActivity {
 
     // access to the database
     private ProductDAO productDAO;
+    private ListDAO listDAO;
 
     // reference
     FloatingActionButton addElementBtn;
@@ -77,6 +81,7 @@ public class ListView extends AppCompatActivity {
         setContentView(R.layout.activity_list_view);
 
         productDAO = new ProductDAO(ListView.this);
+        listDAO = new ListDAO(ListView.this);
 
         //AFFICHE LE BOUTON SUR L'ACTIONBAR
         /*
@@ -157,15 +162,35 @@ public class ListView extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         String msg = "";
         switch (item.getItemId()){
+            /**BOUTON DELETE*/
             case R.id.delete:
-                msg = "delete";
-                break;
-            case R.id.settings:
-                msg = "settings";
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                //Boite de dialogue
+                builder.setTitle("Delete")
+                        .setMessage("Are you sure you want to delete ?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            listDAO.delete(idList);
+                            Intent MainIntent = new Intent(ListView.this, MainActivity.class);
+                            startActivity(MainIntent);
+                            }
+                        }
+                        )
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                closeContextMenu();
+                            }
+                        })
+
+                        .create()
+                        .show();
                 break;
 
+
         }
-        Toast.makeText(this, msg+" Checked", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, msg+" Checked", Toast.LENGTH_LONG).show();
         return super.onOptionsItemSelected(item);
     }
 
@@ -186,7 +211,7 @@ public class ListView extends AppCompatActivity {
 
     }
 
-    private void viewData2(long id) {
+    /**private void viewData2(long id) {
 
         ArrayList<Product> listProducts = productDAO.getAllProducts(id);
 
@@ -208,9 +233,9 @@ public class ListView extends AppCompatActivity {
         // TODO
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
         listView.setAdapter(adapter);
-        */
 
-    }
+
+    }*/
 
 
     /**
