@@ -1,12 +1,10 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import java.util.ArrayList;
 import android.util.Pair;
-
-import com.example.buyinglistocr.model.List;
 
 /**
  * Allow to interact with the "List" table
@@ -57,6 +55,17 @@ public class ListDAO extends DAOBase {
 
         return ret;
 
+    }
+
+    public void delete(long id) {
+
+        // Open the connection with the database
+        mDb = open();
+
+        mDb.delete(ListDAO.LIST_TABLE_NAME, ListDAO.LIST_KEY + " = ?", new String[]{String.valueOf(id)} );
+
+        // Close the connection with the database
+        mDb.close();
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

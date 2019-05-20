@@ -1,7 +1,6 @@
 package com.example.buyinglistocr.controller;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.ToolbarWidgetWrapper;
 import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +17,8 @@ import android.widget.EditText;
 import com.example.buyinglistocr.model.List;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.ListDAO;
+import com.example.buyinglistocr.model.MyAdapter;
 
 /**
  * Allow to represent the main activity

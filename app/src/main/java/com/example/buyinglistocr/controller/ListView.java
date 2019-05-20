@@ -3,6 +3,7 @@ package com.example.buyinglistocr.controller;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,10 +16,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +30,10 @@ import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.model.ListDAO;
+import com.example.buyinglistocr.model.Product;
+import com.example.buyinglistocr.model.ProductDAO;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -42,24 +50,22 @@ import java.util.Iterator;
 
 public class ListView extends AppCompatActivity {
 
-    //ACCES A LA BASE DE DONNEE
+    // access to the database
     private ProductDAO productDAO;
+    private ListDAO listDAO;
 
-    //REFERENCE
-    FloatingActionButton addNewItem;
+    // reference
+    FloatingActionButton addElementBtn;
     android.widget.ListView listView;
 
-
-    //PROPRIETE
+    // attribute
     long idList;
     ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<String> adapter;
 
-
     /**
      * Partie photo
      */
-
     public static final String TESS_DATA = "/tessdata";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/Tess";
@@ -75,32 +81,34 @@ public class ListView extends AppCompatActivity {
         setContentView(R.layout.activity_list_view);
 
         productDAO = new ProductDAO(ListView.this);
+        listDAO = new ListDAO(ListView.this);
 
-       /* //AFFICHE LE BOUTON SUR L'ACTIONBAR
+        //AFFICHE LE BOUTON SUR L'ACTIONBAR
+        /*
         getSupportActionBar().setTitle("ListView");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
-       //gestion toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        */
+        // gestion toolbar
         Toolbar toolbar = findViewById(R.id.toolbarList);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // display reference on the activity view
+        listView = (android.widget.ListView) findViewById(R.id.activity_list_view_list);
 
-        //AFFICHAGE DES REFERENCES
-        //addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
-        listView = (android.widget.ListView) findViewById(R.id.activity_main_list_view);
-
-        //RECUPERE L'ID DE LA LISTE
+        // get the idList from our current list
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
-
         System.out.println("ListView : " + idList);
 
-        //AFFICHAGE DES ELEMENTS DE NOTRE LISTE
+        // display products of our current list
         viewData(idList);
+        // TEST
+        //viewData2(idList);
 
-
-        FloatingActionButton buttonAddEl = findViewById(R.id.activity_main_activity_add_new_item);
-        buttonAddEl.setOnClickListener(new View.OnClickListener() {
+        // TODO
+        FloatingActionButton addElementBtn = findViewById(R.id.activity_list_view_add_new_elt);
+        addElementBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -115,8 +123,7 @@ public class ListView extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-                //INFORMATION SUR L'ITEM
+                // item informations
                 String str = listView.getItemAtPosition(position).toString();
                 System.out.println("NAME : " + str);
                 System.out.println("ID : " + productDAO.getId(str));
@@ -142,32 +149,103 @@ public class ListView extends AppCompatActivity {
         });
     }
 
+
+    //Affichage du menu dans la barre d'action
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_listview,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //Actions liées à chaque items
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String msg = "";
+        switch (item.getItemId()){
+            /**BOUTON DELETE*/
+            case R.id.delete:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                //Boite de dialogue
+                builder.setTitle("Delete")
+                        .setMessage("Are you sure you want to delete ?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            listDAO.delete(idList);
+                            Intent MainIntent = new Intent(ListView.this, MainActivity.class);
+                            startActivity(MainIntent);
+                            }
+                        }
+                        )
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                closeContextMenu();
+                            }
+                        })
+
+                        .create()
+                        .show();
+                break;
+
+
+        }
+        //Toast.makeText(this, msg+" Checked", Toast.LENGTH_LONG).show();
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
-     *
+     * Display all products of a list
      * @param id
      */
     private void viewData(long id) {
 
         ArrayList<String> names = productDAO.getNames(id);
         Iterator<String> it = names.iterator();
-
         while(it.hasNext()){
             listItems.add(it.next());
         }
-
+        // TODO
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
         listView.setAdapter(adapter);
 
     }
 
+    /**private void viewData2(long id) {
+
+        ArrayList<Product> listProducts = productDAO.getAllProducts(id);
+
+        Iterator<Product> it = listProducts.iterator();
+        System.out.println("VIEWDATA2 : ");
+        if(it.hasNext()){
+            it.next();
+        }
+        while(it.hasNext()) {
+            //listItems.add(it.next().getName() + " (" + it.next().getQuantityAct() + "/" + it.next().getQuantityBase() + ")");
+            Product product = it.next();
+            System.out.println(product.getName());
+        }
+
+        for (Product pdt : listProducts) {
+            System.out.println(pdt.getName());
+        }
+        /*
+        // TODO
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
+        listView.setAdapter(adapter);
+
+
+    }*/
+
 
     /**
-     *
+     * Launch AddProduct activity
      * @param v
      */
     public void addItemsView(View v) {
 
         Intent AddElementIntent = new Intent(ListView.this, AddElement.class);
+        // send the idList to the AddProduct activity
         AddElementIntent.putExtra("idList", idList);
         startActivity(AddElementIntent);
 

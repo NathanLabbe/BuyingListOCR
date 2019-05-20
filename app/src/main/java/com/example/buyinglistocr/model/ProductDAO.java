@@ -1,11 +1,8 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
-import com.example.buyinglistocr.model.List;
-import com.example.buyinglistocr.model.Product;
 
 import java.util.ArrayList;
 
@@ -65,10 +62,6 @@ public class ProductDAO extends DAOBase {
      * Allow to get all name of a list
      * @return - The ArrayList<String> of the name courses
      */
-    /**
-     * Allow to get all name of a list
-     * @return - The ArrayList<String> of the name courses
-     */
     public ArrayList<String> getNames(long id) {
 
         // The return value
@@ -103,14 +96,90 @@ public class ProductDAO extends DAOBase {
     }
 
     /**
+     * Allow to get all product
+     * @param id
+     * @return
+     */
+    public ArrayList<Product> getAllProducts (long id) {
+
+        // The return value
+        ArrayList<Product> ret = new ArrayList<>();
+
+        Product product;
+
+        // Open the connection with the database
+        mDb = open();
+
+        String query = " SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_KEY_LIST + " = " + id;
+
+        Cursor cursor = mDb.rawQuery(query, null);
+
+        if(cursor.getCount() > 0) {
+
+            while (cursor.moveToNext()) {
+
+                String name = cursor.getString(1);
+                int quantityBase = cursor.getInt(2);
+                int quantityAct = cursor.getInt(3);
+                String note = cursor.getString(4);
+                int statut = cursor.getInt(5);
+
+                product = new Product(name, quantityBase, quantityAct, note, statut, id);
+
+                // TEST
+                System.out.println("PRODUCT : " + product.getName());
+
+                ret.add(product);
+
+            }
+
+        }
+
+        cursor.close();
+
+        // Close the connection with the database
+        mDb.close();
+
+        return ret;
+    }
+
+    /**
+     * Allow to get the name of the product
+     * @param id
+     * @return
+     */
+    public String getName(long id) {
+
+        // The return value
+        String ret = "";
+
+        // Open the connection with the database
+        mDb = open();
+
+        String query = "SELECT " + PRODUCT_NAME + " FROM " + ProductDAO.PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_KEY + " = " + id;
+        Cursor cursor = mDb.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        ret = cursor.getString(0);
+
+        cursor.close();
+
+        // Close the connection with the database
+        mDb.close();
+
+        return ret;
+
+    }
+
+    /**
      * Allow to get the idProduct of the product
      * @param str - The name
      * @return - The idProduct
      */
-    public long getId(String str) {
+    public int getId(String str) {
 
         // The return value
-        long ret = 0;
+        int ret = 0;
 
         // Open the connection with the database
         mDb = open();
@@ -127,6 +196,7 @@ public class ProductDAO extends DAOBase {
         mDb.close();
 
         return ret;
+
     }
 
     /**
@@ -162,9 +232,43 @@ public class ProductDAO extends DAOBase {
 
         // Close the connection with the database
         mDb.close();
+
     }
 
 
+    public boolean exist(CharSequence str, long id) {
+
+        // The return value
+        Boolean ret = false;
+
+        // Open the connection with the database
+        mDb = open();
+
+        String query = "SELECT * FROM " + ProductDAO.PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_NAME + " = \"" + str + "\" AND " + ProductDAO.PRODUCT_KEY_LIST + " = " + id;
+        Cursor cursor = mDb.rawQuery(query, null);
+
+        if(cursor.getCount() > 0) {
+            ret = true;
+        }
+
+        // Close the connection with the database
+        mDb.close();
+
+        return ret;
+
+    }
+
+    public void deleteAll() {
+
+        // Open the connection with the database
+        mDb = open();
+
+        mDb.delete(ProductDAO.PRODUCT_TABLE_NAME, null, null);
+
+        // Close the connection with the database
+        mDb.close();
+
+    }
 
 }
 

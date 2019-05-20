@@ -9,31 +9,37 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.ProductDAO;
 
 public class ModifyElement extends AppCompatActivity {
 
-    //ACCES DE LA BASE DE DONNEE
+    // access to the database
     ProductDAO productDAO;
 
-    //REFERENCE
+    // reference
     EditText nameInput;
     Button modifyElementBtn;
     Button deleteElementBtn;
+    TextView alertTextView;
 
-    //PROPIETE
+    // attribute
     long idProduct;
     long idList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_element);
 
+        // access to the database
         productDAO = new ProductDAO(ModifyElement.this);
 
-        /*//AFFICHE LE BOUTON SUR L'ACTIONBAR
+        // display actionbar
+        /*
         getSupportActionBar().setTitle("ModifyElement");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         */
@@ -44,25 +50,37 @@ public class ModifyElement extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 startActivity(new         Intent(getApplicationContext(),MainActivity.class));
                 Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
                 ListViewIntent.putExtra("idList", idList);
                 startActivity(ListViewIntent);
+
             }
         });
 
-        //AFFICHAGE DES REFERENCES
+        // displays references on the activity view
         nameInput = (EditText) findViewById(R.id.activity_modify_element_name_input);
         modifyElementBtn = (Button) findViewById(R.id.activity_modify_element_modify_btn);
         deleteElementBtn = (Button) findViewById(R.id.activity_modify_element_delete_btn);
+        alertTextView = (TextView) findViewById(R.id.activity_modify_element_alertTextView);
 
+        // TODO
+        alertTextView.setVisibility(View.INVISIBLE);
+
+        // get the idList from our current list
         Intent intent = getIntent();
         idProduct = intent.getLongExtra("idProduct", 0);
         idList = intent.getLongExtra("idList", 0);
 
+        // TODO
+        //nameInput.setHint(productDAO.getName(idProduct).toString());
+        //System.out.println("TEST : " + productDAO.getName(idProduct).toString());
+
         modifyElementBtn.setEnabled(false);
 
         nameInput.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -77,33 +95,39 @@ public class ModifyElement extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
             }
+
         });
-
-
-    }
-
-    public void modifyElt(View view) {
-
-        productDAO.updateName(idProduct, nameInput.getText().toString());
-
-        Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
-        ListViewIntent.putExtra("idList", idList);
-
-        startActivity(ListViewIntent);
 
     }
 
     /**
-     *
+     * Update the product in the current list
+     * @param view
+     */
+    public void modifyElt(View view) {
+
+        String str = nameInput.getText().toString();
+        if (productDAO.exist(str, idList)) {
+            alertTextView.setText("This product name already exist in your list !");
+            alertTextView.setVisibility(View.VISIBLE);
+        } else {
+            productDAO.updateName(idProduct, str);
+            Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
+            ListViewIntent.putExtra("idList", idList);
+            startActivity(ListViewIntent);
+        }
+
+    }
+
+    /**
+     * Delete the product in the current list
      * @param view
      */
     public void deleteElt(View view) {
 
         productDAO.delete(idProduct);
-
         Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
         ListViewIntent.putExtra("idList", idList);
-
         startActivity(ListViewIntent);
 
     }

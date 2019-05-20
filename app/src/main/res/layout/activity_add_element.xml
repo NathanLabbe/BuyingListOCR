@@ -12,7 +12,7 @@
         layout="@layout/toolbar"/>
 
     <EditText
-        android:id="@+id/activity_add_element_name_input"
+        android:id="@+id/activity_add_element_nameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -20,13 +20,33 @@
         android:hint="Name of your element"
         />
 
+    <EditText
+        android:id="@+id/activity_add_element_quantityInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        android:hint="Quantity"/>
+
     <Button
-        android:id="@+id/activity_add_element_add_button"
+        android:id="@+id/activity_add_element_addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:text="Add"
-        android:onClick="addItems"/>
+        android:onClick="addElement"/>
+
+    <TextView
+        android:id="@+id/activity_add_element_alertTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="#80ff0000"
+        android:textAlignment="center"
+        android:text="TextView"/>
 
 </LinearLayout>

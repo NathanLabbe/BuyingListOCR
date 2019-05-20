@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
