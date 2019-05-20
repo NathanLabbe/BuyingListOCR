@@ -74,8 +74,8 @@ public class ModifyElement extends AppCompatActivity {
         idList = intent.getLongExtra("idList", 0);
 
         // TODO
-        nameInput.setHint(productDAO.getName(idProduct).toString());
-        System.out.println("TEST : " + productDAO.getName(idProduct).toString());
+        //nameInput.setHint(productDAO.getName(idProduct).toString());
+        //System.out.println("TEST : " + productDAO.getName(idProduct).toString());
 
         modifyElementBtn.setEnabled(false);
 

@@ -142,6 +142,7 @@ public class AddElement extends AppCompatActivity {
             Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
             ListViewIntent.putExtra("idList",idList);
             startActivity(ListViewIntent);
+
         }
 
     }
