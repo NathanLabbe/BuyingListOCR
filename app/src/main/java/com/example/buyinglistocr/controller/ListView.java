@@ -3,6 +3,7 @@ package com.example.buyinglistocr.controller;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -43,24 +45,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class ListView extends AppCompatActivity {
 
-    // access to the database
+    //ACCES A LA BASE DE DONNEE
     private ProductDAO productDAO;
 
-    // reference
-    FloatingActionButton addElementBtn;
+    //REFERENCE
+
     android.widget.ListView listView;
 
-    // attribute
+
+    //PROPRIETE
     long idList;
-    ArrayList<String> listItems = new ArrayList<String>();
+    ArrayList<String> listItems = new ArrayList<>();
     ArrayAdapter<String> adapter;
+
 
     /**
      * Partie photo
      */
+
     public static final String TESS_DATA = "/tessdata";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/Tess";
@@ -77,30 +83,33 @@ public class ListView extends AppCompatActivity {
 
         productDAO = new ProductDAO(ListView.this);
 
-        //AFFICHE LE BOUTON SUR L'ACTIONBAR
-        /*
+       /* //AFFICHE LE BOUTON SUR L'ACTIONBAR
         getSupportActionBar().setTitle("ListView");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        */
-        // gestion toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+       //gestion toolbar
         Toolbar toolbar = findViewById(R.id.toolbarList);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        // display reference on the activity view
-        listView = (android.widget.ListView) findViewById(R.id.activity_list_view_list);
 
-        // get the idList from our current list
+
+
+        //AFFICHAGE DES REFERENCES
+        //addNewItem = findViewById(R.id.activity_main_activity_add_new_item);
+        listView = findViewById(R.id.activity_main_list_view);
+
+        //RECUPERE L'ID DE LA LISTE
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
+
         System.out.println("ListView : " + idList);
 
-        // display products of our current list
+        //AFFICHAGE DES ELEMENTS DE NOTRE LISTE
         viewData(idList);
 
-        // TODO
-        FloatingActionButton addElementBtn = findViewById(R.id.activity_list_view_add_new_elt);
-        addElementBtn.setOnClickListener(new View.OnClickListener() {
+
+        FloatingActionButton buttonAddEl = findViewById(R.id.activity_main_activity_add_new_item);
+        buttonAddEl.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -115,7 +124,8 @@ public class ListView extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // item informations
+
+                //INFORMATION SUR L'ITEM
                 String str = listView.getItemAtPosition(position).toString();
                 System.out.println("NAME : " + str);
                 System.out.println("ID : " + productDAO.getId(str));
@@ -155,41 +165,62 @@ public class ListView extends AppCompatActivity {
         String msg = "";
         switch (item.getItemId()){
             case R.id.delete:
-                msg = "delete";
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                //Boite de dialogue
+                builder.setTitle("Delete")
+                        .setMessage("Are you sure you want to delete ?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }
+                        )
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                closeContextMenu();
+                            }
+                        })
+
+                        .create()
+                        .show();
                 break;
             case R.id.settings:
                 msg = "settings";
                 break;
 
         }
-        Toast.makeText(this, msg+" Checked", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, msg+" Checked", Toast.LENGTH_LONG).show();
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * Display all products of a list
      * @param id
      */
     private void viewData(long id) {
+
         ArrayList<String> names = productDAO.getNames(id);
         Iterator<String> it = names.iterator();
+
         while(it.hasNext()){
             listItems.add(it.next());
         }
-        // TODO
+
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
         listView.setAdapter(adapter);
+
     }
 
 
     /**
-     * Launch AddProduct activity
+     *
      * @param v
      */
     public void addItemsView(View v) {
 
         Intent AddElementIntent = new Intent(ListView.this, AddElement.class);
-        // send the idList to the AddProduct activity
         AddElementIntent.putExtra("idList", idList);
         startActivity(AddElementIntent);
 
@@ -237,7 +268,7 @@ public class ListView extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -269,12 +300,12 @@ public class ListView extends AppCompatActivity {
     private void prepareTessData() {
         try {
             File dir = getExternalFilesDir(TESS_DATA);
-            if (!dir.exists()) {
+            if (dir != null) {
                 if (!dir.mkdir()) {
                     Toast.makeText(getApplicationContext(), "The folder " + dir.getPath() + "was not created", Toast.LENGTH_SHORT).show();
                 }
             }
-            String fileList[] = getAssets().list("");
+            String[] fileList = getAssets().list("");
             for (String fileName : fileList) {
                 String pathToDataFile = dir + "/" + fileName;
                 if (!(new File(pathToDataFile)).exists()) {
