@@ -55,7 +55,7 @@ public class Product {
         Product.idProduit = idProduit;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 

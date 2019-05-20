@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductDAO;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -97,6 +98,8 @@ public class ListView extends AppCompatActivity {
 
         // display products of our current list
         viewData(idList);
+        // TEST
+        viewData2(idList);
 
         // TODO
         FloatingActionButton addElementBtn = findViewById(R.id.activity_list_view_add_new_elt);
@@ -171,14 +174,39 @@ public class ListView extends AppCompatActivity {
      * @param id
      */
     private void viewData(long id) {
+
         ArrayList<String> names = productDAO.getNames(id);
         Iterator<String> it = names.iterator();
         while(it.hasNext()){
-            listItems.add(it.next());
+            listItems.add(it.next() + " (2/2)");
         }
         // TODO
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
         listView.setAdapter(adapter);
+
+    }
+
+    private void viewData2(long id) {
+
+        ArrayList<Product> listProducts = productDAO.getAllProducts(id);
+        /*
+        Iterator<Product> it = listProducts.iterator();
+        System.out.println("VIEWDATA2 : ");
+        while(it.hasNext()) {
+            //listItems.add(it.next().getName() + " (" + it.next().getQuantityAct() + "/" + it.next().getQuantityBase() + ")");
+            Product product = it.next();
+            System.out.println(product.getName());
+        }
+        */
+        for (Product pdt : listProducts) {
+            System.out.println(pdt.getName());
+        }
+        /*
+        // TODO
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
+        listView.setAdapter(adapter);
+        */
+
     }
 
 

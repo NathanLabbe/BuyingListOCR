@@ -65,6 +65,7 @@ public class AddElement extends AppCompatActivity {
         addElementBtn = (Button) findViewById(R.id.activity_add_element_addButton);
         alertTextView = (TextView) findViewById(R.id.activity_add_element_alertTextView);
 
+        // TODO
         alertTextView.setVisibility(View.INVISIBLE);
 
         // get the idList from our current list
@@ -73,6 +74,7 @@ public class AddElement extends AppCompatActivity {
         // TEST
         System.out.println("AddElement : " + idList);
 
+        // TODO
         addElementBtn.setEnabled(false);
 
         nameInput.addTextChangedListener(new TextWatcher() {
@@ -119,6 +121,8 @@ public class AddElement extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     /**
@@ -128,11 +132,12 @@ public class AddElement extends AppCompatActivity {
     public void addElement(View v) {
 
         String str = nameInput.getText().toString();
+        int quantityBase = Integer.parseInt(quantityInput.getText().toString());
         if (productDAO.exist(str, idList)) {
             alertTextView.setText("This product already exist in your list !");
             alertTextView.setVisibility(View.VISIBLE);
         } else {
-            Product product = new Product(str, 0, 0, "", 0, idList);
+            Product product = new Product(str, quantityBase, 0, "", 0, idList);
             productDAO.add(product);
             Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
             ListViewIntent.putExtra("idList",idList);
