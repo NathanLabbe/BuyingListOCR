@@ -1,7 +1,5 @@
 package com.example.buyinglistocr.model;
 
-import org.w3c.dom.Text;
-
 public class Product {
 
     private static long idProduit;
@@ -13,7 +11,7 @@ public class Product {
     private static long idList;
 
 
-    public Product(String name, int quantityBase, int quantityAct, String note, int statut, long idList) {
+    public Product( String name, int quantityBase, int quantityAct, String note, int statut, long idList) {
         this.name = name;
         this.quantityBase = quantityBase;
         this.quantityAct = quantityAct;

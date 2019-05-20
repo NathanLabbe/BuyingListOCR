@@ -3,7 +3,6 @@ package com.example.buyinglistocr.model;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import java.util.ArrayList;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.controller.ListView;
+
+import java.util.ArrayList;
 
 /**
  * Allow to custom the recycler view

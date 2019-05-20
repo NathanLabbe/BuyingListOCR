@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -32,7 +32,6 @@ import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AnalyseData;
 import com.example.buyinglistocr.model.ListDAO;
-import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductDAO;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -399,9 +398,8 @@ public class ListView extends AppCompatActivity {
         Bitmap bitmapfinal = WriteFile.writeBitmap(tessBaseAPI.getThresholdedImage());
 
         tessBaseAPI.end();
-        AnalyseData test = new AnalyseData(retStr);
-        //retStr = test.clean(retStr);
-        System.out.println(retStr);
+        AnalyseData test = new AnalyseData("a");
+        retStr = test.clean(retStr);
         return retStr;
     }
 }
