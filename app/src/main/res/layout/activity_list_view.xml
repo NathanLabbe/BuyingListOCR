@@ -28,7 +28,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:gravity="center"
-        android:src="@drawable/camera"
+        android:src="@drawable/ic_photo_camera_black_24dp"
         android:backgroundTint="@android:color/holo_red_light"
         app:rippleColor="@android:color/black"
         android:tint="@android:color/white"
