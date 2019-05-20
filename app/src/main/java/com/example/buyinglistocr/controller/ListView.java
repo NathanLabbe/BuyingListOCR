@@ -21,16 +21,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListDAO;
 import com.example.buyinglistocr.model.ProductDAO;
 import com.googlecode.leptonica.android.WriteFile;
@@ -82,6 +85,11 @@ public class ListView extends AppCompatActivity {
         productDAO = new ProductDAO(ListView.this);
         listDAO = new ListDAO(ListView.this);
 
+        // get the idList from our current list
+        Intent intent = getIntent();
+        idList = intent.getLongExtra("idList", 0);
+        System.out.println("ListView : " + idList);
+
         //AFFICHE LE BOUTON SUR L'ACTIONBAR
         /*
         getSupportActionBar().setTitle("ListView");
@@ -92,13 +100,12 @@ public class ListView extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getSupportActionBar().setTitle( listDAO.getListName(idList));
+
         // display reference on the activity view
         listView = (android.widget.ListView) findViewById(R.id.activity_list_view_list);
 
-        // get the idList from our current list
-        Intent intent = getIntent();
-        idList = intent.getLongExtra("idList", 0);
-        System.out.println("ListView : " + idList);
+
 
         // display products of our current list
         viewData(idList);
@@ -168,13 +175,13 @@ public class ListView extends AppCompatActivity {
                 builder.setTitle("Delete")
                         .setMessage("Are you sure you want to delete ?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            listDAO.delete(idList);
-                            Intent MainIntent = new Intent(ListView.this, MainActivity.class);
-                            startActivity(MainIntent);
-                            }
-                        }
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        listDAO.delete(idList);
+                                        Intent MainIntent = new Intent(ListView.this, MainActivity.class);
+                                        startActivity(MainIntent);
+                                    }
+                                }
                         )
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
@@ -185,6 +192,43 @@ public class ListView extends AppCompatActivity {
 
                         .create()
                         .show();
+
+
+
+                break;
+            case R.id.modify:
+                // Create an alert builder
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+
+                // Set the custom layout
+                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
+                builder2.setView(customLayout);
+
+                // Define the positive button
+                builder2.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        EditText editText = customLayout.findViewById(R.id.name);
+
+                        listDAO.updateName(idList,editText.getText().toString());
+                        recreate();
+
+                    }
+
+                });
+
+                // Create and show the alert dialog
+                AlertDialog dialog = builder2.create();
+                dialog.show();
+
+
+
+
+
+
+
                 break;
 
 
@@ -212,29 +256,29 @@ public class ListView extends AppCompatActivity {
 
     /**private void viewData2(long id) {
 
-        ArrayList<Product> listProducts = productDAO.getAllProducts(id);
+     ArrayList<Product> listProducts = productDAO.getAllProducts(id);
 
-        Iterator<Product> it = listProducts.iterator();
-        System.out.println("VIEWDATA2 : ");
-        if(it.hasNext()){
-            it.next();
-        }
-        while(it.hasNext()) {
-            //listItems.add(it.next().getName() + " (" + it.next().getQuantityAct() + "/" + it.next().getQuantityBase() + ")");
-            Product product = it.next();
-            System.out.println(product.getName());
-        }
+     Iterator<Product> it = listProducts.iterator();
+     System.out.println("VIEWDATA2 : ");
+     if(it.hasNext()){
+     it.next();
+     }
+     while(it.hasNext()) {
+     //listItems.add(it.next().getName() + " (" + it.next().getQuantityAct() + "/" + it.next().getQuantityBase() + ")");
+     Product product = it.next();
+     System.out.println(product.getName());
+     }
 
-        for (Product pdt : listProducts) {
-            System.out.println(pdt.getName());
-        }
-        /*
-        // TODO
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
-        listView.setAdapter(adapter);
+     for (Product pdt : listProducts) {
+     System.out.println(pdt.getName());
+     }
+     /*
+     // TODO
+     adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
+     listView.setAdapter(adapter);
 
 
-    }*/
+     }*/
 
 
     /**

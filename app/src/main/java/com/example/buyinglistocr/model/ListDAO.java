@@ -67,7 +67,20 @@ public class ListDAO extends DAOBase {
         // Close the connection with the database
         mDb.close();
     }
+    public String getListName(long id){
+        String ret="";
 
+        // Open the connection with the database
+        mDb= open();
+
+        Cursor cursor = mDb.rawQuery("select "+ LIST_NAME +" from "+ LIST_TABLE_NAME+" where " + LIST_KEY+" = "+id, null);
+        cursor.moveToFirst();
+        ret = cursor.getString(0);
+
+        cursor.close();
+        mDb.close();
+        return ret;
+    }
     /**
      * Allow to get all name of course
      * @return - The ArrayList<String> of the name courses
@@ -101,6 +114,26 @@ public class ListDAO extends DAOBase {
         mDb.close();
 
         return ret;
+
+    }
+
+    /**
+     * Allow to update the name of the list
+     * @param id - The idList
+     * @param str - The new name
+     */
+    public void updateName(long id, String str) {
+
+        // Open the connection with the database
+        mDb = open();
+
+        ContentValues cv = new ContentValues();
+        cv.put(ListDAO.LIST_NAME, str);
+
+        mDb.update(ListDAO.LIST_TABLE_NAME, cv, ListDAO.LIST_KEY + " = ?", new String[]{String.valueOf(id)});
+
+        // Close the connection with the database
+        mDb.close();
 
     }
 

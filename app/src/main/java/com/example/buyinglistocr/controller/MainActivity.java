@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(customLayout);
 
         // Define the positive button
-        builder.setPositiveButton("Créer", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Make", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {

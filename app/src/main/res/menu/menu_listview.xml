@@ -9,13 +9,11 @@
         app:showAsAction="always"
 
         />
-    <!--
-    <item   android:id="@+id/settings"
+    <item   android:id="@+id/modify"
         android:orderInCategory="100"
-        android:title="Settings"
+        android:title="Modify"
         app:showAsAction="never"
 
         />
-    -->
 
 </menu>
