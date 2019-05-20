@@ -9,35 +9,45 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductDAO;
 
-import java.util.Objects;
-
 public class AddElement extends AppCompatActivity {
 
-    //ACCES A LA BASE DE DONNEE
+    // access to the database
     ProductDAO productDAO;
     private long idList;
-    //REFERENCE
+
+    // reference
     EditText nameInput;
+    EditText quantityInput;
     Button addElementBtn;
+    TextView alertTextView;
+
+    // attribute
+    Boolean b1 = false;
+    Boolean b2 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_element);
 
+        // access to the database
         productDAO = new ProductDAO(this);
 
-        //AFFICHE LE BOUTON SUR L'ACTIONBAR
-        // getSupportActionBar().setTitle("AddElement");
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // display the actionbar
+        /*
+        getSupportActionBar().setTitle("AddElement");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        */
         Toolbar toolbar = findViewById(R.id.toolbarAdd);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,16 +59,22 @@ public class AddElement extends AppCompatActivity {
             }
         });
         
+        // displays references on the activity view
+        nameInput = (EditText) findViewById(R.id.activity_add_element_nameInput);
+        quantityInput = (EditText) findViewById(R.id.activity_add_element_quantityInput);
+        addElementBtn = (Button) findViewById(R.id.activity_add_element_addButton);
+        alertTextView = (TextView) findViewById(R.id.activity_add_element_alertTextView);
 
-        nameInput = findViewById(R.id.activity_add_element_name_input);
-        addElementBtn = findViewById(R.id.activity_add_element_add_button);
+        // TODO
+        alertTextView.setVisibility(View.INVISIBLE);
 
-        //RECUPERE L'IDLIST
+        // get the idList from our current list
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
-
+        // TEST
         System.out.println("AddElement : " + idList);
 
+        // TODO
         addElementBtn.setEnabled(false);
 
         nameInput.addTextChangedListener(new TextWatcher() {
@@ -69,7 +85,12 @@ public class AddElement extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addElementBtn.setEnabled(s.toString().length() != 0);
+                if (s.length() > 0) {
+                    b1 = true;
+                } else {
+                    b1 = false;
+                }
+                addElementBtn.setEnabled(b1 && b2);
             }
 
             @Override
@@ -78,17 +99,51 @@ public class AddElement extends AppCompatActivity {
             }
         });
 
+        quantityInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    b2 = true;
+                } else {
+                    b2 = false;
+                }
+                addElementBtn.setEnabled(b1 && b2);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
     }
 
-    public void addItems(View v) {
+    /**
+     * Add a product to our list
+     * @param v
+     */
+    public void addElement(View v) {
+
         String str = nameInput.getText().toString();
-        Product product = new Product(str, 0, 0, "", 0, idList);
-        productDAO.add(product);
+        int quantityBase = Integer.parseInt(quantityInput.getText().toString());
+        if (productDAO.exist(str, idList)) {
+            alertTextView.setText("This product already exist in your list !");
+            alertTextView.setVisibility(View.VISIBLE);
+        } else {
+            Product product = new Product(str, quantityBase, 0, "", 0, idList);
+            productDAO.add(product);
+            Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
+            ListViewIntent.putExtra("idList",idList);
+            startActivity(ListViewIntent);
+        }
 
-        Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
-        ListViewIntent.putExtra("idList",idList);
-        startActivity(ListViewIntent);
     }
-
 
 }
