@@ -34,6 +34,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // "Item" table
     public static final String ITEM_TABLE_NAME = "Item";
 
+
+
     // Attributes of "Item" table
     public static final String ITEM_KEY = "id";
     public static final String ITEM_NAME = "name";
@@ -121,6 +123,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(SHOP_TABLE_CREATE);
         db.execSQL(PRODUCT_TABLE_CREATE);
 
+
+        creationShop(db);
+
+
+
     }
 
     /**
@@ -137,6 +144,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(SHOP_TABLE_DROP);
         db.execSQL(PRODUCT_TABLE_DROP);
         onCreate(db);
+
+    }
+
+
+    public void creationShop(SQLiteDatabase db) {
+
+        // Specify the values which wil be inserted
+        ContentValues value = new ContentValues();
+        value.put(ShopDAO.SHOP_NAME,"Intermarche");
+        // Insert the data in the database
+        long id = db.insert(ShopDAO.SHOP_TABLE_NAME,null,value);
+        creationProduct(db, id);
+    }
+
+    public void creationProduct(SQLiteDatabase db, long id) {
+
+        // Specify the values which wil be inserted
+        ContentValues value = new ContentValues();
+        value.put(ProductDAO.PRODUCT_TABLE_NAME,"CHAB.MINI ROULE.CHOC");
+        value.put(ProductDAO.PRODUCT_CORRESPONDENCE,"Gâteau");
+        value.put(ProductDAO.PRODUCT_KEY_SHOP,id);
+        db.insert(ProductDAO.PRODUCT_TABLE_NAME, null, value);
+
+        ContentValues value2 = new ContentValues();
+        value.put(ProductDAO.PRODUCT_TABLE_NAME,"PAT LAIT RED LACTOSE");
+        value.put(ProductDAO.PRODUCT_CORRESPONDENCE,"Lait");
+        value.put(ProductDAO.PRODUCT_KEY_SHOP,id);
+        db.insert(ProductDAO.PRODUCT_TABLE_NAME, null, value);
+
+
 
     }
 
