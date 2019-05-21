@@ -33,6 +33,8 @@ import android.widget.Toast;
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.model.Item;
+import com.example.buyinglistocr.model.ItemDAO;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListDAO;
 import com.example.buyinglistocr.model.ProductDAO;
@@ -53,7 +55,7 @@ import java.util.Iterator;
 public class ListView extends AppCompatActivity {
 
     // access to the database
-    private ProductDAO productDAO;
+    private ItemDAO itemDAO;
     private ListDAO listDAO;
 
     // reference
@@ -62,6 +64,7 @@ public class ListView extends AppCompatActivity {
 
     // attribute
     long idList;
+    String listName;
     ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<String> adapter;
 
@@ -82,35 +85,26 @@ public class ListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
 
-        productDAO = new ProductDAO(ListView.this);
+        itemDAO = new ItemDAO(ListView.this);
         listDAO = new ListDAO(ListView.this);
 
         // get the idList from our current list
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
+        listName = intent.getStringExtra("listName");
         System.out.println("ListView : " + idList);
 
-        //AFFICHE LE BOUTON SUR L'ACTIONBAR
-        /*
-        getSupportActionBar().setTitle("ListView");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        */
         // gestion toolbar
         Toolbar toolbar = findViewById(R.id.toolbarList);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        getSupportActionBar().setTitle( listDAO.getListName(idList));
+        getSupportActionBar().setTitle(listName);
 
         // display reference on the activity view
         listView = (android.widget.ListView) findViewById(R.id.activity_list_view_list);
 
-
-
         // display products of our current list
         viewData(idList);
-        // TEST
-        //viewData2(idList);
 
         // TODO
         FloatingActionButton addElementBtn = findViewById(R.id.activity_list_view_add_new_elt);
@@ -130,16 +124,14 @@ public class ListView extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // item informations
-                Item item = listView.getItemAtPosition(position);
-                System.out.println("NAME : " + str);
-                System.out.println("ID : " + productDAO.getId(str));
-
-                long idProduct = productDAO.getId(str);
+                Item item = (Item) listView.getItemAtPosition(position);
+                // TEST
+                System.out.println("NAME : " + item.getName());
+                System.out.println("ID : " + item.getId());
 
                 Intent ModifyElementIntent = new Intent(ListView.this, ModifyElement.class);
-                ModifyElementIntent.putExtra("idProduct", idProduct);
+                ModifyElementIntent.putExtra("idProduct", item.getId());
                 ModifyElementIntent.putExtra("idList", idList);
-
                 startActivity(ModifyElementIntent);
             }
         });
@@ -212,7 +204,9 @@ public class ListView extends AppCompatActivity {
 
                         EditText editText = customLayout.findViewById(R.id.name);
 
-                        listDAO.updateName(idList,editText.getText().toString());
+                        List list = new List(listDAO.getList(idList).getId(), editText.getText().toString(), listDAO.getList(idList).getSpent());
+
+                        listDAO.update(list);
                         recreate();
 
                     }
@@ -222,12 +216,6 @@ public class ListView extends AppCompatActivity {
                 // Create and show the alert dialog
                 AlertDialog dialog = builder2.create();
                 dialog.show();
-
-
-
-
-
-
 
                 break;
 
@@ -243,43 +231,16 @@ public class ListView extends AppCompatActivity {
      */
     private void viewData(long id) {
 
-        ArrayList<String> names = productDAO.getNames(id);
-        Iterator<String> it = names.iterator();
+        ArrayList<Item> items = itemDAO.get(idList);
+        Iterator<Item> it = items.iterator();
         while(it.hasNext()){
-            listItems.add(it.next());
+            listItems.add(it.next().getName());
         }
         // TODO
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
         listView.setAdapter(adapter);
 
     }
-
-    /**private void viewData2(long id) {
-
-     ArrayList<Product> listProducts = productDAO.getAllProducts(id);
-
-     Iterator<Product> it = listProducts.iterator();
-     System.out.println("VIEWDATA2 : ");
-     if(it.hasNext()){
-     it.next();
-     }
-     while(it.hasNext()) {
-     //listItems.add(it.next().getName() + " (" + it.next().getQuantityAct() + "/" + it.next().getQuantityBase() + ")");
-     Product product = it.next();
-     System.out.println(product.getName());
-     }
-
-     for (Product pdt : listProducts) {
-     System.out.println(pdt.getName());
-     }
-     /*
-     // TODO
-     adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
-     listView.setAdapter(adapter);
-
-
-     }*/
-
 
     /**
      * Launch AddProduct activity
@@ -293,7 +254,6 @@ public class ListView extends AppCompatActivity {
         startActivity(AddElementIntent);
 
     }
-
 
     /**
      * PARTIE PHOTO
