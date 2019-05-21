@@ -106,6 +106,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
                     Intent intent = new Intent(context, ListView.class);
                     intent.putExtra("idList", currentPair.first);
+                    intent.putExtra("listName", currentPair.second);
                     context.startActivity(intent);
 
                 }
