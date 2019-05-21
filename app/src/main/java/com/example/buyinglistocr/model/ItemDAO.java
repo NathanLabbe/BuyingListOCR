@@ -192,28 +192,8 @@ public class ItemDAO extends DAOBase {
     }
 
     /**
-    public boolean exist(CharSequence str, long id) {
-
-        // The return value
-        Boolean ret = false;
-
-        // Open the connection with the database
-        mDb = open();
-
-        String query = "SELECT * FROM " + ProductDAO.PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_NAME + " = \"" + str + "\" AND " + ProductDAO.PRODUCT_KEY_LIST + " = " + id;
-        Cursor cursor = mDb.rawQuery(query, null);
-
-        if(cursor.getCount() > 0) {
-            ret = true;
-        }
-
-        // Close the connection with the database
-        mDb.close();
-
-        return ret;
-
-    }*/
-
+     *
+     */
     public void clear() {
 
         // Open the connection with the database

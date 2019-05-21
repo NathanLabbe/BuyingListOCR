@@ -130,7 +130,7 @@ public class ListView extends AppCompatActivity {
                 System.out.println("ID : " + item.getId());
 
                 Intent ModifyElementIntent = new Intent(ListView.this, ModifyElement.class);
-                ModifyElementIntent.putExtra("idProduct", item.getId());
+                ModifyElementIntent.putExtra("idItem", item.getId());
                 ModifyElementIntent.putExtra("idList", idList);
                 startActivity(ModifyElementIntent);
             }

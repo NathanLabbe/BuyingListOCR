@@ -12,12 +12,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.Item;
+import com.example.buyinglistocr.model.ItemDAO;
 import com.example.buyinglistocr.model.ProductDAO;
+
+import java.util.ArrayList;
 
 public class ModifyElement extends AppCompatActivity {
 
     // access to the database
-    ProductDAO productDAO;
+    ItemDAO itemDAO;
 
     // reference
     EditText nameInput;
@@ -26,7 +30,7 @@ public class ModifyElement extends AppCompatActivity {
     TextView alertTextView;
 
     // attribute
-    long idProduct;
+    long idItem;
     long idList;
 
     @Override
@@ -36,13 +40,8 @@ public class ModifyElement extends AppCompatActivity {
         setContentView(R.layout.activity_modify_element);
 
         // access to the database
-        productDAO = new ProductDAO(ModifyElement.this);
+        itemDAO = new ItemDAO(ModifyElement.this);
 
-        // display actionbar
-        /*
-        getSupportActionBar().setTitle("ModifyElement");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        */
         Toolbar toolbar = findViewById(R.id.toolbarModify);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,7 +69,7 @@ public class ModifyElement extends AppCompatActivity {
 
         // get the idList from our current list
         Intent intent = getIntent();
-        idProduct = intent.getLongExtra("idProduct", 0);
+        idItem = intent.getLongExtra("idItem", 0);
         idList = intent.getLongExtra("idList", 0);
 
         // TODO
@@ -107,11 +106,14 @@ public class ModifyElement extends AppCompatActivity {
     public void modifyElt(View view) {
 
         String str = nameInput.getText().toString();
-        if (productDAO.exist(str, idList)) {
+
+        if (isPresent(str, idList)) {
             alertTextView.setText("This product name already exist in your list !");
             alertTextView.setVisibility(View.VISIBLE);
         } else {
-            productDAO.updateName(idProduct, str);
+            Item item = itemDAO.getItem(idItem);
+            item.setName(str);
+            itemDAO.update(item);
             Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
             ListViewIntent.putExtra("idList", idList);
             startActivity(ListViewIntent);
@@ -125,10 +127,34 @@ public class ModifyElement extends AppCompatActivity {
      */
     public void deleteElt(View view) {
 
-        productDAO.delete(idProduct);
+        itemDAO.delete(idItem);
         Intent ListViewIntent = new Intent(ModifyElement.this, ListView.class);
         ListViewIntent.putExtra("idList", idList);
         startActivity(ListViewIntent);
+
+    }
+
+    /**
+     *
+     * @param str
+     * @param idList
+     * @return
+     */
+    public boolean isPresent(String str, long idList) {
+
+        // The return value
+        Boolean ret = false;
+
+        // Get all items of our list
+        ArrayList<Item> items = itemDAO.get(idList);
+
+        for (Item item : items) {
+            if (item.getName().equals(str)) {
+                ret = true;
+            }
+        }
+
+        return ret;
 
     }
 }
