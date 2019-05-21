@@ -23,14 +23,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private Context context;
 
     // The ArrayList of list
-    private ArrayList<Pair<Long, String>> lists;
+    private ArrayList<List> lists;
 
     /**
      * The constructor of the class
      * @param context - The context
      * @param lists - The ArrayList of the list
      */
-    public MyAdapter(Context context, ArrayList<Pair<Long, String>> lists) {
+    public MyAdapter(Context context, ArrayList<List> lists) {
 
         this.context = context;
         this.lists = lists;
@@ -73,8 +73,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Pair<Long, String> pair = lists.get(position);
-        holder.display(pair);
+        List list = lists.get(position);
+        holder.display(list);
 
     }
 
@@ -84,7 +84,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         // The pair that the view holder represent
-        private Pair<Long, String> currentPair;
+        private List currentList;
 
         // The name of the view holder
         private final TextView name;
@@ -105,8 +105,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 public void onClick(View view) {
 
                     Intent intent = new Intent(context, ListView.class);
-                    intent.putExtra("idList", currentPair.first);
-                    intent.putExtra("listName", currentPair.second);
+                    intent.putExtra("idList", currentList.getId());
+                    intent.putExtra("listName", currentList.getName());
                     context.startActivity(intent);
 
                 }
@@ -117,12 +117,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         /**
          * Display the data in the view holder
-         * @param pair - The pair
+         * @param list - The list
          */
-        public void display(Pair pair) {
+        public void display(List list) {
 
-            currentPair = pair;
-            name.setText(currentPair.second);
+            currentList = list;
+            name.setText(currentList.getName());
 
         }
 

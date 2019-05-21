@@ -121,9 +121,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(SHOP_TABLE_CREATE);
         db.execSQL(PRODUCT_TABLE_CREATE);
 
-        creationShop():
-        creationProduct();
-
     }
 
     /**
@@ -140,28 +137,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(SHOP_TABLE_DROP);
         db.execSQL(PRODUCT_TABLE_DROP);
         onCreate(db);
-
-    }
-
-    public void creationShop(SQLiteDatabase db) {
-
-
-        // Specify the values which wil be inserted
-        ContentValues value = new ContentValues();
-        value.put(ItemDAO.ITEM_NAME, item.getName());
-        value.put(ItemDAO.ITEM_QUANTITY_DESIRED, item.getQuantityDesired());
-        value.put(ItemDAO.ITEM_QUANTITY_GOT, item.getQuantityGot());
-        value.put(ItemDAO.ITEM_NOTE, item.getNote());
-        value.put(ItemDAO.ITEM_STATUS, item.getStatus());
-        value.put(ItemDAO.ITEM_KEY_LIST, item.getIdList());
-
-        db.insert("Blablabla");
-
-    }
-
-    public void creationProduct(SQLiteDatabase db) {
-
-
 
     }
 

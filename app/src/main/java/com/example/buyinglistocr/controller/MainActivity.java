@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 
 import android.support.v7.widget.Toolbar;
-import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ListDAO listDAO;
 
     // The ArrayList of list
-    private ArrayList<Pair<Long, String>> lists;
+    private ArrayList<List> lists;
 
     /**
      * Method that be executed during the creation of the activity
@@ -118,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
                 // Add this list to the database and get it id
                 long idList = listDAO.add(list);
 
+                list.setId(idList);
+
                 // Add this list to the ArrayList
-                lists.add(Pair.create(idList, list.getName()));
+                lists.add(list);
 
                 // Notify the recycler view that a data is inserted
                 rv.getAdapter().notifyItemInserted(lists.size() - 1);
