@@ -402,7 +402,7 @@ public class ListView extends AppCompatActivity {
         Bitmap bitmapfinal = WriteFile.writeBitmap(tessBaseAPI.getThresholdedImage());
 
         tessBaseAPI.end();
-        AnalyseData test = new AnalyseData("a");
+        AnalyseData test = new AnalyseData("a", ListView.this);
         retStr = test.clean(retStr);
         return retStr;
     }

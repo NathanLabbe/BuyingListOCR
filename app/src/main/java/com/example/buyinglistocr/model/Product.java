@@ -8,24 +8,21 @@ public class Product {
     // Different attributes of Product
     private long id;
     private String name;
-    private int type;
-    private float price;
+    private String correspondence;
     private long idShop;
 
     /**
      * The constructor of the class
      * @param id - The id
      * @param name - The name
-     * @param type - The type
-     * @param price - The price
+     * @param correspondence - The correspondence
      * @param idShop - The idShop
      */
-    public Product(long id, String name, int type, float price,  long idShop) {
+    public Product(long id, String name, String correspondence,  long idShop) {
 
         this.id = id;
         this.name = name;
-        this.type = type;
-        this.price = price;
+        this.correspondence = correspondence;
         this.idShop = idShop;
 
     }
@@ -71,44 +68,26 @@ public class Product {
     }
 
     /**
-     * Getter of the type attribute
-     * @return - The type
+     * Getter of the correspondence attribute
+     * @return - The correspondence
      */
-    public int getType() {
+    public String getCorrespondence() {
 
-        return this.type;
+        return this.correspondence;
 
     }
 
     /**
-     * Setter of the type attribute
-     * @param type - The type
+     * Setter of the correspondence attribute
+     * @param correspondence - The correspondence
      */
-    public void setType(int type) {
+    public void setCorrespondence(String correspondence) {
 
-        this.type = type;
+        this.correspondence = correspondence;
 
     }
 
-    /**
-     * Getter of the price attribute
-     * @return - The price
-     */
-    public float getPrice() {
 
-        return this.price;
-
-    }
-
-    /**
-     * Setter of the price attribute
-     * @param price - The price
-     */
-    public void setPrice(int price) {
-
-        this.price = price;
-
-    }
 
     /**
      * Getter of the idShop attribute
