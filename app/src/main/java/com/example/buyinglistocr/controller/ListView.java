@@ -21,7 +21,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +36,6 @@ import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemDAO;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListDAO;
-import com.example.buyinglistocr.model.ProductDAO;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -130,7 +128,7 @@ public class ListView extends AppCompatActivity {
                 System.out.println("ID : " + item.getId());
 
                 Intent ModifyElementIntent = new Intent(ListView.this, ModifyElement.class);
-                ModifyElementIntent.putExtra("idItem", item.getId());
+                ModifyElementIntent.putExtra("idProduct", item.getId());
                 ModifyElementIntent.putExtra("idList", idList);
                 startActivity(ModifyElementIntent);
             }
@@ -403,7 +401,8 @@ public class ListView extends AppCompatActivity {
 
         tessBaseAPI.end();
         AnalyseData test = new AnalyseData("a", ListView.this);
-        retStr = test.clean(retStr);
+        retStr = test.list(retStr);
+        System.out.println(retStr);
         return retStr;
     }
 }

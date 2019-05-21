@@ -27,6 +27,8 @@ public class Product {
 
     }
 
+
+
     /**
      * Getter of the id attribute
      * @return - The id
