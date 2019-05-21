@@ -13,13 +13,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.Item;
+import com.example.buyinglistocr.model.ItemDAO;
 import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductDAO;
+
+import java.util.ArrayList;
 
 public class AddElement extends AppCompatActivity {
 
     // access to the database
-    ProductDAO productDAO;
+    private ItemDAO itemDAO;
     private long idList;
 
     // reference
@@ -38,13 +42,9 @@ public class AddElement extends AppCompatActivity {
         setContentView(R.layout.activity_add_element);
 
         // access to the database
-        productDAO = new ProductDAO(this);
+        itemDAO = new ItemDAO(this);
 
         // display the actionbar
-        /*
-        getSupportActionBar().setTitle("AddElement");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        */
         Toolbar toolbar = findViewById(R.id.toolbarAdd);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,8 +71,6 @@ public class AddElement extends AppCompatActivity {
         // get the idList from our current list
         Intent intent = getIntent();
         idList = intent.getLongExtra("idList", 0);
-        // TEST
-        System.out.println("AddElement : " + idList);
 
         // TODO
         addElementBtn.setEnabled(false);
@@ -132,18 +130,41 @@ public class AddElement extends AppCompatActivity {
     public void addElement(View v) {
 
         String str = nameInput.getText().toString();
-        int quantityBase = Integer.parseInt(quantityInput.getText().toString());
-        if (productDAO.exist(str, idList)) {
+        if (isPresent(str, idList)) {
             alertTextView.setText("This product already exist in your list !");
             alertTextView.setVisibility(View.VISIBLE);
         } else {
-            Product product = new Product(str, quantityBase, 0, "", 0, idList);
-            productDAO.add(product);
+            Item item = new Item(str, 0, 0, "", 0, idList);
+            itemDAO.add(item);
             Intent ListViewIntent = new Intent(AddElement.this, ListView.class);
             ListViewIntent.putExtra("idList",idList);
             startActivity(ListViewIntent);
 
         }
+
+    }
+
+    /**
+     *
+     * @param str
+     * @param idList
+     * @return
+     */
+    public boolean isPresent(String str, long idList) {
+
+        // The return value
+        Boolean ret = false;
+
+        // Get all items of our list
+        ArrayList<Item> items = itemDAO.get(idList);
+
+        for (Item item : items) {
+            if (item.getName().equals(str)) {
+                ret = true;
+            }
+        }
+
+        return ret;
 
     }
 

@@ -16,6 +16,26 @@ public class Item {
 
     /**
      * The constructor of the class
+     * @param name - The name
+     * @param quantityDesired - The quantityDesired
+     * @param quantityGot - The quantity got
+     * @param note - The note
+     * @param status - The status
+     * @param idList - The id of the list
+     */
+    public Item(String name, int quantityDesired, int quantityGot, String note, int status, long idList) {
+
+        this.name = name;
+        this.quantityDesired = quantityDesired;
+        this.quantityGot = quantityGot;
+        this.note = note;
+        this.status = status;
+        this.idList = idList;
+
+    }
+
+    /**
+     * The constructor of the class
      * @param id - The id
      * @param name - The name
      * @param quantityDesired - The quantityDesired
