@@ -28,13 +28,10 @@ public class AddElement extends AppCompatActivity {
 
     // reference
     EditText nameInput;
-    EditText quantityInput;
     Button addElementBtn;
     TextView alertTextView;
 
     // attribute
-    Boolean b1 = false;
-    Boolean b2 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +58,6 @@ public class AddElement extends AppCompatActivity {
         
         // displays references on the activity view
         nameInput = (EditText) findViewById(R.id.activity_add_element_nameInput);
-        quantityInput = (EditText) findViewById(R.id.activity_add_element_quantityInput);
         addElementBtn = (Button) findViewById(R.id.activity_add_element_addButton);
         alertTextView = (TextView) findViewById(R.id.activity_add_element_alertTextView);
 
@@ -84,11 +80,8 @@ public class AddElement extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    b1 = true;
-                } else {
-                    b1 = false;
+                    addElementBtn.setEnabled(true);
                 }
-                addElementBtn.setEnabled(b1 && b2);
             }
 
             @Override
@@ -96,30 +89,6 @@ public class AddElement extends AppCompatActivity {
 
             }
         });
-
-        quantityInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    b2 = true;
-                } else {
-                    b2 = false;
-                }
-                addElementBtn.setEnabled(b1 && b2);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
 
     }
 
