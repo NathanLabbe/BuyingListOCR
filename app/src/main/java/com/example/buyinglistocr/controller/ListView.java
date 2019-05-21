@@ -130,7 +130,7 @@ public class ListView extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // item informations
-                String str = listView.getItemAtPosition(position).toString();
+                Item item = listView.getItemAtPosition(position);
                 System.out.println("NAME : " + str);
                 System.out.println("ID : " + productDAO.getId(str));
 

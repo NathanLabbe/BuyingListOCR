@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import java.util.ArrayList;
-import android.util.Pair;
 
 /**
  * Allow to interact with the "List" table
@@ -15,7 +14,7 @@ public class ListDAO extends DAOBase {
     public static final String LIST_TABLE_NAME = "List";
 
     // Attributes of "List" table
-    public static final String LIST_KEY = "idList";
+    public static final String LIST_KEY = "id";
     public static final String LIST_NAME = "name";
     public static final String LIST_SPENT = "spent";
 
@@ -42,7 +41,7 @@ public class ListDAO extends DAOBase {
         // Open the connection with the database
         mDb = open();
 
-        // Specify the values which wil be inserted
+        // Specify the values which will be inserted
         ContentValues value = new ContentValues();
         value.put(ListDAO.LIST_NAME, list.getName());
         value.put(ListDAO.LIST_SPENT, list.getSpent());
@@ -57,57 +56,77 @@ public class ListDAO extends DAOBase {
 
     }
 
+    /**
+     * Allow to delete a list in the "List" table
+     * @param id - The id of the list
+     */
     public void delete(long id) {
 
         // Open the connection with the database
         mDb = open();
 
+        // Delete the data in the database
         mDb.delete(ListDAO.LIST_TABLE_NAME, ListDAO.LIST_KEY + " = ?", new String[]{String.valueOf(id)} );
 
         // Close the connection with the database
         mDb.close();
+
     }
-    public String getListName(long id){
-        String ret="";
 
-        // Open the connection with the database
-        mDb= open();
-
-        Cursor cursor = mDb.rawQuery("select "+ LIST_NAME +" from "+ LIST_TABLE_NAME+" where " + LIST_KEY+" = "+id, null);
-        cursor.moveToFirst();
-        ret = cursor.getString(0);
-
-        cursor.close();
-        mDb.close();
-        return ret;
-    }
     /**
-     * Allow to get all name of course
-     * @return - The ArrayList<String> of the name courses
+     * Allow to update a list in the "List" table
+     * @param list - The list to update
      */
-    public ArrayList<Pair<Long, String>> get() {
-
-        // The return value
-        ArrayList<Pair<Long, String>> ret = new ArrayList<>();
+    public void update(List list) {
 
         // Open the connection with the database
         mDb = open();
 
-        Cursor cursor = mDb.rawQuery("select " + LIST_KEY + ',' + LIST_NAME + " from " + LIST_TABLE_NAME, null);
+        // Specify the values which will be updated
+        ContentValues value = new ContentValues();
+        value.put(ListDAO.LIST_NAME, list.getName());
+        value.put(ListDAO.LIST_SPENT, list.getSpent());
 
+        // Update the data in the database
+        mDb.update(ListDAO.LIST_TABLE_NAME, value, ListDAO.LIST_KEY + " = ?", new String[] { String.valueOf(list.getId()) });
+
+        // Close the connection with the database
+        mDb.close();
+
+    }
+
+    /**
+     * Allow to get all list
+     * @return - The ArrayList of list
+     */
+    public ArrayList<List> get() {
+
+        // The return value
+        ArrayList<List> ret = new ArrayList<>();
+
+        // Open the connection with the database
+        mDb = open();
+
+        // Get all data of the table
+        Cursor cursor = mDb.rawQuery("select * from " + ListDAO.LIST_TABLE_NAME, null);
+
+        // If the table isn't empty
         if(cursor.getCount() > 0) {
 
+            // Browse all data
             while (cursor.moveToNext()) {
 
-                Long idList = cursor.getLong(0);
+                Long id = cursor.getLong(0);
                 String name = cursor.getString(1);
+                long spent = cursor.getLong(2);
 
-                ret.add(Pair.create(idList, name));
+                ret.add(new List(id, name, spent));
 
             }
 
         }
 
+        // Close the cursor
         cursor.close();
 
         // Close the connection with the database
@@ -118,19 +137,46 @@ public class ListDAO extends DAOBase {
     }
 
     /**
-     * Allow to update the name of the list
-     * @param id - The idList
-     * @param str - The new name
+     * Allow to get a specific list
+     * @param id - the id of the list
+     * @return - The list
      */
-    public void updateName(long id, String str) {
+    public List getList(long id){
+
+        List ret;
 
         // Open the connection with the database
         mDb = open();
 
-        ContentValues cv = new ContentValues();
-        cv.put(ListDAO.LIST_NAME, str);
+        // Get all data of a specific list
+        Cursor cursor = mDb.rawQuery("select * from " + LIST_TABLE_NAME + " where " + LIST_KEY + " = " + id, null);
 
-        mDb.update(ListDAO.LIST_TABLE_NAME, cv, ListDAO.LIST_KEY + " = ?", new String[]{String.valueOf(id)});
+        // Go to the head of data
+        cursor.moveToFirst();
+
+        // Create the new list with the data
+        String name = cursor.getString(1);
+        long spent = cursor.getLong(2);
+
+        ret = new List(id, name, spent);
+
+        // Close the cursor
+        cursor.close();
+
+        // Close the connection with the database
+        mDb.close();
+
+        return ret;
+
+    }
+
+    public void clear() {
+
+        // Open the connection with the database
+        mDb = open();
+
+        // delete all data in the database
+        mDb.delete(ListDAO.LIST_TABLE_NAME, null, null);
 
         // Close the connection with the database
         mDb.close();
@@ -138,4 +184,3 @@ public class ListDAO extends DAOBase {
     }
 
 }
-

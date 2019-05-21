@@ -3,8 +3,6 @@ package com.example.buyinglistocr.model;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.buyinglistocr.model.DatabaseHandler;
-
 /**
  * Implement the method which allow the connection with the database
  */

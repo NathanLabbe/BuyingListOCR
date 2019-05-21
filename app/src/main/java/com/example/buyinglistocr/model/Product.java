@@ -1,105 +1,133 @@
 package com.example.buyinglistocr.model;
 
+/**
+ * Represent the Product object
+ */
 public class Product {
 
-    private static long idProduit;
-    private static String name;
-    private static int quantityBase;
-    private static int quantityAct;
-    private static String note;
-    private static int statut;
-    private static long idList;
-
-
-    public Product( String name, int quantityBase, int quantityAct, String note, int statut, long idList) {
-        this.name = name;
-        this.quantityBase = quantityBase;
-        this.quantityAct = quantityAct;
-        this.note = note;
-        this.statut = statut;
-        this.idList = idList;
-    }
+    // Different attributes of Product
+    private long id;
+    private String name;
+    private int type;
+    private float price;
+    private long idShop;
 
     /**
      * The constructor of the class
-     * @param idProduit
-     * @param name
-     * @param quantityBase
-     * @param quantityAct
-     * @param note
-     * @param statut
-     * @param idList
+     * @param id - The id
+     * @param name - The name
+     * @param type - The type
+     * @param price - The price
+     * @param idShop - The idShop
      */
-    public Product(long idProduit, String name, int quantityBase, int quantityAct, String note, int statut, long idList) {
-        super();
-        this.idProduit = idProduit;
+    public Product(long id, String name, int type, float price,  long idShop) {
+
+        this.id = id;
         this.name = name;
-        this.quantityBase = quantityBase;
-        this.quantityAct = quantityAct;
-        this.note = note;
-        this.statut = statut;
-        this.idList = idList;
+        this.type = type;
+        this.price = price;
+        this.idShop = idShop;
+
     }
 
     /**
-     * Getters and setters
+     * Getter of the id attribute
+     * @return - The id
      */
+    public long getId() {
 
-    public static long getIdProduit() {
-        return idProduit;
+        return this.id;
+
     }
 
-    public static void setIdProduit(long idProduit) {
-        Product.idProduit = idProduit;
+    /**
+     * Setter of the id attribute
+     * @param id - The id
+     */
+    public void setId(long id) {
+
+        this.id = id;
+
     }
 
-    public static String getName() {
-        return name;
+    /**
+     * Getter of the name attribute
+     * @return - The name
+     */
+    public String getName() {
+
+        return this.name;
+
     }
 
-    public static void setName(String name) {
-        Product.name = name;
+    /**
+     * Setter of the name attribute
+     * @param name - The name
+     */
+    public void setName(String name) {
+
+        this.name = name;
+
     }
 
-    public static int getQuantityBase() {
-        return quantityBase;
+    /**
+     * Getter of the type attribute
+     * @return - The type
+     */
+    public int getType() {
+
+        return this.type;
+
     }
 
-    public static void setQuantityBase(int quantityBase) {
-        Product.quantityBase = quantityBase;
+    /**
+     * Setter of the type attribute
+     * @param type - The type
+     */
+    public void setType(int type) {
+
+        this.type = type;
+
     }
 
-    public static int getQuantityAct() {
-        return quantityAct;
+    /**
+     * Getter of the price attribute
+     * @return - The price
+     */
+    public float getPrice() {
+
+        return this.price;
+
     }
 
-    public static void setQuantityAct(int quantityAct) {
-        Product.quantityAct = quantityAct;
+    /**
+     * Setter of the price attribute
+     * @param price - The price
+     */
+    public void setPrice(int price) {
+
+        this.price = price;
+
     }
 
-    public static String getNote() {
-        return note;
+    /**
+     * Getter of the idShop attribute
+     * @return - The idShop
+     */
+    public long getIdShop() {
+
+        return this.idShop;
+
     }
 
-    public static void setNote(String note) {
-        Product.note = note;
-    }
+    /**
+     * Setter of the idShop attribute
+     * @param idShop - The idShop
+     */
+    public void setIdShop(int idShop) {
 
-    public static int getStatut() {
-        return statut;
-    }
+        this.idShop = idShop;
 
-    public static void setStatut(int statut) {
-        Product.statut = statut;
     }
-
-    public static long getIdList() {
-        return idList;
-    }
-
-    public static void setIdList(int idList) {
-        Product.idList = idList;
-    }
-    /**END**/
 
 }
