@@ -16,6 +16,7 @@ public class AnalyseData {
         this.context = context;
     }
 
+
     // Corriger les mots cles comme TEL, MONTANT, Nombre
     public String correction(String text) {
         String[] tokens = text.split("[ \\n]+");
@@ -38,11 +39,9 @@ public class AnalyseData {
 
     }
 
-    //Enleve les donnees inutiles et le mettre en BBD
+    //Enleve les donnees inutiles et le mettre en Table
     public void clean(String text) {
-       text= text.replace(',','.');
-
-
+        text= text.replace(',','.');
         int nbProduct = findNbProduct(text);
         String[] tokens = text.split("\\n");
         int i = 0;
@@ -57,12 +56,32 @@ public class AnalyseData {
             for (int k = 0; k < lignes.length - 3; k++){
                 nom = nom+ " "+ lignes[k];
             }
-            Purchase p = new Purchase(nom, prix, 1);
+            Purchase p = new Purchase(nom, prix, 1);// quantite defaut
             Table.add(p);
         }
 
     }
 
+
+    //Cherche le nombre de produit total
+    public int findNbProduct(String text) {
+        String[] tokens = text.split("\\n");
+        for (int i = 0; i < tokens.length; i++){
+            String[] words = tokens[i].split(" ");
+            // for (int j = 0; j < words.length; j++ ){
+
+            if(Hamming(words[0],"Nombre") < 2) {
+                nbProduct = Integer.parseInt(words[words.length-1]);
+                break;
+            }
+            //}
+        }
+        return nbProduct;
+
+    }
+
+
+    //Affichage la Table
     public String list (String text) {
         clean(text);
         findNbProduct(text);
@@ -74,10 +93,10 @@ public class AnalyseData {
         return res;
     }
 
-    // ajouter une lettre en n'importe position de mots pour le Hamming
+    // ajouter une lettre en n'importe position de mot pour le Hamming
     public String ajouteChar(String s, int i) {
         String n = "";
-        for (int k = 0; k < s.length(); k++) {
+        for (int k = 0; k <= s.length(); k++) {
             if (k < i) {
                 n = n + s.charAt(k);
             } else if (k == i) {
@@ -92,18 +111,20 @@ public class AnalyseData {
     // Comparer et corriger les mots
     public int Hamming(String s, String m) {
         int dist = 0;
+        int res = 50;
         switch (s.length() - m.length()) {
 
             case 1:
                 int i = 0;
-                while (i <= m.length() && dist != 1) {
+                while (i <= m.length()) {
                     dist = 0;
                     String n = ajouteChar(m, i);
-                    for (int k = 0; k < m.length(); k++) {
+                    for (int k = 0; k < n.length(); k++) {
                         if (n.charAt(k) != s.charAt(k)) {
                             dist = dist + 1;
                         }
                     }
+                    if (dist < res) res = dist;
                     i = i + 1;
                 }
                 break;
@@ -111,14 +132,15 @@ public class AnalyseData {
 
             case -1:
                 int j = 0;
-                while (j <= s.length() && dist != 1) {
+                while (j <= s.length() ) {
                     dist = 0;
                     String n = ajouteChar(s, j);
-                    for (int k = 0; k < s.length(); k++) {
+                    for (int k = 0; k < n.length(); k++) {
                         if (n.charAt(k) != m.charAt(k)) {
                             dist = dist + 1;
                         }
                     }
+                    if (dist < res) res = dist;
                     j = j + 1;
                 }
                 break;
@@ -129,54 +151,27 @@ public class AnalyseData {
                         dist = dist + 1;
                     }
                 }
+                res = dist;
                 break;
 
             default:
-                dist = 5;
+                res = 50;
                 break;
         }
-        return dist;
+        return res;
     }
 
-    //Corriger les fautes d'analyses
-    private String toleranceMot(String text) {
-
-        return null;
-    }
-
-    //Cherche le nombre de produit total
-    public int findNbProduct(String text) {
-        String[] tokens = text.split("\\n");
-        for (int i = 0; i < tokens.length; i++){
-            String[] words = tokens[i].split(" ");
-           // for (int j = 0; j < words.length; j++ ){
-
-                if(Hamming(words[0],"Nombre") < 2) {
-                    nbProduct = Integer.parseInt(words[words.length-1]);
-                    break;
-                }
-            //}
-        }
-        return nbProduct;
-
-    }
-
-    // return le nbProduct
-    public int getNbProduct() {
-        return nbProduct;
-    }
 
     public static void main(String[] args) throws FileNotFoundException {
 
         String c = " TEL ; 02.22.51.00.01 \n N ' r R4498809700011 \n PAT VRT FRUIT PEUle 1,28 EUR A \n PATUMES. ENN.,w,. R 1.48 EUR A \n MONTANT \nNombre de produit est 2\n";
-        AnalyseData a = new AnalyseData(c);
-        System.out.println(a.Hamming("MONTIN", "MONTANT"));
-        System.out.println(a.correction(a.textBrut));
-        System.out.println(a.findNbProduct(a.textBrut));
-        //a.clean(c);
-        System.out.println(a.Table.size());
-        System.out.println("sdrtdyddrt"+ a.list(a.textBrut));
-        //System.out.println("misss");
+        //AnalyseData a = new AnalyseData(c);
+        //System.out.println(a.Hamming("MONTANT", "MONTTT"));
+        //System.out.println(a.correction(a.textBrut));
+        //System.out.println(a.findNbProduct(a.textBrut));
+        //System.out.println(a.Table.size());
+        //System.out.println("sdrtdyddrt"+ a.list(a.textBrut));
+
 
     }
 }
