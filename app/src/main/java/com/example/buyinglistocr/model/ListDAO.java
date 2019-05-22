@@ -118,7 +118,7 @@ public class ListDAO extends DAOBase {
 
                 Long id = cursor.getLong(0);
                 String name = cursor.getString(1);
-                long spent = cursor.getLong(2);
+                double spent = cursor.getDouble(2);
 
                 ret.add(new List(id, name, spent));
 
@@ -156,7 +156,7 @@ public class ListDAO extends DAOBase {
 
         // Create the new list with the data
         String name = cursor.getString(1);
-        long spent = cursor.getLong(2);
+        double spent = cursor.getDouble(2);
 
         ret = new List(id, name, spent);
 

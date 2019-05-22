@@ -9,15 +9,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.List;
 
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.ListDAO;
-import com.example.buyinglistocr.model.MyAdapter;
 
 /**
  * Allow to represent the main activity
@@ -50,13 +49,9 @@ public class MainActivity extends AppCompatActivity {
         lists = listDAO.get();
 
         // Define the recycler view
-        rv = findViewById(R.id.list);
+        rv = findViewById(R.id.lists);
         rv.setLayoutManager(new GridLayoutManager(this, 2));
-        rv.setAdapter(new MyAdapter(MainActivity.this, lists));
-
-        //Gestion Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        rv.setAdapter(new AdapterLists(MainActivity.this, lists));
 
         // Define the buttonAdd
         FloatingActionButton buttonAdd = findViewById(R.id.buttonAdd);
@@ -71,9 +66,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
-
-
 
     }
 

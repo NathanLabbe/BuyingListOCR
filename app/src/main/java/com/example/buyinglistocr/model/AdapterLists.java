@@ -3,7 +3,6 @@ package com.example.buyinglistocr.model;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Allow to custom the recycler view
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder> {
 
     // The context of the recycler view
     private Context context;
@@ -30,7 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
      * @param context - The context
      * @param lists - The ArrayList of the list
      */
-    public MyAdapter(Context context, ArrayList<List> lists) {
+    public AdapterLists(Context context, ArrayList<List> lists) {
 
         this.context = context;
         this.lists = lists;
@@ -104,9 +103,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 @Override
                 public void onClick(View view) {
 
+                    // Start the new activity with the current list that parameter
                     Intent intent = new Intent(context, ListView.class);
-                    intent.putExtra("idList", currentList.getId());
-                    intent.putExtra("listName", currentList.getName());
+                    intent.putExtra("list", currentList);
                     context.startActivity(intent);
 
                 }

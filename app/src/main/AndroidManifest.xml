@@ -20,12 +20,6 @@
         <activity
             android:name=".controller.ListView"
             android:parentActivityName=".controller.MainActivity" />
-        <activity
-            android:name=".controller.ModifyElement"
-            android:parentActivityName=".controller.ListView" />
-        <activity
-            android:name=".controller.AddElement"
-            android:parentActivityName=".controller.ListView" />
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

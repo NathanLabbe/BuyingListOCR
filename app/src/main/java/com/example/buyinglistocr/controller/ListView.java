@@ -1,8 +1,8 @@
 package com.example.buyinglistocr.controller;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +19,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +34,8 @@ import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.AdapterItems;
+import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.AnalyseData;
 import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemDAO;
@@ -52,23 +57,23 @@ import java.util.Iterator;
 
 public class ListView extends AppCompatActivity {
 
+    // The recycler view
+    private RecyclerView rv;
+
     // access to the database
-    private ItemDAO itemDAO;
     private ListDAO listDAO;
+    private ItemDAO itemDAO;
 
-    // reference
-    FloatingActionButton addElementBtn;
-    android.widget.ListView listView;
+    // The current list
+    private List list;
 
-    // attribute
-    long idList;
-    String listName;
-    ArrayList<String> listItems = new ArrayList<String>();
-    ArrayAdapter<String> adapter;
+    // The ArrayList of Item
+    private ArrayList<Item> items;
 
     /**
      * Partie photo
      */
+
     public static final String TESS_DATA = "/tessdata";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/Tess";
@@ -77,139 +82,194 @@ public class ListView extends AppCompatActivity {
     private String mCurrentPhotoPath;
     HashMap<String, ArrayList<String>> listProduit;
 
-    @SuppressLint("ClickableViewAccessibility")
+    /**
+     * Partie photo
+     */
+
+    /**
+     * Method that be executed during the creation of the activity
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
 
-        itemDAO = new ItemDAO(ListView.this);
-        listDAO = new ListDAO(ListView.this);
-
-        // get the idList from our current list
+        // Get the parameter
         Intent intent = getIntent();
-        idList = intent.getLongExtra("idList", 0);
-        listName = intent.getStringExtra("listName");
-        System.out.println("ListView : " + idList);
+        list = intent.getParcelableExtra("list");
 
-        // gestion toolbar
+        // Get the list and the idem DAO
+        listDAO = new ListDAO(ListView.this);
+        itemDAO = new ItemDAO(ListView.this);
+
+        // Get the data
+        items = itemDAO.get(list.getId());
+
+        // Define the recycler view
+        rv = findViewById(R.id.items);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(new AdapterItems(this, items, rv));
+
+        // Define the toolbar
         Toolbar toolbar = findViewById(R.id.toolbarList);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(listName);
+        getSupportActionBar().setTitle(list.getName());
 
-        // display reference on the activity view
-        listView = (android.widget.ListView) findViewById(R.id.activity_list_view_list);
-
-        // display products of our current list
-        viewData(idList);
-
-        // TODO
-        FloatingActionButton addElementBtn = findViewById(R.id.activity_list_view_add_new_elt);
-        addElementBtn.setOnClickListener(new View.OnClickListener() {
+        // Define the buttonAddItem
+        FloatingActionButton buttonAddItem = findViewById(R.id.buttonAddItem);
+        buttonAddItem.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                addItemsView(view);
+                // Launch the alert dialog
+                showAlertDialogButtonClicked(view);
 
             }
 
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // item informations
-                Item item = (Item) listView.getItemAtPosition(position);
-                // TEST
-                System.out.println("NAME : " + item.getName());
-                System.out.println("ID : " + item.getId());
-
-                Intent ModifyElementIntent = new Intent(ListView.this, ModifyElement.class);
-                ModifyElementIntent.putExtra("idProduct", item.getId());
-                ModifyElementIntent.putExtra("idList", idList);
-                startActivity(ModifyElementIntent);
-            }
-        });
+        /*******************************************************************************************
+         * Photo
+         *******************************************************************************************/
 
         final Activity activity = this;
+
         checkPermission();
+
         this.findViewById(R.id.buttonTakePhoto).setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
                 checkPermission();
                 dispatchTakePictureIntent();
+
             }
+
         });
+
+        /*******************************************************************************************
+         * Photo
+         *******************************************************************************************/
+
     }
 
+    /**
+     * Method that be executed during the resume of the activity
+     */
+    @Override
+    public void onResume(){
 
-    //Affichage du menu dans la barre d'action
+        super.onResume();
+
+        // Notify the data set changed
+        rv.getAdapter().notifyDataSetChanged();
+
+    }
+
+    /**
+     * Allow to display the menu on the toolbar
+     * @param menu - The menu
+     * @return - A boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_listview,menu);
+
         return super.onCreateOptionsMenu(menu);
+
     }
 
-    //Actions liées à chaque items
+    /**
+     * Allow to define the action for each item
+     * @param item - The item
+     * @return - A boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String msg = "";
+
         switch (item.getItemId()){
-            /**BOUTON DELETE*/
+
             case R.id.delete:
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                //Boite de dialogue
-                builder.setTitle("Delete")
-                        .setMessage("Are you sure you want to delete ?")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        listDAO.delete(idList);
-                                        Intent MainIntent = new Intent(ListView.this, MainActivity.class);
-                                        startActivity(MainIntent);
-                                    }
-                                }
-                        )
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                closeContextMenu();
-                            }
-                        })
 
-                        .create()
-                        .show();
+                builder.setTitle("Suppression")
+                    .setMessage("Etes vous sur de vouloir supprimer cette liste ?")
+                    .setPositiveButton("Supprimer", new DialogInterface.OnClickListener() {
 
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+                            listDAO.delete(list.getId());
+
+                            Intent MainIntent = new Intent(ListView.this, MainActivity.class);
+                            startActivity(MainIntent);
+
+                        }
+
+                    })
+
+                    .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            closeContextMenu();
+
+                        }
+
+                    })
+
+                    .create()
+                    .show();
 
                 break;
+
             case R.id.modify:
+
                 // Create an alert builder
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 
                 // Set the custom layout
-                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
+                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
                 builder2.setView(customLayout);
 
                 // Define the positive button
-                builder2.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                builder2.setTitle("Modifier")
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    .setPositiveButton("Renommer", new DialogInterface.OnClickListener() {
 
-                        EditText editText = customLayout.findViewById(R.id.name);
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                        List list = new List(listDAO.getList(idList).getId(), editText.getText().toString(), listDAO.getList(idList).getSpent());
+                            EditText editText = customLayout.findViewById(R.id.name);
 
-                        listDAO.update(list);
-                        recreate();
+                            list.setName(editText.getText().toString());
 
-                    }
+                            listDAO.update(list);
 
-                });
+                            recreate();
+
+                        }
+
+                    })
+
+                    .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            closeContextMenu();
+
+                        }
+
+                    });
 
                 // Create and show the alert dialog
                 AlertDialog dialog = builder2.create();
@@ -219,43 +279,99 @@ public class ListView extends AppCompatActivity {
 
 
         }
-        //Toast.makeText(this, msg+" Checked", Toast.LENGTH_LONG).show();
+
         return super.onOptionsItemSelected(item);
+
     }
 
     /**
-     * Display all products of a list
-     * @param id
+     * Allow to define the alert dialog
+     * @param view - The view
      */
-    private void viewData(long id) {
+    public void showAlertDialogButtonClicked(View view) {
 
+        final Context context = this;
+
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
+        builder.setView(customLayout);
+
+        // Define the positive button
+        builder.setPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                EditText editText = customLayout.findViewById(R.id.name);
+
+                if(isPresent(editText.getText().toString(), list.getId())) {
+
+                    Toast toast = Toast.makeText(context, "Ce nom existe déjà", Toast.LENGTH_SHORT);
+                    toast.show();
+
+                } else {
+
+                    // Create the new item with the data of the edit text
+                    Item item = new Item(editText.getText().toString(), 0, 0, new String(), 0, list.getId());
+
+                    // Add this item to the database and get it id
+                    long idItem = itemDAO.add(item);
+
+                    item.setId(idItem);
+
+                    // Add this item to the ArrayList
+                    items.add(item);
+
+                    // Notify the recycler view that a data is inserted
+                    rv.getAdapter().notifyItemInserted(items.size() - 1);
+
+                }
+
+            }
+
+        });
+
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    /**
+     * Allow to know if an item exist with the same name in this list
+     * @param name - The name
+     * @param idList - The list id
+     * @return - True if the name exist, false else
+     */
+    public boolean isPresent(String name, long idList) {
+
+        // The return value
+        Boolean ret = false;
+
+        // Get all items of our list
         ArrayList<Item> items = itemDAO.get(idList);
-        Iterator<Item> it = items.iterator();
-        while(it.hasNext()){
-            listItems.add(it.next().getName());
+
+        for(Item item : items) {
+
+            if(item.getName().equals(name)) {
+
+                ret = true;
+
+            }
+
         }
-        // TODO
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems);
-        listView.setAdapter(adapter);
+
+        return ret;
 
     }
 
-    /**
-     * Launch AddProduct activity
-     * @param v
-     */
-    public void addItemsView(View v) {
+    /*******************************************************************************************
+     * Photo
+     *******************************************************************************************/
 
-        Intent AddElementIntent = new Intent(ListView.this, AddElement.class);
-        // send the idList to the AddProduct activity
-        AddElementIntent.putExtra("idList", idList);
-        startActivity(AddElementIntent);
-
-    }
-
-    /**
-     * PARTIE PHOTO
-     */
     //Gestion Des Permissions
     private void checkPermission() {
 
@@ -400,9 +516,10 @@ public class ListView extends AppCompatActivity {
         Bitmap bitmapfinal = WriteFile.writeBitmap(tessBaseAPI.getThresholdedImage());
 
         tessBaseAPI.end();
-        AnalyseData test = new AnalyseData("a", ListView.this);
-        retStr = test.list(retStr);
-        System.out.println(retStr);
-        return retStr;
+        /**AnalyseData test = new AnalyseData("a");
+        retStr = test.clean(retStr);
+        return retStr;*/
+
+        return null;
     }
 }
