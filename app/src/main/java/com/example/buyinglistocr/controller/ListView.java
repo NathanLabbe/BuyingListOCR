@@ -41,6 +41,10 @@ import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemDAO;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListDAO;
+import com.example.buyinglistocr.model.Product;
+import com.example.buyinglistocr.model.ProductDAO;
+import com.example.buyinglistocr.model.Shop;
+import com.example.buyinglistocr.model.ShopDAO;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -63,12 +67,19 @@ public class ListView extends AppCompatActivity {
     // access to the database
     private ListDAO listDAO;
     private ItemDAO itemDAO;
+    private ProductDAO productDAO;
+    private ShopDAO shopDAO;
 
     // The current list
     private List list;
 
     // The ArrayList of Item
     private ArrayList<Item> items;
+
+    // The List id
+    long idList;
+    String listName;
+    ArrayList<String> listItems = new ArrayList<String>();
 
     /**
      * Partie photo
@@ -99,10 +110,23 @@ public class ListView extends AppCompatActivity {
         // Get the parameter
         Intent intent = getIntent();
         list = intent.getParcelableExtra("list");
+        idList = list.getId();
+        listName = list.getName();
 
         // Get the list and the idem DAO
-        listDAO = new ListDAO(ListView.this);
         itemDAO = new ItemDAO(ListView.this);
+        listDAO = new ListDAO(ListView.this);
+        productDAO = new ProductDAO(ListView.this);
+        shopDAO = new ShopDAO(ListView.this);
+
+        Shop intermarche = new Shop(666,"intermarche");
+        shopDAO.add(intermarche);
+
+        Product p = new Product(0, "SUZI WAN NOUILLES AU", "pâtes",666);
+        productDAO.add(p);
+        System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productDAO.getAll(666).size());
+
+
 
         // Get the data
         items = itemDAO.get(list.getId());
@@ -479,6 +503,7 @@ public class ListView extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+        recreate();
     }
 
     //ORIENTATION BITMAP
@@ -499,7 +524,7 @@ public class ListView extends AppCompatActivity {
         }
         String dataPath = getExternalFilesDir("/").getPath() + "/";
         tessBaseAPI.init(dataPath, "fra",TessBaseAPI.OEM_TESSERACT_ONLY);
-        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aàAbBcçCdDeEéèêfFgGhHiIjJkKlLmMnNoôOpPqQrRsStTuùUvVwWxXyYzZ1234567890\',.;+-_%/ ");
+        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aàAbBcçCdDeEéèêfFgGhHiIjJkKlLmMnNoôOpPqQrRsStTuùUvVwWxXyYzZ1234567890°\',.;+*-_%/ ");
         /**
          * Selon le téléphone commentez
          */
@@ -516,10 +541,15 @@ public class ListView extends AppCompatActivity {
         Bitmap bitmapfinal = WriteFile.writeBitmap(tessBaseAPI.getThresholdedImage());
 
         tessBaseAPI.end();
-        /**AnalyseData test = new AnalyseData("a");
-        retStr = test.clean(retStr);
-        return retStr;*/
-
-        return null;
+        /**Analyse Data*/
+        AnalyseData test = new AnalyseData(retStr, ListView.this, idList);
+        test.correction(test.getTextBrut());
+        test.clean(test.getTextBrut());
+        test.tableToCorrespondenceTable(test.getTable());
+        test.removePurchase(test.getCorrespondanceTable());
+        for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
+            System.out.println("Element TABLE CORRES numéro"+i+" "+test.getCorrespondanceTable().get(i).getName());
+        }
+        return retStr;
     }
 }

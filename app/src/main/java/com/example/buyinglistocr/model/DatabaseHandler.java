@@ -81,18 +81,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String PRODUCT_TABLE_NAME = "Product";
 
     // Attributes of "Product" table
+
     public static final String PRODUCT_KEY = "id";
     public static final String PRODUCT_NAME = "name";
-    public static final String PRODUCT_TYPE = "type";
-    public static final String PRODUCT_PRICE = "price";
+    public static final String PRODUCT_CORRESPONDENCE = "correspondence";
     public static final String PRODUCT_KEY_SHOP = "idShop";
 
     // SQL request for the creation of the "Product" table
     public static final String PRODUCT_TABLE_CREATE = "CREATE TABLE " + PRODUCT_TABLE_NAME + " (" +
                                                    PRODUCT_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                                    PRODUCT_NAME + " TEXT, " +
-                                                   PRODUCT_TYPE + " INTEGER, " +
-                                                   PRODUCT_PRICE + " INTEGER, " +
+                                                   PRODUCT_CORRESPONDENCE + " TEXT, " +
                                                    PRODUCT_KEY_SHOP + " INTEGER);";
 
     // SQL request for the update of the "Product" table
@@ -117,14 +116,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        System.out.println("onCreate Database");
         db.execSQL(LIST_TABLE_CREATE);
         db.execSQL(ITEM_TABLE_CREATE);
         db.execSQL(SHOP_TABLE_CREATE);
         db.execSQL(PRODUCT_TABLE_CREATE);
 
 
-        creationShop(db);
+        //creationShop(db);
 
 
 
@@ -148,13 +147,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    public void creationShop(SQLiteDatabase db) {
+    /**public void creationShop(SQLiteDatabase db) {
 
         // Specify the values which wil be inserted
         ContentValues value = new ContentValues();
+        value.put(ShopDAO.SHOP_KEY, 666);
         value.put(ShopDAO.SHOP_NAME,"Intermarche");
         // Insert the data in the database
         long id = db.insert(ShopDAO.SHOP_TABLE_NAME,null,value);
+        System.out.println("Creation Shop avec id : "+ id);
         creationProduct(db, id);
     }
 
@@ -175,6 +176,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
 
-    }
+    }*/
 
 }

@@ -7,35 +7,90 @@ import java.util.ArrayList;
 
 public class AnalyseData {
     private String textBrut;
-    private ArrayList<Purchase> Table = new ArrayList<>();
+    private ArrayList<Purchase> table = new ArrayList<>();
+    private ArrayList<Purchase> correspondanceTable = new ArrayList<>();
     private int nbProduct;
+    private long idList;
     private Context context;
+    private ProductDAO productDao;
+    private ItemDAO itemDAO;
 
-    public AnalyseData(String text, Context context) {
-        this.textBrut = text;
-        this.context = context;
+    public String getTextBrut() {
+        return textBrut;
     }
 
+    public void setTextBrut(String textBrut) {
+        this.textBrut = textBrut;
+    }
+
+    public ArrayList<Purchase> getTable() {
+        return table;
+    }
+
+    public void setTable(ArrayList<Purchase> table) {
+        this.table = table;
+    }
+
+    public ArrayList<Purchase> getCorrespondanceTable() {
+        return correspondanceTable;
+    }
+
+    public void setCorrespondanceTable(ArrayList<Purchase> correspondanceTable) {
+        this.correspondanceTable = correspondanceTable;
+    }
+
+    public AnalyseData(String text, Context context, long idList) {
+        this.textBrut = text;
+        this.context = context;
+        this.idList = idList;
+        productDao = new ProductDAO(context);
+        itemDAO = new ItemDAO(context);
+    }
 
     // Corriger les mots cles comme TEL, MONTANT, Nombre
-    public String correction(String text) {
+    public void correction(String text) {
         String[] tokens = text.split("[ \\n]+");
         String res = "";
+        int count=0;
+        boolean start = false;
         for (int i = 0; i < tokens.length; i++) {
+            if (start) {count++;}
+            if (count == 3){
+                if (!(Hamming(tokens[i], "N°")==0)){
+                    res = res + "\n";
+                } else {
+                    count = -1;
+                }
+
+            }
             if (Hamming(tokens[i], "TEL") < 2) {
-                //System.out.println(tokens[i]);
-                tokens[i] = "TEL";
+                start = true;
+                tokens[i] = "\nTEL";
+                res = res +" "+ tokens[i];
             }
-            if (Hamming(tokens[i], "MONTANT") < 2) {
-                // System.out.println(tokens[i]);
+            else if (Hamming(tokens[i], "N°")==0){
+                tokens[i] = "\nN°";
+                res = res +" "+ tokens[i]+ tokens[i+1];
+            }
+            else if (Hamming(tokens[i], "MONTANT") < 2) {
                 tokens[i] = "MONTANT";
+                res = res +" "+ tokens[i];
             }
-            if (Hamming(tokens[i], "Nombre") < 2) {
+            else if (Hamming(tokens[i], "Nombre") < 2) {
                 tokens[i] = "Nombre";
+                res = res +" "+ tokens[i];
             }
-            res = res +" "+ tokens[i];
+            else if (tokens[i].equals("A")){
+                res = res + " A\n";
+            }
+            else if (Hamming(tokens[i], "EUR")<2 && i<tokens.length-1 && !tokens[i+1].equals("A")){
+                res = res + " EUR\n";
+            }
+            else if (i==0 || res.endsWith("\n")){
+                res = res + tokens[i];
+            }else {res = res +" "+ tokens[i];}
         }
-        return res;
+        this.setTextBrut(res);
 
     }
 
@@ -48,16 +103,17 @@ public class AnalyseData {
         while ( i < tokens.length && Hamming(tokens[i].split(" ")[0],"TEL") < 2){
             i++;
         }
-        i= i+2;// cet ligne depend s'il ya "N° Sirit"
+        i= i+3;// cet ligne depend s'il ya "N° Sirit"
         for (int j = i; j < (i+nbProduct); j++ ){
             String[] lignes = tokens[j].split(" ");
             String nom ="";
-            double prix = Double.parseDouble(lignes[lignes.length-3]);
+            //double prix = Double.parseDouble(lignes[lignes.length-3]);
+            double prix = 0;
             for (int k = 0; k < lignes.length - 3; k++){
                 nom = nom+ " "+ lignes[k];
             }
             Purchase p = new Purchase(nom, prix, 1);// quantite defaut
-            Table.add(p);
+            table.add(p);
         }
 
     }
@@ -69,8 +125,7 @@ public class AnalyseData {
         for (int i = 0; i < tokens.length; i++){
             String[] words = tokens[i].split(" ");
             // for (int j = 0; j < words.length; j++ ){
-
-            if(Hamming(words[0],"Nombre") < 2) {
+            if(Hamming(words[1].toLowerCase(),"nombre") < 2) {
                 nbProduct = Integer.parseInt(words[words.length-1]);
                 break;
             }
@@ -86,9 +141,8 @@ public class AnalyseData {
         clean(text);
         findNbProduct(text);
         String res ="";
-        System.out.println(Table.size());
-        for (int i = 0; i < Table.size(); i++) {
-            res = res + Table.get(i).getName() + "   " + Table.get(i).getPrice() + "    " + Table.get(i).getQuantite();
+        for (int i = 0; i < table.size(); i++) {
+            res = res + table.get(i).getName() + "   " + table.get(i).getPrice() + "    " + table.get(i).getQuantite();
         }
         return res;
     }
@@ -162,16 +216,43 @@ public class AnalyseData {
     }
 
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public void tableToCorrespondenceTable (ArrayList<Purchase> table){
+        ArrayList<Product> products = productDao.getAll(666);
+        for (int k = 0; k < table.size(); k++){
+            correspondanceTable.add(table.get(k));
+        }
+        int hamming = 50;
+        int res = -1;
+        for(int i = 0; i<table.size(); i++){
+            for(int j = 0; j<products.size(); j++){
+                int tmp = Hamming(table.get(i).getName(), products.get(j).getName());
+                if (tmp < hamming && tmp < 3){
+                    hamming = tmp;
+                    res = j;
 
-        String c = " TEL ; 02.22.51.00.01 \n N ' r R4498809700011 \n PAT VRT FRUIT PEUle 1,28 EUR A \n PATUMES. ENN.,w,. R 1.48 EUR A \n MONTANT \nNombre de produit est 2\n";
-        //AnalyseData a = new AnalyseData(c);
-        //System.out.println(a.Hamming("MONTANT", "MONTTT"));
-        //System.out.println(a.correction(a.textBrut));
-        //System.out.println(a.findNbProduct(a.textBrut));
-        //System.out.println(a.Table.size());
-        //System.out.println("sdrtdyddrt"+ a.list(a.textBrut));
+                }
+            }
+            if(res != -1){
+                correspondanceTable.get(i).setName(products.get(res).getCorrespondence());
+                res = -1;
+            }
+            hamming = 50;
 
-
+        }
     }
+
+    public void removePurchase (ArrayList<Purchase> correspondenceTable){
+        ArrayList<Item> items = itemDAO.get(idList);
+        for(int i = 0; i<correspondenceTable.size(); i++){
+            for(int j = 0; j<items.size(); j++){
+                if(correspondenceTable.get(i).getName().equals(items.get(j).getName())){
+                    itemDAO.delete(items.get(j).getId());
+                }
+            }
+        }
+    }
+
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.buyinglistocr.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -28,6 +29,30 @@ public class ProductDAO extends DAOBase {
         super(pContext);
 
     }
+    public long add(Product product) {
+
+        // The id of the item
+        long ret;
+
+        // Open the connection with the database
+        mDb = open();
+
+        // Specify the values which wil be inserted
+        ContentValues value = new ContentValues();
+        value.put(ProductDAO.PRODUCT_NAME, product.getName());
+        value.put(ProductDAO.PRODUCT_CORRESPONDENCE, product.getCorrespondence());
+        value.put(ProductDAO.PRODUCT_KEY_SHOP, product.getIdShop());
+
+        // Insert the data in the database
+        ret = mDb.insert(ProductDAO.PRODUCT_TABLE_NAME, null, value);
+
+        // Close the connection with the database
+        mDb.close();
+
+        return ret;
+
+    }
+
 
     public Product getProduct(long id) {
 
@@ -68,7 +93,7 @@ public class ProductDAO extends DAOBase {
         mDb = open();
 
         // Get all data of the table
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + ProductDAO.PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_KEY + " = " + shopKey, null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + ProductDAO.PRODUCT_TABLE_NAME + " WHERE " + ProductDAO.PRODUCT_KEY_SHOP + " = " + shopKey, null);
 
         // If the table isn't empty
         if(cursor.getCount() > 0) {
