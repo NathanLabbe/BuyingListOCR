@@ -47,6 +47,7 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
 
     }
 
+
     /**
      * Allow to create the view holder
      * @param parent - The parent

@@ -8,7 +8,16 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_marginHorizontal="15dp"
         android:hint="Product name" />
+    <EditText
+        android:id="@+id/quantities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:hint="Quantities" />
+
+
+
 
 </LinearLayout>
