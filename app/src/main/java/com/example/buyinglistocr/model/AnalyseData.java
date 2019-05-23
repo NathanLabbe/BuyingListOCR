@@ -256,7 +256,11 @@ public class AnalyseData {
         for(int i = 0; i<correspondenceTable.size(); i++){
             for(int j = 0; j<items.size(); j++){
                 if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())){
-                    itemDAO.delete(items.get(j).getId());
+                    if(items.get(j).getQuantityGot()<items.get(j).getQuantityDesired()){
+                        items.get(j).setQuantityGot(items.get(j).getQuantityGot()+1);
+                    } else if (items.get(j).getStatus()!=1){
+                        items.get(j).setStatus(1);
+                    }
                 }
             }
         }
