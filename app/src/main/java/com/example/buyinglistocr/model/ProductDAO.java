@@ -122,4 +122,17 @@ public class ProductDAO extends DAOBase {
         return ret;
     }
 
+    public void clear() {
+
+        // Open the connection with the database
+        mDb = open();
+
+        // delete all data in the database
+        mDb.delete(ProductDAO.PRODUCT_TABLE_NAME, null, null);
+
+        // Close the connection with the database
+        mDb.close();
+
+    }
+
 }
