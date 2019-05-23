@@ -101,7 +101,7 @@ public class ListView extends AppCompatActivity {
         Shop intermarche = new Shop(666,"intermarche");
         shopDAO.add(intermarche);
 
-
+        productDAO.clear();
         Product p = new Product(0, "SUZI WAN NOUILLES AU", "pâtes",666);
         productDAO.add(p);
         Product p2 = new Product(1, "LACTEL BIO 1/2E UHT", "lait",666);
