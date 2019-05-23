@@ -3,12 +3,15 @@ package com.example.buyinglistocr.model;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -106,6 +109,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
         // The buttons of the view holder
        // private final Button buttonModify;
         private final Button buttonDelete;
+        private CheckBox checkBox;
 
         /**
          * The constructor of the class
@@ -118,6 +122,33 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             itemDAO = new ItemDAO(context);
 
             name = itemView.findViewById(R.id.name);
+
+            checkBox = itemView.findViewById(R.id.checkBox);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(checkBox.isChecked()){
+                        currentItem.setStatus(1);
+                        itemDAO.update(currentItem);
+                        String sampleText = name.getText().toString();
+                        name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                        name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
+                        name.setText(sampleText);
+                        System.out.println("Statu : "+ itemDAO.getItem(currentItem.getId()).getStatus());
+                    }
+                    else {
+                        currentItem.setStatus(0);
+                        itemDAO.update(currentItem);
+                        String sampleText = name.getText().toString();
+                        name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
+                        name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
+
+                        name.setText(sampleText);
+                        System.out.println("Statu : "+ itemDAO.getItem(currentItem.getId()).getStatus());
+                    }
+                }
+            });
+
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

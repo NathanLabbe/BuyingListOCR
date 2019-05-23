@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
         builder.setView(customLayout);
-
+        builder.setTitle("Add List");
         // Define the positive button
         builder.setPositiveButton("Make", new DialogInterface.OnClickListener() {
 

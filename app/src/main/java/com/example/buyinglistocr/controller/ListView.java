@@ -265,7 +265,7 @@ public class ListView extends AppCompatActivity {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 
                 // Set the custom layout
-                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
+                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_modify_list, null);
                 builder2.setView(customLayout);
 
                 // Define the positive button
@@ -326,7 +326,7 @@ public class ListView extends AppCompatActivity {
         // Set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
         builder.setView(customLayout);
-
+        builder.setTitle("Add Product");
         // Define the positive button
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
