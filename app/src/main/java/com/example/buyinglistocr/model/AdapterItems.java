@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
@@ -184,7 +185,11 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    currentItem.setName(editText.getText().toString());
+                    if ((editText.getText().length() > 0) && isPresent(editText.getText().toString(), currentItem.getIdList())) {
+
+                        currentItem.setName(editText.getText().toString());
+
+                    }
 
                     if (editTextQte.getText().length() > 0) {
 
@@ -210,6 +215,33 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
         }
 
+        /**
+         * Allow to know if an item exist with the same name in this list
+         * @param name - The name
+         * @param idList - The list id
+         * @return - True if the name exist, false else
+         */
+        public boolean isPresent(String name, long idList) {
+
+            // The return value
+            Boolean ret = false;
+
+            // Get all items of our list
+            ArrayList<Item> items = itemDAO.get(idList);
+
+            for(Item item : items) {
+
+                if(item.getName().equals(name)) {
+
+                    ret = true;
+
+                }
+
+            }
+
+            return ret;
+
+        }
 
     }
 
