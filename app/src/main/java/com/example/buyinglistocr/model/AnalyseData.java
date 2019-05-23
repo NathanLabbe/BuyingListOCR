@@ -80,7 +80,11 @@ public class AnalyseData {
                 tokens[i] = "Nombre";
                 res = res +" "+ tokens[i];
             }
-            else if (tokens[i].equals("A")){
+            else if (Hamming(tokens[i], "TOTAL") < 2){
+                tokens[i] = "\nTOTAL";
+                res = res + " "+ tokens[i];
+            }
+            else if (tokens[i].equals("A")||tokens[i].equals("B")||tokens[i].equals("C")){
                 res = res + " A\n";
             }
             else if (Hamming(tokens[i], "EUR")<2 && i<tokens.length-1 && !tokens[i+1].equals("A")){
@@ -245,7 +249,7 @@ public class AnalyseData {
         ArrayList<Item> items = itemDAO.get(idList);
         for(int i = 0; i<correspondenceTable.size(); i++){
             for(int j = 0; j<items.size(); j++){
-                if(correspondenceTable.get(i).getName().equals(items.get(j).getName())){
+                if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())){
                     itemDAO.delete(items.get(j).getId());
                 }
             }

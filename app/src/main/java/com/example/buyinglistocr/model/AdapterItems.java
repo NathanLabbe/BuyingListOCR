@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
@@ -101,7 +102,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
         private final TextView name;
 
         // The buttons of the view holder
-        private final Button buttonModify;
+       // private final Button buttonModify;
         private final Button buttonDelete;
 
         /**
@@ -115,20 +116,16 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             itemDAO = new ItemDAO(context);
 
             name = itemView.findViewById(R.id.name);
-
-            buttonModify = itemView.findViewById(R.id.buttonModify);
-            buttonModify.setOnClickListener(new View.OnClickListener() {
-
+            name.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-
-                    showAlertDialogButtonClicked(view);
-
+                public void onClick(View v) {
+                    showAlertDialogNameClicked(v);
                 }
-
             });
 
-            buttonDelete = itemView.findViewById(R.id.buttonDelete);
+
+
+            buttonDelete = itemView.findViewById(R.id.delete);
             buttonDelete.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -164,20 +161,21 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
          * Allow to define the alert dialog
          * @param view - The view
          */
-        public void showAlertDialogButtonClicked(View view) {
+        public void showAlertDialogNameClicked(View view) {
 
             // Create an alert builder
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
             // Set the custom layout
-            final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_create_list, null);
+           // final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_create_item, null);
+            final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_modify_item,null);
             builder.setView(customLayout);
 
             final EditText editText = customLayout.findViewById(R.id.name);
             editText.setText(currentItem.getName());
 
             // Define the positive button
-            builder.setPositiveButton("Make", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -198,6 +196,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             dialog.show();
 
         }
+
 
     }
 

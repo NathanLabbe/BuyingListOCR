@@ -229,9 +229,9 @@ public class ListView extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                builder.setTitle("Suppression")
-                    .setMessage("Etes vous sur de vouloir supprimer cette liste ?")
-                    .setPositiveButton("Supprimer", new DialogInterface.OnClickListener() {
+                builder.setTitle("Delete")
+                    .setMessage("Are you sure ?")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -245,7 +245,7 @@ public class ListView extends AppCompatActivity {
 
                     })
 
-                    .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -271,9 +271,9 @@ public class ListView extends AppCompatActivity {
                 builder2.setView(customLayout);
 
                 // Define the positive button
-                builder2.setTitle("Modifier")
+                builder2.setTitle("Modify")
 
-                    .setPositiveButton("Renommer", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Rename", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -290,7 +290,7 @@ public class ListView extends AppCompatActivity {
 
                     })
 
-                    .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -330,7 +330,7 @@ public class ListView extends AppCompatActivity {
         builder.setView(customLayout);
 
         // Define the positive button
-        builder.setPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -339,7 +339,7 @@ public class ListView extends AppCompatActivity {
 
                 if(isPresent(editText.getText().toString(), list.getId())) {
 
-                    Toast toast = Toast.makeText(context, "Ce nom existe déjà", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(context, "This name already exist", Toast.LENGTH_SHORT);
                     toast.show();
 
                 } else {
