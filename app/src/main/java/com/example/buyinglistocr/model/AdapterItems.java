@@ -216,7 +216,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if ((editText.getText().length() > 0) && isPresent(editText.getText().toString(), currentItem.getIdList())) {
+                    if ((editText.getText().length() > 0) && !isPresent(editText.getText().toString(), currentItem.getIdList())) {
 
                         currentItem.setName(editText.getText().toString());
 
