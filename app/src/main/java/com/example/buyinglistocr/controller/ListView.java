@@ -346,7 +346,8 @@ public class ListView extends AppCompatActivity {
 
                     int quantityDesired = 1;
 
-                    if (editTextQte.getTextSize() > 0) {
+                    if (editTextQte.getText().length() > 0) {
+                        System.out.println("true");
                         quantityDesired = Integer.parseInt(editTextQte.getText().toString());
                     }
 
@@ -357,7 +358,7 @@ public class ListView extends AppCompatActivity {
                     long idItem = itemDAO.add(item);
 
                     // TEST
-                    System.out.println("TEST LISTVIEW - quantityDesired : " + itemDAO.getItem(item.getId()).getQuantityDesired());
+                    System.out.println("TEST LISTVIEW - quantityDesired : " + itemDAO.getItem(idItem).getQuantityDesired());
 
                     item.setId(idItem);
 

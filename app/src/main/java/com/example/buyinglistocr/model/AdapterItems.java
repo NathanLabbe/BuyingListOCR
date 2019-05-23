@@ -176,7 +176,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             editText.setText(currentItem.getName());
 
             final EditText editTextQte = customLayout.findViewById(R.id.quantities);
-            editTextQte.setText(currentItem.getQuantityDesired());
+            editTextQte.setText(""+currentItem.getQuantityDesired());
 
             // Define the positive button
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
@@ -186,7 +186,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
                     currentItem.setName(editText.getText().toString());
 
-                    if (editTextQte.getTextSize() > 0) {
+                    if (editTextQte.getText().length() > 0) {
 
                         currentItem.setQuantityDesired(Integer.parseInt(editTextQte.getText().toString()));
 
