@@ -132,8 +132,6 @@ public class ListView extends AppCompatActivity {
         createShop();
         System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productDAO.getAll(666).size());
 
-
-
         // Get the data
         items = itemDAO.get(list.getId());
 
@@ -337,6 +335,8 @@ public class ListView extends AppCompatActivity {
 
                 EditText editText = customLayout.findViewById(R.id.name);
 
+                EditText editTextQte = customLayout.findViewById(R.id.quantities);
+
                 if(isPresent(editText.getText().toString(), list.getId())) {
 
                     Toast toast = Toast.makeText(context, "This name already exist", Toast.LENGTH_SHORT);
@@ -344,11 +344,20 @@ public class ListView extends AppCompatActivity {
 
                 } else {
 
+                    int quantityDesired = 1;
+
+                    if (editTextQte.getTextSize() > 0) {
+                        quantityDesired = Integer.parseInt(editTextQte.getText().toString());
+                    }
+
                     // Create the new item with the data of the edit text
-                    Item item = new Item(editText.getText().toString(), 0, 0, new String(), 0, list.getId());
+                    Item item = new Item(editText.getText().toString(), quantityDesired, 0, new String(), 0, list.getId());
 
                     // Add this item to the database and get it id
                     long idItem = itemDAO.add(item);
+
+                    // TEST
+                    System.out.println("TEST LISTVIEW - quantityDesired : " + itemDAO.getItem(item.getId()).getQuantityDesired());
 
                     item.setId(idItem);
 

@@ -2,6 +2,7 @@ package com.example.buyinglistocr.model;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -174,6 +175,9 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             final EditText editText = customLayout.findViewById(R.id.name);
             editText.setText(currentItem.getName());
 
+            final EditText editTextQte = customLayout.findViewById(R.id.quantities);
+            editTextQte.setText(currentItem.getQuantityDesired());
+
             // Define the positive button
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
 
@@ -182,7 +186,16 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
                     currentItem.setName(editText.getText().toString());
 
+                    if (editTextQte.getTextSize() > 0) {
+
+                        currentItem.setQuantityDesired(Integer.parseInt(editTextQte.getText().toString()));
+
+                    }
+
                     itemDAO.update(currentItem);
+
+                    // TEST
+                    System.out.println("TEST ADAPTERITEMS - quantityDesired : " + itemDAO.getItem(currentItem.getId()).getQuantityDesired());
 
                     // Notify the recycler view that a data is inserted
                     rv.getAdapter().notifyItemChanged(position);

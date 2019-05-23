@@ -200,7 +200,7 @@ public class ItemDAO extends DAOBase {
         mDb = open();
 
         // delete all data in the database
-        mDb.delete(ProductDAO.PRODUCT_TABLE_NAME, null, null);
+        mDb.delete(ItemDAO.ITEM_TABLE_NAME, null, null);
 
         // Close the connection with the database
         mDb.close();
