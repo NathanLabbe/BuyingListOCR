@@ -123,17 +123,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 }
             });
 
-        //  buttonModify = itemView.findViewById(R.id.buttonModify);
-        //  buttonModify.setOnClickListener(new View.OnClickListener() {
 
-        //      @Override
-        //      public void onClick(View view) {
-
-        //          showAlertDialogButtonClicked(view);
-
-        //      }
-
-        //  });
 
             buttonDelete = itemView.findViewById(R.id.delete);
             buttonDelete.setOnClickListener(new View.OnClickListener() {
