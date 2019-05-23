@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,15 +26,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AdapterItems;
-import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.AnalyseData;
 import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemDAO;
@@ -57,7 +53,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class ListView extends AppCompatActivity {
 
@@ -97,6 +92,22 @@ public class ListView extends AppCompatActivity {
      * Partie photo
      */
 
+
+    /**
+     * Method that be executed during the creation of the activity
+     * Create shop with some of product
+     */
+    public void createShop() {
+        Shop intermarche = new Shop(666,"intermarche");
+        shopDAO.add(intermarche);
+
+
+        Product p = new Product(0, "SUZI WAN NOUILLES AU", "pâtes",666);
+        productDAO.add(p);
+        Product p2 = new Product(1, "LACTEL BIO 1/2E UHT", "lait",666);
+        productDAO.add(p2);
+    }
+
     /**
      * Method that be executed during the creation of the activity
      * @param savedInstanceState
@@ -118,12 +129,7 @@ public class ListView extends AppCompatActivity {
         listDAO = new ListDAO(ListView.this);
         productDAO = new ProductDAO(ListView.this);
         shopDAO = new ShopDAO(ListView.this);
-
-        Shop intermarche = new Shop(666,"intermarche");
-        shopDAO.add(intermarche);
-
-        Product p = new Product(0, "SUZI WAN NOUILLES AU", "pâtes",666);
-        productDAO.add(p);
+        createShop();
         System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productDAO.getAll(666).size());
 
 
@@ -543,8 +549,12 @@ public class ListView extends AppCompatActivity {
         tessBaseAPI.end();
         /**Analyse Data*/
         AnalyseData test = new AnalyseData(retStr, ListView.this, idList);
-        test.correction(test.getTextBrut());
+        System.out.println(test.getTextBrut());
+       // test.correction(test.getTextBrut());  // pas besoin pour ce moment;
         test.clean(test.getTextBrut());
+        for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
+            System.out.println("Element TABLE numéro"+i+" "+test.getTable().get(i).getName());
+        }
         test.tableToCorrespondenceTable(test.getTable());
         test.removePurchase(test.getCorrespondanceTable());
         for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
