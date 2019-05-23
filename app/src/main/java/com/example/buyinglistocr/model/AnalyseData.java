@@ -107,12 +107,11 @@ public class AnalyseData {
         while ( i < tokens.length && Hamming(tokens[i].split(" ")[0],"TEL") < 2){
             i++;
         }
-        i= i+3;// cet ligne depend s'il ya "N° Sirit"
+        i= i+2;// cet ligne depend s'il ya "N° Sirit"
         for (int j = i; j < (i+nbProduct); j++ ){
             String[] lignes = tokens[j].split(" ");
             String nom ="";
-            //double prix = Double.parseDouble(lignes[lignes.length-3]);
-            double prix = 0;
+            double prix = Double.parseDouble(lignes[lignes.length-3]);
             for (int k = 0; k < lignes.length - 3; k++){
                 nom = nom+ " "+ lignes[k];
             }
@@ -129,7 +128,7 @@ public class AnalyseData {
         for (int i = 0; i < tokens.length; i++){
             String[] words = tokens[i].split(" ");
             // for (int j = 0; j < words.length; j++ ){
-            if(Hamming(words[1].toLowerCase(),"nombre") < 2) {
+            if(Hamming(words[0].toLowerCase(),"nombre") < 2) {
                 nbProduct = Integer.parseInt(words[words.length-1]);
                 break;
             }
@@ -219,7 +218,10 @@ public class AnalyseData {
         return res;
     }
 
-
+    /**
+     * From the arrayList of purchase we create a arrayList of purchase with the correspondance of each name of the first arrayList
+     * @param table
+     */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
         ArrayList<Product> products = productDao.getAll(666);
         for (int k = 0; k < table.size(); k++){
@@ -245,6 +247,10 @@ public class AnalyseData {
         }
     }
 
+    /**
+     * We compare the correspondance table to the elements on our list and we delete
+     * @param correspondenceTable
+     */
     public void removePurchase (ArrayList<Purchase> correspondenceTable){
         ArrayList<Item> items = itemDAO.get(idList);
         for(int i = 0; i<correspondenceTable.size(); i++){
