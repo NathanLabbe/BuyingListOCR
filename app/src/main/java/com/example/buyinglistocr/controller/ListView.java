@@ -22,6 +22,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -117,6 +119,7 @@ public class ListView extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
+
 
         // Get the parameter
         Intent intent = getIntent();
@@ -327,28 +330,34 @@ public class ListView extends AppCompatActivity {
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
         builder.setView(customLayout);
         builder.setTitle("Add Product");
+        final EditText editText = customLayout.findViewById(R.id.name);
+
+        final EditText editTextQte = customLayout.findViewById(R.id.quantities);
         // Define the positive button
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                EditText editText = customLayout.findViewById(R.id.name);
-
-                EditText editTextQte = customLayout.findViewById(R.id.quantities);
 
                 if(isPresent(editText.getText().toString(), list.getId())) {
 
                     Toast toast = Toast.makeText(context, "This name already exist", Toast.LENGTH_SHORT);
                     toast.show();
 
-                } else {
+                }
+
+
+
+                    else {
 
                     int quantityDesired = 1;
 
                     if (editTextQte.getText().length() > 0) {
                         System.out.println("true");
-                        quantityDesired = Integer.parseInt(editTextQte.getText().toString());
+                        if (Integer.parseInt(editTextQte.getText().toString())>0){
+                            quantityDesired = Integer.parseInt(editTextQte.getText().toString());
+                        }
                     }
 
                     // Create the new item with the data of the edit text
@@ -364,7 +373,6 @@ public class ListView extends AppCompatActivity {
 
                     // Add this item to the ArrayList
                     items.add(item);
-
                     // Notify the recycler view that a data is inserted
                     rv.getAdapter().notifyItemInserted(items.size() - 1);
 
@@ -375,9 +383,57 @@ public class ListView extends AppCompatActivity {
         });
 
         // Create and show the alert dialog
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(editText.getText().length()<1){
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else if (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0){
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        editTextQte.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(editTextQte.getText().length()>0) {
+                    if (Integer.parseInt(editTextQte.getText().toString()) <= 0) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                        Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (editText.getText().length()>1) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    }
+                } else if (editText.getText().length()>1){
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     /**
