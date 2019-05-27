@@ -270,7 +270,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                         Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
                         toast.show();
-                    } else if (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0){
+                    } else if (!editText.getText().toString().startsWith(" ") && (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0)){
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     }
                 }
@@ -292,10 +292,10 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                             Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
                             toast.show();
-                        } else if (editText.getText().length()>1) {
+                        } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")) {
                             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                         }
-                    } else if (editText.getText().length()>1){
+                    } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")){
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     }
                 }
