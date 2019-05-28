@@ -205,7 +205,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
         public void showAlertDialogNameClicked(View view) {
 
             // Create an alert builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
             // Set the custom layout
            // final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_create_item, null);
@@ -229,6 +229,8 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     if ((editText.getText().length() > 0) && !isPresent(editText.getText().toString(), currentItem.getIdList())) {
 
                         currentItem.setName(editText.getText().toString());
+
+                    } else {
 
                     }
 
