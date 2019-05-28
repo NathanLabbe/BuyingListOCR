@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
@@ -60,6 +61,9 @@ public class ListView extends AppCompatActivity {
 
     // The recycler view
     private RecyclerView rv;
+
+    //
+    TextView textView2;
 
     // access to the database
     private ListDAO listDAO;
@@ -162,6 +166,11 @@ public class ListView extends AppCompatActivity {
             }
 
         });
+
+        //
+        textView2 = findViewById(R.id.textView2);
+
+        textView2.setText("YEAH");
 
         /*******************************************************************************************
          * Photo
