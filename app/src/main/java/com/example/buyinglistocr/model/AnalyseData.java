@@ -2,18 +2,18 @@ package com.example.buyinglistocr.model;
 
 import android.content.Context;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class AnalyseData {
     private String textBrut;
-    private ArrayList<Purchase> table = new ArrayList<>();
+    public static ArrayList<Purchase> table = new ArrayList<>();
     private ArrayList<Purchase> correspondanceTable = new ArrayList<>();
     private int nbProduct;
     private long idList;
     private Context context;
     private ProductDAO productDao;
     private ItemDAO itemDAO;
+    private ListDAO list;
 
     public String getTextBrut() {
         return textBrut;
@@ -45,6 +45,11 @@ public class AnalyseData {
         this.idList = idList;
         productDao = new ProductDAO(context);
         itemDAO = new ItemDAO(context);
+    }
+
+    public AnalyseData(String text, long idList) {
+        this.textBrut = text;
+        this.idList = idList;
     }
 
     // Corriger les mots cles comme TEL, MONTANT, Nombre
@@ -102,20 +107,33 @@ public class AnalyseData {
     public void clean(String text) {
         text= text.replace(',','.');
         int nbProduct = findNbProduct(text);
+        System.out.println("Nombre de product is "+ nbProduct);
         String[] tokens = text.split("\\n");
         int i = 0;
-        while ( i < tokens.length && Hamming(tokens[i].split(" ")[0],"TEL") < 2){
+        while ( i < tokens.length && (Hamming(tokens[i].split(" ")[0].toLowerCase(),"tel") >= 2)){
             i++;
         }
-        i= i+2;// cet ligne depend s'il ya "N° Sirit"
+        i= i+1;// cet ligne depend s'il ya "N° Sirit"
+        //System.out.println(i);
         for (int j = i; j < (i+nbProduct); j++ ){
             String[] lignes = tokens[j].split(" ");
             String nom ="";
-            double prix = Double.parseDouble(lignes[lignes.length-3]);
-            for (int k = 0; k < lignes.length - 3; k++){
-                nom = nom+ " "+ lignes[k];
+            double prix;
+            if (lignes[lignes.length-1].length() == 1) {
+                prix = Double.parseDouble(lignes[lignes.length - 3]);
+                for (int k = 0; k < lignes.length - 3; k++) {
+                    nom = nom + " " + lignes[k];
+                }
+            }else {
+                for (int k = 0; k < lignes.length; k++) {
+                    nom = nom + " " + lignes[k];
+                }
+                lignes = tokens[j+1].split(" ");
+                prix = Double.parseDouble(lignes[lignes.length - 3]);
+                j++;
+                i++;
             }
-            Purchase p = new Purchase(nom, prix, 1);// quantite defaut
+            Purchase p = new Purchase(nom, 0.0, 1);// quantite defaut
             table.add(p);
         }
 
@@ -128,8 +146,9 @@ public class AnalyseData {
         for (int i = 0; i < tokens.length; i++){
             String[] words = tokens[i].split(" ");
             // for (int j = 0; j < words.length; j++ ){
-            if(Hamming(words[0].toLowerCase(),"nombre") < 2) {
+            if(Hamming(words[0],"Nombre") < 2) {
                 nbProduct = Integer.parseInt(words[words.length-1]);
+                //System.out.println("nb Product is"+nbProduct);
                 break;
             }
             //}
@@ -142,10 +161,10 @@ public class AnalyseData {
     //Affichage la Table
     public String list (String text) {
         clean(text);
-        findNbProduct(text);
+        //findNbProduct(text);
         String res ="";
         for (int i = 0; i < table.size(); i++) {
-            res = res + table.get(i).getName() + "   " + table.get(i).getPrice() + "    " + table.get(i).getQuantite();
+            res = res + table.get(i).getName() + "   " + table.get(i).getPrice() + "    " + table.get(i).getQuantite()+"\n";
         }
         return res;
     }
@@ -224,6 +243,8 @@ public class AnalyseData {
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
         ArrayList<Product> products = productDao.getAll(666);
+        //System.out.println(products.get(0).getName());
+        //System.out.println(products.get(0).getName());
         for (int k = 0; k < table.size(); k++){
             correspondanceTable.add(table.get(k));
         }
@@ -232,7 +253,8 @@ public class AnalyseData {
         for(int i = 0; i<table.size(); i++){
             for(int j = 0; j<products.size(); j++){
                 int tmp = Hamming(table.get(i).getName(), products.get(j).getName());
-                if (tmp < hamming && tmp < 3){
+                //System.out.println(table.get(i).getName());
+                if (tmp < hamming && tmp < 5){
                     hamming = tmp;
                     res = j;
 
@@ -240,6 +262,8 @@ public class AnalyseData {
             }
             if(res != -1){
                 correspondanceTable.get(i).setName(products.get(res).getCorrespondence());
+                correspondanceTable.get(i).setPrice(table.get(i).getPrice());
+                System.out.println("Name is "+ products.get(res).getCorrespondence());
                 res = -1;
             }
             hamming = 50;
@@ -252,20 +276,35 @@ public class AnalyseData {
      * @param correspondenceTable
      */
     public void removePurchase (ArrayList<Purchase> correspondenceTable){
+        double spent = 0;
+        List lists =  list.getList(idList);
         ArrayList<Item> items = itemDAO.get(idList);
         for(int i = 0; i<correspondenceTable.size(); i++){
             for(int j = 0; j<items.size(); j++){
                 if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())){
                     if(items.get(j).getQuantityGot()<items.get(j).getQuantityDesired()){
                         items.get(j).setQuantityGot(items.get(j).getQuantityGot()+1);
+                        itemDAO.update(items.get(j));
+                        System.out.println(items.get(j).getName() + " : " + items.get(j).getQuantityGot());
+                        if(items.get(j).getQuantityGot()==items.get(j).getQuantityDesired()){
+
+                            items.get(j).setStatus(1);
+                            itemDAO.update(items.get(j));
+                        }
+                        spent = spent + correspondenceTable.get(i).getPrice();
+                        System.out.println("Your spent is "+ spent);
                     } else if (items.get(j).getStatus()!=1){
                         items.get(j).setStatus(1);
+                        itemDAO.update(items.get(j));
+                    } else {
+                        System.out.println(items.get(j).getName() + " STATUT : " + items.get(j).getStatus());
                     }
                 }
             }
         }
+        lists.setSpent(spent);
+        list.update(lists);
     }
-
 
 
 

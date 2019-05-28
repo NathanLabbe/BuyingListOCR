@@ -183,4 +183,21 @@ public class ListDAO extends DAOBase {
 
     }
 
+    /*public void updateSpent(int spent) {
+        int res = Integer.parseInt(ListDAO.LIST_SPENT)+ spent;
+        mDb = open();
+
+        // Specify the values which will be updated
+        ContentValues value = new ContentValues();
+        value.put(ListDAO.LIST_SPENT, res);
+
+        // Update the data in the database
+        mDb.update(ListDAO.LIST_TABLE_NAME, value, ListDAO.LIST_KEY + " = ?", new String[] { String.valueOf(LIST_KEY) });
+
+        // Close the connection with the database
+        mDb.close();
+
+
+    }*/
+
 }

@@ -108,10 +108,27 @@ public class ListView extends AppCompatActivity {
         shopDAO.add(intermarche);
 
         productDAO.clear();
-        Product p = new Product(0, "SUZI WAN NOUILLES AU", "pâtes",666);
-        productDAO.add(p);
+        Product p1 = new Product(0, "SUZI WAN NOUILLES AU", "pâtes",666);
+        productDAO.add(p1);
         Product p2 = new Product(1, "LACTEL BIO 1/2E UHT", "lait",666);
         productDAO.add(p2);
+        Product p3 = new Product(2, "RANOU ALLUMETTES NAT", "lardon",666);
+        productDAO.add(p3);
+        Product p4 = new Product(3, "RANOU ALLUMETTES NAT", "lardon",666);
+        productDAO.add(p4);
+        Product p5 = new Product(4, "GLADE REFRESH FR.SOM", "beauté",666);
+        productDAO.add(p5);
+        Product p6 = new Product(5, "PASQ 8 PAINS CHOCO I", "pain",666);
+        productDAO.add(p6);
+        Product p7 = new Product(6, "FLORETTE MACHE 125G", "légume",666);
+        productDAO.add(p7);
+        Product p8 = new Product(7, "JANZ CUITS PLT LR BLC", "poulet",666);
+        productDAO.add(p8);
+        Product p9 = new Product(7, "TOMATE RONDE VRAC", "tomate",666);
+        productDAO.add(p9);
+        Product p10 = new Product(7, "BIO PAT LT UHT 1/2EC", "lait",666);
+        productDAO.add(p8);
+
     }
 
     /**
@@ -138,7 +155,6 @@ public class ListView extends AppCompatActivity {
         shopDAO = new ShopDAO(ListView.this);
         createShop();
         System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productDAO.getAll(666).size());
-
         // Get the data
         items = itemDAO.get(list.getId());
 
@@ -622,7 +638,9 @@ public class ListView extends AppCompatActivity {
         Bitmap bitmapfinal = WriteFile.writeBitmap(tessBaseAPI.getThresholdedImage());
 
         tessBaseAPI.end();
+
         /**Analyse Data*/
+        //String c = " EiQ ANS \n SAS RENGASE V \n Au cap1ta1 de 48 000 E \n 1 Rue A1exandre Lefas \n 35700 Rennes \nTel 102 99 36 29 24 \n xa********* \n RANUU ALLUMETTES NAT 1,47 EUR A \n RANOU ALLUMETTES NAT 1,47 EUR A \n GLADE REFRESH FR.SDM 2.30 EUR 8 \n PASD 8 PAINS CHOCO I 1.64 EUR A \n FLDRETTE MACHE 1256 1.85 EUR A \n JANZ CUIS PLT LR BLU 3,85 EUR A \n NECTARINE BLANCHE VR \n 0,830 kg x 3,99EURO/kg 3,31 EUR A \n CERù5iTSQêD55TTE 750 5.99 EUR A \nESPECES 21f90 EUR \nNombre dhrt1c1es vendusz 8 \nTOTAL ELIGIBLE TRD 14,09 EUR \n A RENDRE 0.02 EUR \n ESPECES -0.02 EUR\n";
         AnalyseData test = new AnalyseData(retStr, ListView.this, idList);
         System.out.println(test.getTextBrut());
        // test.correction(test.getTextBrut());  // pas besoin pour ce moment;
@@ -631,7 +649,6 @@ public class ListView extends AppCompatActivity {
             System.out.println("Element TABLE numéro"+i+" "+test.getTable().get(i).getName());
         }
         test.tableToCorrespondenceTable(test.getTable());
-        test.removePurchase(test.getCorrespondanceTable());
         for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
             System.out.println("Element TABLE CORRES numéro"+i+" "+test.getCorrespondanceTable().get(i).getName());
         }
