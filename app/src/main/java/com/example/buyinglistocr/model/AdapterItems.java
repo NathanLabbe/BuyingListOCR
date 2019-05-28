@@ -127,7 +127,9 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             name = itemView.findViewById(R.id.name);
 
             checkBox = itemView.findViewById(R.id.checkBox);
+
             checkBox.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
                     if(checkBox.isChecked()){
@@ -195,6 +197,27 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             currentItem = item;
             this.position = position;
             name.setText(currentItem.getName() + " (" + currentItem.getQuantityGot() + "/" + currentItem.getQuantityDesired() + ") ");
+
+            //gère la coche
+            if(currentItem.getStatus()==1) {
+                checkBox.setChecked(true);
+                String sampleText = name.getText().toString();
+                name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
+                name.setText(sampleText);
+            }else{
+                String sampleText = name.getText().toString();
+                name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
+                name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
+
+                name.setText(sampleText);
+            }
+        /**
+         * The constructor of the class
+         * @param itemView - The item view
+         */
+
+
 
         }
 
