@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:text="SPENT :"
+        android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:textSize="18dp"/>
 
