@@ -185,8 +185,9 @@ public class ListView extends AppCompatActivity {
 
         //
         textView2 = findViewById(R.id.textView2);
+        textView2.setText("SPENT : " +listDAO.getList(idList).getSpent()+" €");
 
-        textView2.setText("YEAH");
+
 
         /*******************************************************************************************
          * Photo
