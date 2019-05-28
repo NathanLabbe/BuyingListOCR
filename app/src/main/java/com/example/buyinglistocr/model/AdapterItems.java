@@ -194,7 +194,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
             currentItem = item;
             this.position = position;
-            name.setText(currentItem.getName());
+            name.setText(currentItem.getName() + " (" + currentItem.getQuantityGot() + "/" + currentItem.getQuantityDesired() + ") ");
 
         }
 
