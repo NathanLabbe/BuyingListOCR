@@ -2,6 +2,7 @@ package com.example.buyinglistocr.model;
 
 import android.content.Context;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class AnalyseData {
@@ -14,6 +15,10 @@ public class AnalyseData {
     private ProductDAO productDao;
     private ItemDAO itemDAO;
     private ListDAO list;
+
+    public AnalyseData(String c) {
+        this.textBrut= c;
+    }
 
     public String getTextBrut() {
         return textBrut;
@@ -47,10 +52,6 @@ public class AnalyseData {
         itemDAO = new ItemDAO(context);
     }
 
-    public AnalyseData(String text, long idList) {
-        this.textBrut = text;
-        this.idList = idList;
-    }
 
     // Corriger les mots cles comme TEL, MONTANT, Nombre
     public void correction(String text) {
@@ -106,16 +107,41 @@ public class AnalyseData {
     //Enleve les donnees inutiles et le mettre en Table
     public void clean(String text) {
         text= text.replace(',','.');
-        int nbProduct = findNbProduct(text);
-        System.out.println("Nombre de product is "+ nbProduct);
+        //int nbProduct = findNbProduct(text);
+        //System.out.println("Nombre de product is "+ nbProduct);
         String[] tokens = text.split("\\n");
         int i = 0;
         while ( i < tokens.length && (Hamming(tokens[i].split(" ")[0].toLowerCase(),"tel") >= 2)){
             i++;
         }
-        i= i+1;// cet ligne depend s'il ya "N° Sirit"
+        for (int j = i; j < tokens.length-1; j++) {
+            String[] ligne = tokens[j].split(" ");
+            String nom = "";
+            double prix = 0.0;
+            if (ligne.length > 1 && ligne[ligne.length - 2].equals("EUR")) {
+                prix = Double.parseDouble(ligne[ligne.length - 3]);
+                for (int k = 0; k < ligne.length - 3; k++) {
+                    nom = nom + " " + ligne[k];
+                }
+                Purchase p = new Purchase(nom, prix, 1);// quantite defaut
+                table.add(p);
+            }else {
+                for (int k = 0; k < ligne.length; k++) {
+                    nom = nom + " " + ligne[k];
+                }
+                String[] ligne2 = tokens[j+1].split(" ");
+                if (ligne2.length > 2 && ligne2[1].equals("kg")) {
+                        prix = Double.parseDouble(ligne2[ligne2.length - 3]);
+                        j++;
+                        Purchase p = new Purchase(nom, prix, 1);// quantite defaut
+                        table.add(p);
+                }
+            }
+
+        }
+        //i= i+6;// cet ligne depend s'il ya "N° Sirit"
         //System.out.println(i);
-        for (int j = i; j < (i+nbProduct); j++ ){
+        /*for (int j = i; j < (i+nbProduct-1); j++ ){
             String[] lignes = tokens[j].split(" ");
             String nom ="";
             double prix;
@@ -133,9 +159,9 @@ public class AnalyseData {
                 j++;
                 i++;
             }
-            Purchase p = new Purchase(nom, 0.0, 1);// quantite defaut
+            Purchase p = new Purchase(nom, prix, 1);// quantite defaut
             table.add(p);
-        }
+        }*/
 
     }
 
@@ -262,7 +288,6 @@ public class AnalyseData {
             }
             if(res != -1){
                 correspondanceTable.get(i).setName(products.get(res).getCorrespondence());
-                correspondanceTable.get(i).setPrice(table.get(i).getPrice());
                 System.out.println("Name is "+ products.get(res).getCorrespondence());
                 res = -1;
             }
@@ -275,9 +300,9 @@ public class AnalyseData {
      * We compare the correspondance table to the elements on our list and we delete
      * @param correspondenceTable
      */
-    public void removePurchase (ArrayList<Purchase> correspondenceTable){
+    public double removePurchase (ArrayList<Purchase> correspondenceTable){
         double spent = 0;
-        List lists =  list.getList(idList);
+        //List lists = list.getList(idList);
         ArrayList<Item> items = itemDAO.get(idList);
         for(int i = 0; i<correspondenceTable.size(); i++){
             for(int j = 0; j<items.size(); j++){
@@ -302,8 +327,25 @@ public class AnalyseData {
                 }
             }
         }
-        lists.setSpent(spent);
-        list.update(lists);
+        //lists.setSpent(spent);
+        //list.update(lists);
+        return spent;
+    }
+    public static void main(String[] args) throws FileNotFoundException {
+
+        String c = " SAS RENGAST \n Au capital de 48 000 E \n1 Rue Mexandre Lefas \n35700 Rennes \nTel 2 02 99 36 29 24 \n***+************4+*w\nREPRISE EICKET \nNR CAISSEz 005 \nRANOU ALLUMETTES NAT 1,47 EUR A \nRANUU ALLUMETTES NAT 1.47 EUR A \nGLADE REFRESH FR.SDM 2.30 EUR B \nPASS 8 PAINS tHOED I 1,64 EUR A \nPLORETTE HACHE 1258 1.85 EUR A \nJANZ CUIS PLT LR BLC 3,85 EUR A\nNECTARINE BLANCHE VR \n0,830 kg X 3,99EURO/kg 3.31 EUR A \nCERISETKQRUEêTTE 750 319ê8E%BRA \nESPECES 21f90 EUR \nNombre dàrt1c1es vendusz 8\n";
+        AnalyseData a = new AnalyseData(c);
+        a.clean(c);
+        System.out.println(a.list(a.textBrut));
+        //System.out.println("misss");
+        //AnalyseData a = new AnalyseData(c);
+        //System.out.println(a.Hamming("MONTANT", "MONTTT"));
+        //System.out.println(a.correction(a.textBrut));
+        //System.out.println(a.findNbProduct(a.textBrut));
+        //System.out.println(a.Table.size());
+        //System.out.println("sdrtdyddrt"+ a.list(a.textBrut));
+
+
     }
 
 

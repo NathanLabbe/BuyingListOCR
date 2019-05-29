@@ -1,22 +1,21 @@
 package com.example.buyinglistocr.controller;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import java.util.ArrayList;
-
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.List;
-
-import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.ListDAO;
+
+import java.util.ArrayList;
 
 /**
  * Allow to represent the main activity

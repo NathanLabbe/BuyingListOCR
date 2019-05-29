@@ -55,7 +55,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class ListView extends AppCompatActivity {
 
@@ -78,8 +77,8 @@ public class ListView extends AppCompatActivity {
     private ArrayList<Item> items;
 
     // The List id
-    long idList;
-    String listName;
+    public static long idList;
+    public static String listName;
     ArrayList<String> listItems = new ArrayList<String>();
 
     /**
@@ -92,7 +91,6 @@ public class ListView extends AppCompatActivity {
     private TessBaseAPI tessBaseAPI;
     private Uri outputFileDir;
     private String mCurrentPhotoPath;
-    HashMap<String, ArrayList<String>> listProduit;
 
     /**
      * Partie photo
@@ -140,7 +138,7 @@ public class ListView extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
-
+        listDAO = new ListDAO(ListView.this);
 
         // Get the parameter
         Intent intent = getIntent();
@@ -150,7 +148,7 @@ public class ListView extends AppCompatActivity {
 
         // Get the list and the idem DAO
         itemDAO = new ItemDAO(ListView.this);
-        listDAO = new ListDAO(ListView.this);
+
         productDAO = new ProductDAO(ListView.this);
         shopDAO = new ShopDAO(ListView.this);
         createShop();
@@ -641,17 +639,21 @@ public class ListView extends AppCompatActivity {
         tessBaseAPI.end();
 
         /**Analyse Data*/
-        //String c = " EiQ ANS \n SAS RENGASE V \n Au cap1ta1 de 48 000 E \n 1 Rue A1exandre Lefas \n 35700 Rennes \nTel 102 99 36 29 24 \n xa********* \n RANUU ALLUMETTES NAT 1,47 EUR A \n RANOU ALLUMETTES NAT 1,47 EUR A \n GLADE REFRESH FR.SDM 2.30 EUR 8 \n PASD 8 PAINS CHOCO I 1.64 EUR A \n FLDRETTE MACHE 1256 1.85 EUR A \n JANZ CUIS PLT LR BLU 3,85 EUR A \n NECTARINE BLANCHE VR \n 0,830 kg x 3,99EURO/kg 3,31 EUR A \n CERù5iTSQêD55TTE 750 5.99 EUR A \nESPECES 21f90 EUR \nNombre dhrt1c1es vendusz 8 \nTOTAL ELIGIBLE TRD 14,09 EUR \n A RENDRE 0.02 EUR \n ESPECES -0.02 EUR\n";
         AnalyseData test = new AnalyseData(retStr, ListView.this, idList);
+        System.out.println("IdList is : "+idList);
         System.out.println(test.getTextBrut());
-       // test.correction(test.getTextBrut());  // pas besoin pour ce moment;
+
         test.clean(test.getTextBrut());
-        for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
-            System.out.println("Element TABLE numéro"+i+" "+test.getTable().get(i).getName());
-        }
         test.tableToCorrespondenceTable(test.getTable());
+        double spent = test.removePurchase(test.getCorrespondanceTable());
+
+        List lists = listDAO.getList(idList);
+        spent = spent + lists.getSpent();
+        lists.setSpent(spent);
+        listDAO.update(lists);
+
         for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
-            System.out.println("Element TABLE CORRES numéro"+i+" "+test.getCorrespondanceTable().get(i).getName());
+            System.out.println("Element TABLE CORRES numéro "+i+" "+test.getCorrespondanceTable().get(i).getName());
         }
         return retStr;
     }
