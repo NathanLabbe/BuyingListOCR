@@ -81,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed(){
+        finish();
+    }
+
     /**
      * Allow to define the alert dialog
      * @param view - The view

@@ -212,6 +212,10 @@ public class ListView extends AppCompatActivity {
          *******************************************************************************************/
 
     }
+    @Override
+    public void onBackPressed(){
+        finish();
+    }
 
     /**
      * Method that be executed during the resume of the activity
