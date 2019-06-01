@@ -111,10 +111,9 @@ public class AnalyseData {
         //System.out.println("Nombre de product is "+ nbProduct);
         String[] tokens = text.split("\\n");
         int i = 0;
-        while ( i < tokens.length && (Hamming(tokens[i].split(" ")[0].toLowerCase(),"tel") >= 2)){
-            i++;
-        }
+        System.out.println("CLEAN" + "tokens.length : " + tokens.length + "i : " + i);
         for (int j = i; j < tokens.length-1; j++) {
+            System.out.println("CLEAN j");
             String[] ligne = tokens[j].split(" ");
             String nom = "";
             double prix = 0.0;

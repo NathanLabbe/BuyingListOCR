@@ -122,10 +122,16 @@ public class ListView extends AppCompatActivity {
         productDAO.add(p7);
         Product p8 = new Product(7, "JANZ CUITS PLT LR BLC", "poulet",666);
         productDAO.add(p8);
-        Product p9 = new Product(7, "TOMATE RONDE VRAC", "tomate",666);
+        Product p9 = new Product(8, "TOMATE RONDE VRAC", "tomate",666);
         productDAO.add(p9);
-        Product p10 = new Product(7, "BIO PAT LT UHT 1/2EC", "lait",666);
-        productDAO.add(p8);
+        Product p10 = new Product(9, "BIO PAT UHT 1/2EC BT", "lait",666);
+        productDAO.add(p10);
+        Product p11 = new Product(10, "PERFECT F CHATSEC SE", "croquettes", 666);
+        productDAO.add(p11);
+        Product p12 = new Product(11, "BIO CHAB GALETTE BRE", "biscuits", 666);
+        productDAO.add(p12);
+        Product p13 = new Product(12, "BOUTON OR CHIPS NAT", "chips", 666);
+        productDAO.add(p13);
 
     }
 

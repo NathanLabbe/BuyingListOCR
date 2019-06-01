@@ -112,6 +112,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
         // The buttons of the view holder
        // private final Button buttonModify;
         private final Button buttonDelete;
+        private final Button buttonPlus;
         private CheckBox checkBox;
 
         /**
@@ -135,7 +136,8 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     if(checkBox.isChecked()){
                         currentItem.setStatus(1);
                         itemDAO.update(currentItem);
-                        String sampleText = name.getText().toString();
+
+                        String sampleText = currentItem.getName() + " (" + currentItem.getQuantityDesired() + "/" + currentItem.getQuantityDesired() + ") ";
                         name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                         name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
                         name.setText(sampleText);
@@ -144,7 +146,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     else {
                         currentItem.setStatus(0);
                         itemDAO.update(currentItem);
-                        String sampleText = name.getText().toString();
+                        String sampleText = currentItem.getName() + " (" + currentItem.getQuantityGot() + "/" + currentItem.getQuantityDesired() + ") ";
                         name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
                         name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
 
@@ -161,30 +163,59 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 }
             });
 
+            name.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    showAlertDialogSuppr(v);
+                    return true;
+                }
+            });
 
-
+            //Reduce the quantity got. If the quantity got = 0 the button delete the item.
             buttonDelete = itemView.findViewById(R.id.delete);
             buttonDelete.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
-                    checkBox.setChecked(false);
-                    String sampleText = name.getText().toString();
-                    name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
-                    name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-                    name.setText(sampleText);
-
-                    itemDAO.delete(currentItem.getId());
-
-                    int index = items.indexOf(currentItem);
-
-                    items.remove(currentItem);
-
-                    rv.getAdapter().notifyItemRemoved(index);
-
+                    if(currentItem.getQuantityGot()>0){
+                        if(currentItem.getQuantityGot()==currentItem.getQuantityDesired() && currentItem.getStatus() == 1){
+                            currentItem.setStatus(0);
+                            checkBox.setChecked(false);
+                        }
+                        currentItem.setQuantityGot(currentItem.getQuantityGot()-1);
+                        itemDAO.update(currentItem);
+                        int index = items.indexOf(currentItem);
+                        rv.getAdapter().notifyItemChanged(index);
+                    } else {
+                        showAlertDialogSuppr(view);
+                    }
                 }
 
             });
+
+            //Up the quantity got
+            buttonPlus = itemView.findViewById(R.id.plus);
+            buttonPlus.setOnClickListener((new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentItem.getStatus()==1){
+                        Toast toast = Toast.makeText(context, "Already max", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else {
+                        if(currentItem.getQuantityGot()<currentItem.getQuantityDesired()){
+                            currentItem.setQuantityGot(currentItem.getQuantityGot()+1);
+                            itemDAO.update(currentItem);
+                        }
+                        if(currentItem.getQuantityGot()==currentItem.getQuantityDesired()){
+                            currentItem.setStatus(1);
+                            itemDAO.update(currentItem);
+                        }
+                        int index = items.indexOf(currentItem);
+                        rv.getAdapter().notifyItemChanged(index);
+                    }
+
+                }
+            }));
 
         }
 
@@ -331,6 +362,44 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 }
             });
 
+        }
+        public void showAlertDialogSuppr(View view) {
+            // Create an alert builder
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Delete Product");
+            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+
+                    checkBox.setChecked(false);
+                    String sampleText = name.getText().toString();
+                    name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
+                    name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
+                    name.setText(sampleText);
+
+                    itemDAO.delete(currentItem.getId());
+
+                    int index = items.indexOf(currentItem);
+
+                    items.remove(currentItem);
+
+                    rv.getAdapter().notifyItemRemoved(index);
+
+                }
+
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Nothing
+                }
+            });
+
+            final AlertDialog dialog = builder.create();
+            dialog.show();
         }
 
         /**
