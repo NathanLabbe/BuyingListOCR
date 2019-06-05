@@ -97,6 +97,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // SQL request for the update of the "Product" table
     public static final String PRODUCT_TABLE_DROP = "DROP TABLE IF EXISTS " + PRODUCT_TABLE_NAME+ ";";
 
+
+    /***** SavePurchase *****/
+
+    public static final String SAVEPURCHASE_KEY = "id";
+    public static final String SAVEPURCHASE_NAME = "name";
+
+
+    // SQL request for the creation of the "Product" table
+    public static final String SAVEPURCHASE_TABLE_CREATE = "CREATE TABLE " + PRODUCT_TABLE_NAME + " (" +
+            SAVEPURCHASE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            SAVEPURCHASE_NAME + " TEXT, ";
+
+    // SQL request for the update of the "Product" table
+    public static final String SAVEPURCHASE_TABLE_DROP = "DROP TABLE IF EXISTS " + PRODUCT_TABLE_NAME+ ";";
+
+
     /**
      * The constructor of the class
      * @param context - The context

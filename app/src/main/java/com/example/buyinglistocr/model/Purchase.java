@@ -7,12 +7,14 @@ public class Purchase {
     private String name;
     private double price;
     private int quantite;
+    private boolean findCores;
 
 
     public Purchase(String name, double price, int quantite) {
         this.name = name;
         this.price = price;
         this.quantite = quantite;
+        this.findCores = false;
     }
 
     public String getName() {
@@ -33,6 +35,14 @@ public class Purchase {
 
     public int getQuantite() {
         return quantite;
+    }
+
+    public boolean isFindCores() {
+        return findCores;
+    }
+
+    public void setFindCores(boolean findCores) {
+        this.findCores = findCores;
     }
 
     public void setQuantite(int quantite) {

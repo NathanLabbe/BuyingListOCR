@@ -282,7 +282,6 @@ public class AnalyseData {
                 if (tmp < hamming && tmp < 5){
                     hamming = tmp;
                     res = j;
-
                 }
             }
             if(res != -1){

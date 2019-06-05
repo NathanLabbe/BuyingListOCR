@@ -279,10 +279,23 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    String tmp = editText.getText().toString();
+                    int index = tmp.length()-1;
 
-                    if ((editText.getText().length() > 0) && !isPresent(editText.getText().toString(), currentItem.getIdList())) {
+                    for (int i = index; i>0; i--){
+                        if(tmp.charAt(i) == ' ') {
+                            index--;
+                        } else break;
+                    }
+                    final String getText = tmp.substring(0, index+1);
 
-                        currentItem.setName(editText.getText().toString());
+                    if(isPresent(getText, currentItem.getIdList())){
+                        Toast toast = Toast.makeText(context, "This name already exist", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (getText.length() > 0) {
+
+                        currentItem.setName(getText);
 
                     } else {
 
@@ -326,7 +339,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                         Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
                         toast.show();
-                    } else if (!editText.getText().toString().startsWith(" ") && (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0)){
+                    } else if (!editText.getText().toString().startsWith(" ")  && (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0)){
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     }
                 }
@@ -418,7 +431,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
             for(Item item : items) {
 
-                if(item.getName().equals(name)) {
+                if(item.getName().toLowerCase().equals(name.toLowerCase())) {
 
                     ret = true;
 
