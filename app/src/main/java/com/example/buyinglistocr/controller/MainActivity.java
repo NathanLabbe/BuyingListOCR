@@ -1,12 +1,16 @@
 package com.example.buyinglistocr.controller;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -47,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         // Get the data
         lists = listDAO.get();
 
+
+        // Define the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbarMain);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("My Lists");
+
+
         // Define the recycler view
         rv = findViewById(R.id.lists);
         rv.setLayoutManager(new GridLayoutManager(this, 2));
@@ -65,6 +76,77 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+    }
+
+    /**
+     * Allow to display the menu on the toolbar
+     * @param menu - The menu
+     * @return - A boolean
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
+    /**
+     * Allow to define the action for each item
+     * @param item - The item
+     * @return - A boolean
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.participate:
+
+               /** AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Delete")
+                        .setMessage("Are you sure ?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                listDAO.delete(list.getId());
+
+
+
+
+                                Intent MainIntent = new Intent(ListView.this, MainActivity.class);
+                                startActivity(MainIntent);
+
+                            }
+
+                        })
+
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                closeContextMenu();
+
+                            }
+
+                        })
+
+                        .create()
+                        .show();
+                        **/
+                break;
+
+
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
 
     }
 

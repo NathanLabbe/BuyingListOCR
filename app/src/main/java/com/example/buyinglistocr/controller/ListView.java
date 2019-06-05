@@ -42,6 +42,8 @@ import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListDAO;
 import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductDAO;
+import com.example.buyinglistocr.model.SavePurchase;
+import com.example.buyinglistocr.model.SavePurchaseDAO;
 import com.example.buyinglistocr.model.Shop;
 import com.example.buyinglistocr.model.ShopDAO;
 import com.googlecode.leptonica.android.WriteFile;
@@ -69,6 +71,7 @@ public class ListView extends AppCompatActivity {
     private ItemDAO itemDAO;
     private ProductDAO productDAO;
     private ShopDAO shopDAO;
+    private SavePurchaseDAO savePurchaseDAO;
 
     // The current list
     private List list;
@@ -273,6 +276,9 @@ public class ListView extends AppCompatActivity {
 
                             listDAO.delete(list.getId());
 
+
+
+
                             Intent MainIntent = new Intent(ListView.this, MainActivity.class);
                             startActivity(MainIntent);
 
@@ -293,6 +299,44 @@ public class ListView extends AppCompatActivity {
 
                     .create()
                     .show();
+
+                break;
+            case R.id.share:
+
+              /**  AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Delete")
+                        .setMessage("Are you sure ?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                listDAO.delete(list.getId());
+
+
+
+
+                                Intent MainIntent = new Intent(ListView.this, MainActivity.class);
+                                startActivity(MainIntent);
+
+                            }
+
+                        })
+
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                closeContextMenu();
+
+                            }
+
+                        })
+
+                        .create()
+                        .show();**/
 
                 break;
 
@@ -664,7 +708,22 @@ public class ListView extends AppCompatActivity {
 
         for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
             System.out.println("Element TABLE CORRES numéro "+i+" "+test.getCorrespondanceTable().get(i).getName());
+
+            /** AJOUTER DANS SAVEPURCHASE ?????  **/
+          /*
+          save
+
+          SavePurchase s = new SavePurchase(test.getCorrespondanceTable().get(i).getName());
+            savePurchaseDAO.add(s);
+
+
+
+
+         */
         }
+
+
+
         return retStr;
     }
 }

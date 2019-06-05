@@ -9,8 +9,17 @@
         app:showAsAction="always"
 
         />
+
+    <item   android:id="@+id/share"
+        android:orderInCategory="100"
+        android:title="Share"
+        android:icon="@drawable/ic_share_black_24dp"
+        app:showAsAction="always"
+
+        />
     <item   android:id="@+id/modify"
         android:orderInCategory="100"
+
         android:title="Modify"
         app:showAsAction="never"
 

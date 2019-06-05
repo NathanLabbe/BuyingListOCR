@@ -107,7 +107,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // SQL request for the creation of the "Product" table
     public static final String SAVEPURCHASE_TABLE_CREATE = "CREATE TABLE " + PRODUCT_TABLE_NAME + " (" +
             SAVEPURCHASE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            SAVEPURCHASE_NAME + " TEXT, ";
+            SAVEPURCHASE_NAME + " TEXT); ";
 
     // SQL request for the update of the "Product" table
     public static final String SAVEPURCHASE_TABLE_DROP = "DROP TABLE IF EXISTS " + PRODUCT_TABLE_NAME+ ";";
@@ -137,6 +137,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(ITEM_TABLE_CREATE);
         db.execSQL(SHOP_TABLE_CREATE);
         db.execSQL(PRODUCT_TABLE_CREATE);
+        db.execSQL(SAVEPURCHASE_TABLE_CREATE);
 
 
         //creationShop(db);
@@ -158,6 +159,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(ITEM_TABLE_DROP);
         db.execSQL(SHOP_TABLE_DROP);
         db.execSQL(PRODUCT_TABLE_DROP);
+        db.execSQL(SAVEPURCHASE_TABLE_DROP);
         onCreate(db);
 
     }

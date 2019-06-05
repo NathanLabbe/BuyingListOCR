@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class SavePurchaseDAO extends DAOBase {
 
     // "Product" table
-    public static final String SAVEPURCHASE_TABLE_NAME = "Product";
+    public static final String SAVEPURCHASE_TABLE_NAME = "Purchase";
 
     // Attributes of "Product" table
     public static final String SAVEPURCHASE_KEY = "id";
@@ -27,7 +27,7 @@ public class SavePurchaseDAO extends DAOBase {
         super(pContext);
 
     }
-    public long add(Product product) {
+    public long add(SavePurchase purchase) {
 
         // The id of the item
         long ret;
@@ -37,7 +37,7 @@ public class SavePurchaseDAO extends DAOBase {
 
         // Specify the values which wil be inserted
         ContentValues value = new ContentValues();
-        value.put(SavePurchaseDAO.SAVEPURCHASE_NAME, product.getName());
+        value.put(SavePurchaseDAO.SAVEPURCHASE_NAME, purchase.getName());
 
 
         // Insert the data in the database
@@ -49,29 +49,37 @@ public class SavePurchaseDAO extends DAOBase {
         return ret;
 
     }
+    public void delete(long id) {
 
+        // Open the connection with the database
+        mDb = open();
 
-    public Product getProduct(long id) {
+        // Delete the data in the database
+        mDb.delete(SavePurchaseDAO.SAVEPURCHASE_TABLE_NAME,  SavePurchaseDAO.SAVEPURCHASE_KEY + " = ?", new String[] {String.valueOf(id)});
+
+        // Close the connection with the database
+        mDb.close();
+    }
+
+    public SavePurchase getSavePurchase(long id) {
 
         // The return value
-        Product ret;
+        SavePurchase ret;
 
         // Open the connection with the database
         mDb = open();
 
         // Get all data of a specific item
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + SavePurchaseDAO.SAVEPURCHASE_TABLE_NAME + " WHERE " + SavePurchaseDAO.SAVEPURCHASE_TABLE_NAME + " = " + id, null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + SavePurchaseDAO.SAVEPURCHASE_TABLE_NAME + " WHERE " + SavePurchaseDAO.SAVEPURCHASE_KEY + " = " + id, null);
 
         // Go to the head of data
         cursor.moveToFirst();
 
         // Create the new item with the data
         String name = cursor.getString(1);
-        String correspondence = cursor.getString(2);
-        int idShop = cursor.getInt(3);
 
 
-        ret = new Product(id, name, correspondence, idShop );
+        ret = new SavePurchase(id, name );
 
         cursor.close();
 
@@ -81,7 +89,7 @@ public class SavePurchaseDAO extends DAOBase {
         return ret;
 
     }
-    public ArrayList<Product> getAll(long shopKey) {
+   /* public ArrayList<Product> getAll(long shopKey) {
 
         // The return value
         ArrayList<Product> ret = new ArrayList<>();
@@ -117,7 +125,7 @@ public class SavePurchaseDAO extends DAOBase {
         mDb.close();
 
         return ret;
-    }
+    }*/
 
     public void clear() {
 
