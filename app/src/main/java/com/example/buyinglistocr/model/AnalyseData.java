@@ -12,9 +12,9 @@ public class AnalyseData {
     private int nbProduct;
     private long idList;
     private Context context;
+
     private ProductDAO productDao;
     private ItemDAO itemDAO;
-    private ListDAO list;
 
     public AnalyseData(String c) {
         this.textBrut= c;
@@ -113,7 +113,7 @@ public class AnalyseData {
         int i = 0;
         System.out.println("CLEAN" + "tokens.length : " + tokens.length + "i : " + i);
         for (int j = i; j < tokens.length-1; j++) {
-            System.out.println("CLEAN j");
+            //System.out.println("CLEAN j");
             String[] ligne = tokens[j].split(" ");
             String nom = "";
             double prix = 0.0;
@@ -262,6 +262,29 @@ public class AnalyseData {
         return res;
     }
 
+    public boolean HammList(String s1, String s2){
+        int res = 0;
+        int longeur = s1.split(" ").length;
+        String h1 = "";
+        if (s1.charAt(0) == ' '){
+            for (int k = 1; k< s1.length(); k++){
+                h1 = h1 + s1.charAt(k);
+            }
+        }
+        String[] token1 = h1.split(" ");
+        String[] token2 = s2.split(" ");
+        if (token1.length <= token2.length) {
+            for (int i = 0; i < token1.length - 1; i++) {
+                res = res + Hamming(token1[i], token2[i]);
+            }
+        } else {
+            for (int j = 0; j < token2.length -1; j++){
+                res = res + Hamming(token1[j], token2[j]);
+            }
+        }
+        return res <= longeur;
+    }
+
     /**
      * From the arrayList of purchase we create a arrayList of purchase with the correspondance of each name of the first arrayList
      * @param table
@@ -273,14 +296,14 @@ public class AnalyseData {
         for (int k = 0; k < table.size(); k++){
             correspondanceTable.add(table.get(k));
         }
-        int hamming = 50;
+        //int hamming = 50;
         int res = -1;
         for(int i = 0; i<table.size(); i++){
             for(int j = 0; j<products.size(); j++){
-                int tmp = Hamming(table.get(i).getName(), products.get(j).getName());
+                //int tmp = Hamming(table.get(i).getName(), products.get(j).getName());
                 //System.out.println(table.get(i).getName());
-                if (tmp < hamming && tmp < 5){
-                    hamming = tmp;
+                if (HammList(table.get(i).getName(), products.get(j).getName())){
+                    //hamming = tmp;
                     res = j;
                 }
             }
@@ -289,7 +312,7 @@ public class AnalyseData {
                 System.out.println("Name is "+ products.get(res).getCorrespondence());
                 res = -1;
             }
-            hamming = 50;
+            //hamming = 50;
 
         }
     }
@@ -299,12 +322,18 @@ public class AnalyseData {
      * @param correspondenceTable
      */
     public double removePurchase (ArrayList<Purchase> correspondenceTable){
-        double spent = 0;
+        double spent = 0.0;
         //List lists = list.getList(idList);
         ArrayList<Item> items = itemDAO.get(idList);
         for(int i = 0; i<correspondenceTable.size(); i++){
             for(int j = 0; j<items.size(); j++){
-                if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())){
+
+                long idItem = 0;
+                long idProduct = 0;
+                String name ="";
+                String correspondence = "";
+
+                if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase()) ){
                     if(items.get(j).getQuantityGot()<items.get(j).getQuantityDesired()){
                         items.get(j).setQuantityGot(items.get(j).getQuantityGot()+1);
                         itemDAO.update(items.get(j));
@@ -315,7 +344,7 @@ public class AnalyseData {
                             itemDAO.update(items.get(j));
                         }
                         spent = spent + correspondenceTable.get(i).getPrice();
-                        System.out.println("Your spent is "+ spent);
+                        System.out.printf("Your spent is %s%n", spent);
                     } else if (items.get(j).getStatus()!=1){
                         items.get(j).setStatus(1);
                         itemDAO.update(items.get(j));
@@ -335,6 +364,8 @@ public class AnalyseData {
         AnalyseData a = new AnalyseData(c);
         a.clean(c);
         System.out.println(a.list(a.textBrut));
+        System.out.println(a.HammList(" BIO PAT LT UHT 1/ZEC", "BIO PAT LT UHT 1/2EC"));
+        System.out.println("RANOU ALLUMETTES NAT".split(" ").length);
         //System.out.println("misss");
         //AnalyseData a = new AnalyseData(c);
         //System.out.println(a.Hamming("MONTANT", "MONTTT"));

@@ -42,7 +42,6 @@ import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListDAO;
 import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductDAO;
-import com.example.buyinglistocr.model.SavePurchase;
 import com.example.buyinglistocr.model.SavePurchaseDAO;
 import com.example.buyinglistocr.model.Shop;
 import com.example.buyinglistocr.model.ShopDAO;
@@ -127,7 +126,7 @@ public class ListView extends AppCompatActivity {
         productDAO.add(p8);
         Product p9 = new Product(8, "TOMATE RONDE VRAC", "tomate",666);
         productDAO.add(p9);
-        Product p10 = new Product(9, "BIO PAT UHT 1/2EC BT", "lait",666);
+        Product p10 = new Product(9, "BIO PAT LT UHT 1/2EC", "lait",666);
         productDAO.add(p10);
         Product p11 = new Product(10, "PERFECT F CHATSEC SE", "croquettes", 666);
         productDAO.add(p11);
