@@ -3,28 +3,35 @@ package com.example.buyinglistocr.model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Allow to interact with the "List" table
  */
-public class ListDAO extends DAOBase {
+public class ListDAO {
 
-    // "List" table
-    public static final String LIST_TABLE_NAME = "List";
-
-    // Attributes of "List" table
-    public static final String LIST_KEY = "id";
-    public static final String LIST_NAME = "name";
-    public static final String LIST_SPENT = "spent";
+    private Context context;
 
     /**
      * The constructor of the class
-     * @param pContext - The context
+     * @param context - The context
      */
-    public ListDAO(Context pContext) {
+    public ListDAO(Context context) {
 
-        super(pContext);
+        this.context = context;
 
     }
 
@@ -35,25 +42,58 @@ public class ListDAO extends DAOBase {
      */
     public long add(List list) {
 
-        // The id of the list
-        long ret;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/addList.php",
 
-        // Open the connection with the database
-        mDb = open();
+                new Response.Listener<String>() {
 
-        // Specify the values which will be inserted
-        ContentValues value = new ContentValues();
-        value.put(ListDAO.LIST_NAME, list.getName());
-        value.put(ListDAO.LIST_SPENT, list.getSpent());
+                    @Override
+                    public void onResponse(String response) {
 
-        // Insert the data in the database
-        ret = mDb.insert(ListDAO.LIST_TABLE_NAME, null, value);
+                        try {
 
-        // Close the connection with the database
-        mDb.close();
+                            JSONObject jsonObject = new JSONObject(response);
 
-        return ret;
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
 
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("name", "test4");
+                params.put("spent", "81");
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+
+        return 0;
     }
 
     /**
@@ -62,14 +102,6 @@ public class ListDAO extends DAOBase {
      */
     public void delete(long id) {
 
-        // Open the connection with the database
-        mDb = open();
-
-        // Delete the data in the database
-        mDb.delete(ListDAO.LIST_TABLE_NAME, ListDAO.LIST_KEY + " = ?", new String[]{String.valueOf(id)} );
-
-        // Close the connection with the database
-        mDb.close();
 
     }
 
