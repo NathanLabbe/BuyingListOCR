@@ -12,6 +12,10 @@ public class List implements Parcelable {
     private long id;
     private String name;
     private double spent;
+    private int status;
+    private long idUser;
+
+
 
     /**
      * The constructor of the class
@@ -19,11 +23,13 @@ public class List implements Parcelable {
      * @param name - The name of the list
      * @param spent - The spent for the list
      */
-    public List(long id, String name, double spent) {
+    public List(long id, String name, double spent, int status, long idUser) {
 
         this.id = id;
         this.name = name;
         this.spent = spent;
+        this.status = status;
+        this.idUser = idUser;
 
     }
 
@@ -111,6 +117,22 @@ public class List implements Parcelable {
 
         this.spent = spent;
 
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(long idUser) {
+        this.idUser = idUser;
     }
 
     @Override

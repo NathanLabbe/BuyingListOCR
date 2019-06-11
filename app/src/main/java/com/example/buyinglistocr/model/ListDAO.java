@@ -40,9 +40,9 @@ public class ListDAO {
      * @param list - The list
      * @return - The id of the list
      */
-    public long add(List list) {
+    public long add(final List list) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/addList.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
                 new Response.Listener<String>() {
 
@@ -83,8 +83,11 @@ public class ListDAO {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("name", "test4");
-                params.put("spent", "81");
+                params.put("tag", "add");
+                params.put("name", list.getName());
+                params.put("spent", list.getSpent()+"");
+                params.put("status" , list.getStatus()+"");
+                params.put("idUser", list.getIdUser()+"");
                 return params;
 
             }
@@ -100,8 +103,57 @@ public class ListDAO {
      * Allow to delete a list in the "List" table
      * @param id - The id of the list
      */
-    public void delete(long id) {
+    public void delete(final long id) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag", "delete");
+                params.put("id", id+"");
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
     }
 
@@ -109,7 +161,60 @@ public class ListDAO {
      * Allow to update a list in the "List" table
      * @param list - The list to update
      */
-    public void update(List list) {
+    public void update(final List list) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag", "update");
+                params.put("name", list.getName());
+                params.put("spent", list.getSpent()+"");
+                params.put("status" , list.getStatus()+"");
+                params.put("idUser", list.getIdUser()+"");
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
 
     }
@@ -119,6 +224,57 @@ public class ListDAO {
      * @return - The ArrayList of list
      */
     public ArrayList<List> get() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag", "get");
+                params.put("idUser", SharedPrefManager.getInstance(context).getLogin());
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+
 
 
 
@@ -131,33 +287,59 @@ public class ListDAO {
      * @param id - the id of the list
      * @return - The list
      */
-    public List getList(long id){
+    public List getList(final long id){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag", "getList");
+                params.put("id", id+"");
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
         return null;
 
     }
-
-    public void clear() {
-
-
-
-    }
-
-    /*public void updateSpent(int spent) {
-        int res = Integer.parseInt(ListDAO.LIST_SPENT)+ spent;
-        mDb = open();
-
-        // Specify the values which will be updated
-        ContentValues value = new ContentValues();
-        value.put(ListDAO.LIST_SPENT, res);
-
-        // Update the data in the database
-        mDb.update(ListDAO.LIST_TABLE_NAME, value, ListDAO.LIST_KEY + " = ?", new String[] { String.valueOf(LIST_KEY) });
-
-        // Close the connection with the database
-        mDb.close();
-
-
-    }*/
 
 }

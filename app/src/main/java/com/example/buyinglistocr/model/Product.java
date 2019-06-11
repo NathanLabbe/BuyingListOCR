@@ -8,21 +8,18 @@ public class Product {
     // Different attributes of Product
     private long id;
     private String name;
-    private String correspondence;
     private long idShop;
 
     /**
      * The constructor of the class
      * @param id - The id
      * @param name - The name
-     * @param correspondence - The correspondence
      * @param idShop - The idShop
      */
-    public Product(long id, String name, String correspondence,  long idShop) {
+    public Product(long id, String name,  long idShop) {
 
         this.id = id;
         this.name = name;
-        this.correspondence = correspondence;
         this.idShop = idShop;
 
     }
@@ -69,25 +66,6 @@ public class Product {
 
     }
 
-    /**
-     * Getter of the correspondence attribute
-     * @return - The correspondence
-     */
-    public String getCorrespondence() {
-
-        return this.correspondence;
-
-    }
-
-    /**
-     * Setter of the correspondence attribute
-     * @param correspondence - The correspondence
-     */
-    public void setCorrespondence(String correspondence) {
-
-        this.correspondence = correspondence;
-
-    }
 
 
 
