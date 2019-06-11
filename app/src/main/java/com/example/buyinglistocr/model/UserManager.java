@@ -10,7 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.buyinglistocr.controller.MainActivity;
+import com.example.buyinglistocr.controller.ListsActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,30 +29,6 @@ public class UserManager {
     public UserManager(Context context) {
 
         this.context = context;
-
-    }
-
-    public void add() {
-
-
-
-    }
-
-    public void get() {
-
-
-
-    }
-
-    public void update() {
-
-
-
-    }
-
-    public void delete() {
-
-
 
     }
 
@@ -77,7 +53,7 @@ public class UserManager {
 
                             SharedPrefManager.getInstance(context).userLogin(jsonObject.getInt("id"), jsonObject.getString("login"), jsonObject.getString("mail"));
 
-                            Intent intent = new Intent(context, MainActivity.class);
+                            Intent intent = new Intent(context, ListsActivity.class);
                             context.startActivity(intent);
 
                             ((Activity)context).finish();
@@ -146,7 +122,7 @@ public class UserManager {
 
                             SharedPrefManager.getInstance(context).userLogin(jsonObject.getInt("id"), jsonObject.getString("login"), jsonObject.getString("mail"));
 
-                            Intent intent = new Intent(context, MainActivity.class);
+                            Intent intent = new Intent(context, ListsActivity.class);
                             context.startActivity(intent);
 
                             ((Activity)context).finish();

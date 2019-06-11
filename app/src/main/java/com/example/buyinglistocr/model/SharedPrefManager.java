@@ -83,4 +83,12 @@ public class SharedPrefManager {
 
     }
 
+    public int getId() {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, context.MODE_PRIVATE);
+
+        return sharedPreferences.getInt(KEY_ID, 0);
+
+    }
+
 }

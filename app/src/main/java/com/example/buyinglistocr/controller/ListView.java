@@ -88,7 +88,7 @@ public class ListView extends AppCompatActivity {
      */
 
     public static final String TESS_DATA = "/tessdata";
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = ListsActivity.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/Tess";
     private TessBaseAPI tessBaseAPI;
     private Uri outputFileDir;
@@ -251,7 +251,7 @@ public class ListView extends AppCompatActivity {
 
 
 
-                            Intent MainIntent = new Intent(ListView.this, MainActivity.class);
+                            Intent MainIntent = new Intent(ListView.this, ListsActivity.class);
                             startActivity(MainIntent);
 
                         }

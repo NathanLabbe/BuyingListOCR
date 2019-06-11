@@ -55,7 +55,7 @@ public class ListsActivity extends AppCompatActivity {
         // Define the toolbar
         Toolbar toolbar = findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(SharedPrefManager.getInstance(this).getLogin() + " - My Lists");
+        getSupportActionBar().setTitle(SharedPrefManager.getInstance(this).getLogin() + " " + SharedPrefManager.getInstance(this).getId()+ " - My Lists");
 
 
         // Define the recycler view

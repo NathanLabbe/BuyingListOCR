@@ -19,8 +19,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
-import com.example.buyinglistocr.controller.ListView;
-import com.example.buyinglistocr.controller.MainActivity;
+import com.example.buyinglistocr.controller.ListsActivity;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -39,7 +38,7 @@ public class OCR extends AppCompatActivity {
     private Context context;
 
     public static final String TESS_DATA = "/tessdata";
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = ListsActivity.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/Tess";
     private TessBaseAPI tessBaseAPI;
     private Uri outputFileDir;
