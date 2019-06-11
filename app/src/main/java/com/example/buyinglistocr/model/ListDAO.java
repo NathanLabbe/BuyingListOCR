@@ -111,19 +111,6 @@ public class ListDAO {
      */
     public void update(List list) {
 
-        // Open the connection with the database
-        mDb = open();
-
-        // Specify the values which will be updated
-        ContentValues value = new ContentValues();
-        value.put(ListDAO.LIST_NAME, list.getName());
-        value.put(ListDAO.LIST_SPENT, list.getSpent());
-
-        // Update the data in the database
-        mDb.update(ListDAO.LIST_TABLE_NAME, value, ListDAO.LIST_KEY + " = ?", new String[] { String.valueOf(list.getId()) });
-
-        // Close the connection with the database
-        mDb.close();
 
     }
 
@@ -133,38 +120,9 @@ public class ListDAO {
      */
     public ArrayList<List> get() {
 
-        // The return value
-        ArrayList<List> ret = new ArrayList<>();
 
-        // Open the connection with the database
-        mDb = open();
 
-        // Get all data of the table
-        Cursor cursor = mDb.rawQuery("select * from " + ListDAO.LIST_TABLE_NAME, null);
-
-        // If the table isn't empty
-        if(cursor.getCount() > 0) {
-
-            // Browse all data
-            while (cursor.moveToNext()) {
-
-                Long id = cursor.getLong(0);
-                String name = cursor.getString(1);
-                double spent = cursor.getDouble(2);
-
-                ret.add(new List(id, name, spent));
-
-            }
-
-        }
-
-        // Close the cursor
-        cursor.close();
-
-        // Close the connection with the database
-        mDb.close();
-
-        return ret;
+        return null;
 
     }
 
@@ -175,43 +133,13 @@ public class ListDAO {
      */
     public List getList(long id){
 
-        List ret;
-
-        // Open the connection with the database
-        mDb = open();
-
-        // Get all data of a specific list
-        Cursor cursor = mDb.rawQuery("select * from " + LIST_TABLE_NAME + " where " + LIST_KEY + " = " + id, null);
-
-        // Go to the head of data
-        cursor.moveToFirst();
-
-        // Create the new list with the data
-        String name = cursor.getString(1);
-        double spent = cursor.getDouble(2);
-
-        ret = new List(id, name, spent);
-
-        // Close the cursor
-        cursor.close();
-
-        // Close the connection with the database
-        mDb.close();
-
-        return ret;
+        return null;
 
     }
 
     public void clear() {
 
-        // Open the connection with the database
-        mDb = open();
 
-        // delete all data in the database
-        mDb.delete(ListDAO.LIST_TABLE_NAME, null, null);
-
-        // Close the connection with the database
-        mDb.close();
 
     }
 
