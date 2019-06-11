@@ -39,11 +39,9 @@ import com.example.buyinglistocr.model.AnalyseData;
 import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemDAO;
 import com.example.buyinglistocr.model.List;
-import com.example.buyinglistocr.model.ListDAO;
-import com.example.buyinglistocr.model.Product;
+import com.example.buyinglistocr.model.ListManager;
 import com.example.buyinglistocr.model.ProductDAO;
 import com.example.buyinglistocr.model.SavePurchaseDAO;
-import com.example.buyinglistocr.model.Shop;
 import com.example.buyinglistocr.model.ShopDAO;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -66,7 +64,7 @@ public class ListView extends AppCompatActivity {
     TextView textView2;
 
     // access to the database
-    private ListDAO listDAO;
+    private ListManager listManager;
     private ItemDAO itemDAO;
     private ProductDAO productDAO;
     private ShopDAO shopDAO;
@@ -118,7 +116,7 @@ public class ListView extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
-        listDAO = new ListDAO(ListView.this);
+        listManager = new ListManager(ListView.this);
         savePurchaseDAO = new SavePurchaseDAO(ListView.this);
 
         // Get the parameter
@@ -164,7 +162,7 @@ public class ListView extends AppCompatActivity {
 
         //
         textView2 = findViewById(R.id.textView2);
-        textView2.setText("SPENT : " +listDAO.getList(idList).getSpent()+" €");
+        textView2.setText("SPENT : " +listManager.getList(idList).getSpent()+" €");
 
 
 
@@ -246,7 +244,7 @@ public class ListView extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            listDAO.delete(list.getId());
+                            listManager.delete(list.getId());
 
 
 
@@ -333,7 +331,7 @@ public class ListView extends AppCompatActivity {
 
                             list.setName(editText.getText().toString());
 
-                            listDAO.update(list);
+                            listManager.update(list);
 
                             recreate();
 
@@ -673,10 +671,10 @@ public class ListView extends AppCompatActivity {
         test.tableToCorrespondenceTable(test.getTable());
         double spent = test.removePurchase(test.getCorrespondanceTable());
 
-        List lists = listDAO.getList(idList);
+        List lists = listManager.getList(idList);
         spent = spent + lists.getSpent();
         lists.setSpent(spent);
-        listDAO.update(lists);
+        listManager.update(lists);
 
         for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
             System.out.println("Element TABLE CORRES numéro "+i+" "+test.getCorrespondanceTable().get(i).getName());
