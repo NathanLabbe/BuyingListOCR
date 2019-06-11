@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -222,40 +223,54 @@ public class ListManager {
      * @return - The ArrayList of list
      */
     public ArrayList<List> get() {
+
+        final ArrayList<List> ret = new ArrayList<>();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
-                new Response.Listener<String>() {
+            new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
+                @Override
+                public void onResponse(String response) {
 
-                        try {
+                    try {
 
-                            JSONObject jsonObject = new JSONObject(response);
+                        JSONObject jsonObject = new JSONObject(response);
 
-                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        JSONArray jsonArray = jsonObject.getJSONArray("lists");
 
-                        } catch(JSONException e) {
+                        for (int i = 0 ; i < jsonArray.length() ; i++) {
 
-                            e.printStackTrace();
+                            JSONObject jsonObjectList = jsonArray.getJSONObject(i);
 
+                            Toast.makeText(context, jsonObjectList.getString("name"), Toast.LENGTH_LONG).show();
+
+                            List list = new List(jsonObjectList.getInt("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getInt("idUser"));
+
+                            ret.add(list);
                         }
 
+                    } catch(JSONException e) {
+
+                        e.printStackTrace();
 
                     }
 
-                },
-
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
 
                 }
+
+            },
+
+            new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+
+            }
 
         ) {
 
@@ -276,7 +291,7 @@ public class ListManager {
 
 
 
-        return new ArrayList<>();
+        return ret;
 
     }
 

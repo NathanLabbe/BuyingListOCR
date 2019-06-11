@@ -44,7 +44,12 @@ public class ListsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_lists);
+
+        // Define the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbarMain);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(SharedPrefManager.getInstance(this).getLogin() + " " + SharedPrefManager.getInstance(this).getId()+ " - My Lists");
 
         // Get the list DAO
         listManager = new ListManager(this);
@@ -52,19 +57,13 @@ public class ListsActivity extends AppCompatActivity {
         // Get the data
         lists = listManager.get();
 
-        // Define the toolbar
-        Toolbar toolbar = findViewById(R.id.toolbarMain);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(SharedPrefManager.getInstance(this).getLogin() + " " + SharedPrefManager.getInstance(this).getId()+ " - My Lists");
-
-
         // Define the recycler view
-        rv = findViewById(R.id.lists);
+        rv = findViewById(R.id.recyclerViewLists);
         rv.setLayoutManager(new GridLayoutManager(this, 2));
         rv.setAdapter(new AdapterLists(ListsActivity.this, lists));
 
         // Define the buttonAdd
-        FloatingActionButton buttonAdd = findViewById(R.id.buttonAdd);
+        FloatingActionButton buttonAdd = findViewById(R.id.floatingButtonAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
