@@ -49,6 +49,43 @@ public class SavePurchaseDAO extends DAOBase {
         return ret;
 
     }
+
+    public ArrayList<SavePurchase> getAll(long savepurchasekey) {
+
+        // The return value
+        ArrayList<SavePurchase> ret = new ArrayList<>();
+
+        // Open the connection with the database
+        mDb = open();
+
+        // Get all data of the table
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + SavePurchaseDAO.SAVEPURCHASE_TABLE_NAME + " WHERE " + SavePurchaseDAO.SAVEPURCHASE_KEY + " = " + savepurchasekey, null);
+
+        // If the table isn't empty
+        if(cursor.getCount() > 0) {
+
+            // Browse all data
+            while (cursor.moveToNext()) {
+
+                Long id = cursor.getLong(0);
+                String name = cursor.getString(1);
+
+
+                ret.add(new SavePurchase(id, name));
+
+            }
+
+        }
+
+        // Close the cursor
+        cursor.close();
+
+        // Close the connection with the database
+        mDb.close();
+
+        return ret;
+    }
+
     public void delete(long id) {
 
         // Open the connection with the database

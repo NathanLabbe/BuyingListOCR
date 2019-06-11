@@ -17,10 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".controller.AddCorres"
+            android:parentActivityName=".controller.MainActivity"/>
         <activity
             android:name=".controller.ListView"
-            android:parentActivityName=".controller.MainActivity"
-            />
+            android:parentActivityName=".controller.MainActivity" />
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
