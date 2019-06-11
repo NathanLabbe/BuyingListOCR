@@ -248,7 +248,7 @@ public class CorrespondenceDAO {
         return null;
     }
 
-    public Correspondence getCorrespondence (final long id) {
+    public Correspondence getCorrespondences (final long id) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
                 new Response.Listener<String>() {

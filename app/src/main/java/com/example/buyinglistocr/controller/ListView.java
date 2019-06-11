@@ -104,36 +104,8 @@ public class ListView extends AppCompatActivity {
      * Create shop with some of product
      */
     public void createShop() {
-        Shop intermarche = new Shop(666,"intermarche");
-        shopDAO.add(intermarche);
 
-        productDAO.clear();
-        Product p1 = new Product(0, "SUZI WAN NOUILLES AU", "pâtes",666);
-        productDAO.add(p1);
-        Product p2 = new Product(1, "LACTEL BIO 1/2E UHT", "lait",666);
-        productDAO.add(p2);
-        Product p3 = new Product(2, "RANOU ALLUMETTES NAT", "lardon",666);
-        productDAO.add(p3);
-        Product p4 = new Product(3, "RANOU ALLUMETTES NAT", "lardon",666);
-        productDAO.add(p4);
-        Product p5 = new Product(4, "GLADE REFRESH FR.SOM", "beauté",666);
-        productDAO.add(p5);
-        Product p6 = new Product(5, "PASQ 8 PAINS CHOCO I", "pain",666);
-        productDAO.add(p6);
-        Product p7 = new Product(6, "FLORETTE MACHE 125G", "légume",666);
-        productDAO.add(p7);
-        Product p8 = new Product(7, "JANZ CUITS PLT LR BLC", "poulet",666);
-        productDAO.add(p8);
-        Product p9 = new Product(8, "TOMATE RONDE VRAC", "tomate",666);
-        productDAO.add(p9);
-        Product p10 = new Product(9, "BIO PAT LT UHT 1/2EC", "lait",666);
-        productDAO.add(p10);
-        Product p11 = new Product(10, "PERFECT F CHATSEC SE", "croquettes", 666);
-        productDAO.add(p11);
-        Product p12 = new Product(11, "BIO CHAB GALETTE BRE", "biscuits", 666);
-        productDAO.add(p12);
-        Product p13 = new Product(12, "BOUTON OR CHIPS NAT", "chips", 666);
-        productDAO.add(p13);
+
 
     }
 

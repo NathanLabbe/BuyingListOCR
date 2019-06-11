@@ -1,5 +1,7 @@
 package com.example.buyinglistocr.model;
 
+import java.util.ArrayList;
+
 /**
  * Represent the Product object
  */
@@ -10,13 +12,16 @@ public class Product {
     private String name;
     private long idShop;
 
+    private ArrayList<Correspondence> correspondences;
+
     /**
      * The constructor of the class
-     * @param id - The id
-     * @param name - The name
+     *
+     * @param id     - The id
+     * @param name   - The name
      * @param idShop - The idShop
      */
-    public Product(long id, String name,  long idShop) {
+    public Product(long id, String name, long idShop) {
 
         this.id = id;
         this.name = name;
@@ -25,9 +30,9 @@ public class Product {
     }
 
 
-
     /**
      * Getter of the id attribute
+     *
      * @return - The id
      */
     public long getId() {
@@ -38,6 +43,7 @@ public class Product {
 
     /**
      * Setter of the id attribute
+     *
      * @param id - The id
      */
     public void setId(long id) {
@@ -48,6 +54,7 @@ public class Product {
 
     /**
      * Getter of the name attribute
+     *
      * @return - The name
      */
     public String getName() {
@@ -58,6 +65,7 @@ public class Product {
 
     /**
      * Setter of the name attribute
+     *
      * @param name - The name
      */
     public void setName(String name) {
@@ -67,10 +75,9 @@ public class Product {
     }
 
 
-
-
     /**
      * Getter of the idShop attribute
+     *
      * @return - The idShop
      */
     public long getIdShop() {
@@ -81,6 +88,7 @@ public class Product {
 
     /**
      * Setter of the idShop attribute
+     *
      * @param idShop - The idShop
      */
     public void setIdShop(int idShop) {

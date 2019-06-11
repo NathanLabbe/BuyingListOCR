@@ -308,8 +308,8 @@ public class AnalyseData {
                 }
             }
             if(res != -1){
-                correspondanceTable.get(i).setName(products.get(res).getCorrespondence());
-                System.out.println("Name is "+ products.get(res).getCorrespondence());
+                //correspondanceTable.get(i).setName(products.get(res).getCorrespondence());
+                //System.out.println("Name is "+ products.get(res).getCorrespondence());
                 res = -1;
             }
             //hamming = 50;

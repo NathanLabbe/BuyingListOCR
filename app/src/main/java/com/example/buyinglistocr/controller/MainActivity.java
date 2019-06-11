@@ -18,10 +18,9 @@ import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListDAO;
+import com.example.buyinglistocr.model.SharedPrefManager;
 
 import java.util.ArrayList;
-
-//MAINACTIVITY
 
 /**
  * Allow to represent the main activity
@@ -53,11 +52,10 @@ public class MainActivity extends AppCompatActivity {
         // Get the data
         lists = listDAO.get();
 
-
         // Define the toolbar
         Toolbar toolbar = findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("My Lists");
+        getSupportActionBar().setTitle(SharedPrefManager.getInstance(this).getLogin() + " - My Lists");
 
 
         // Define the recycler view
@@ -194,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 EditText editText = customLayout.findViewById(R.id.name);
 
                 // Create the new list with the data of the edit text
-                List list = new List(0, editText.getText().toString(), 0);
+                List list = new List(0, editText.getText().toString(), 0, 0, 0);
 
                 // Add this list to the database and get it id
                 long idList = listDAO.add(list);
