@@ -147,6 +147,7 @@ public class ListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
         listDAO = new ListDAO(ListView.this);
+        savePurchaseDAO = new SavePurchaseDAO(ListView.this);
 
         // Get the parameter
         Intent intent = getIntent();
@@ -709,16 +710,12 @@ public class ListView extends AppCompatActivity {
             System.out.println("Element TABLE CORRES numéro "+i+" "+test.getCorrespondanceTable().get(i).getName());
 
             /** AJOUTER DANS SAVEPURCHASE ?????  **/
-          /*
-          save
-
-          SavePurchase s = new SavePurchase(test.getCorrespondanceTable().get(i).getName());
-            savePurchaseDAO.add(s);
-
+            /**if(test.getCorrespondanceTable().get(i).isFindCores()){
+                SavePurchase s = new SavePurchase(test.getCorrespondanceTable().get(i).getName());
+                savePurchaseDAO.add(s);
+            }*/
 
 
-
-         */
         }
 
 

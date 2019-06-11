@@ -21,6 +21,8 @@ import com.example.buyinglistocr.model.ListDAO;
 
 import java.util.ArrayList;
 
+//MAINACTIVITY
+
 /**
  * Allow to represent the main activity
  */
@@ -139,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
                         .create()
                         .show();
                         **/
+                Intent ParticipateIntent = new Intent(MainActivity.this, AddCorres.class);
+                startActivity(ParticipateIntent);
                 break;
 
 
