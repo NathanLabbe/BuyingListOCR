@@ -1,10 +1,20 @@
 package com.example.buyinglistocr.model;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Allow to interact with the "Product" table
@@ -15,7 +25,7 @@ public class ItemDAO {
 
     /**
      * The constructor of the class
-     * @param pContext - The context
+     * @param context - The context
      */
     public ItemDAO(Context context) {
 
@@ -28,9 +38,65 @@ public class ItemDAO {
      * @param item - The item
      * @return - The id of the item
      */
-    public long add(Item item) {
+    public long add(final Item item) {
 
-       return 0;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag","add");
+                params.put("name", ""+ item.getName());
+                params.put("quantityDesired", ""+ item.getQuantityDesired());
+                params.put("quantityGot", ""+ item.getQuantityGot());
+                params.put("note", ""+item.getNote());
+                params.put("status", ""+item.getStatus());
+                params.put("idList", ""+item.getIdList());
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+
+        return 0;
 
     }
 
@@ -38,7 +104,57 @@ public class ItemDAO {
      * Allow to delete an item in the "Item" table
      * @param id - The id of the item
      */
-    public void delete(long id) {
+    public void delete(final long id) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag","delete");
+                params.put("id", ""+id);
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
 
 
@@ -48,7 +164,63 @@ public class ItemDAO {
      * Allow to update an item in the "Item" table
      * @param item - The item to update
      */
-    public void update(Item item) {
+    public void update(final Item item) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag","update");
+                params.put("name", ""+ item.getName());
+                params.put("quantityDesired", ""+ item.getQuantityDesired());
+                params.put("quantityGot", ""+ item.getQuantityGot());
+                params.put("note", ""+item.getNote());
+                params.put("status", ""+item.getStatus());
+                params.put("idList", ""+item.getIdList());
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+
 
 
 
@@ -59,9 +231,57 @@ public class ItemDAO {
      * @param listKey - The idList
      * @return - The ArrayList of item
      */
-    public ArrayList<Item> get(long listKey) {
+    public ArrayList<Item> get(final long listKey) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
 
 
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag","get");
+                params.put("listKey", "" + listKey);
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
         return null;
     }
@@ -71,9 +291,59 @@ public class ItemDAO {
      * @param id - The id
      * @return - The item
      */
-    public Item getItem(long id) {
+    public Item getItem(final long id) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
-       return null;
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag","getItem");
+                params.put("id", ""+ id);
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+
+        return null;
 
     }
 

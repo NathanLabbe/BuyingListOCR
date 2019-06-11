@@ -4,12 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import java.util.ArrayList;
-
 /**
  * Allow to interact with the "Item" table
  */
-public class SavePurchaseDAO extends DAOBase {
+public class  SavePurchaseDAO extends DAOBase {
 
     // "Product" table
     public static final String SAVEPURCHASE_TABLE_NAME = "Purchase";
