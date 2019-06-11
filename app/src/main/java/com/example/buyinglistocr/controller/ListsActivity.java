@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Allow to represent the main activity
  */
-public class MainActivity extends AppCompatActivity {
+public class ListsActivity extends AppCompatActivity {
 
     // The recycler view
     private RecyclerView rv;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         // Define the recycler view
         rv = findViewById(R.id.lists);
         rv.setLayoutManager(new GridLayoutManager(this, 2));
-        rv.setAdapter(new AdapterLists(MainActivity.this, lists));
+        rv.setAdapter(new AdapterLists(ListsActivity.this, lists));
 
         // Define the buttonAdd
         FloatingActionButton buttonAdd = findViewById(R.id.buttonAdd);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         .create()
                         .show();
                         **/
-                Intent ParticipateIntent = new Intent(MainActivity.this, AddCorres.class);
+                Intent ParticipateIntent = new Intent(ListsActivity.this, AddCorres.class);
                 startActivity(ParticipateIntent);
                 break;
 

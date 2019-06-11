@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.buyinglistocr">
 
@@ -18,32 +19,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".controller.LoginActivity">
 
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".controller.RegisterActivity"/>
-        <activity android:name=".controller.AddCorres"
-            android:parentActivityName=".controller.MainActivity"/>
-        <activity
-            android:name=".controller.ListView"
-            android:parentActivityName=".controller.MainActivity" />
-        <activity android:name=".controller.MainActivity"/>
 
+            </intent-filter>
+
+        </activity>
+
+        <activity android:name=".controller.RegisterActivity"/>
+
+        <activity android:name=".controller.ListsActivity"/>
+
+        <activity android:name=".controller.ListView"/>
+
+        <activity android:name=".controller.AddCorres"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
+
         </provider>
+
     </application>
 
 </manifest>
