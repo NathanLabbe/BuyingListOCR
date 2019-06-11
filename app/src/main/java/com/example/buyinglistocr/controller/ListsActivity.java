@@ -17,7 +17,7 @@ import android.widget.EditText;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.List;
-import com.example.buyinglistocr.model.ListDAO;
+import com.example.buyinglistocr.model.ListManager;
 import com.example.buyinglistocr.model.SharedPrefManager;
 
 import java.util.ArrayList;
@@ -27,14 +27,14 @@ import java.util.ArrayList;
  */
 public class ListsActivity extends AppCompatActivity {
 
-    // The recycler view
-    private RecyclerView rv;
-
     // The list DAO
-    private ListDAO listDAO;
+    private ListManager listManager;
 
     // The ArrayList of list
     private ArrayList<List> lists;
+
+    // The recycler view
+    private RecyclerView rv;
 
     /**
      * Method that be executed during the creation of the activity
@@ -47,10 +47,10 @@ public class ListsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Get the list DAO
-        listDAO = new ListDAO(this);
+        listManager = new ListManager(this);
 
         // Get the data
-        lists = listDAO.get();
+        lists = listManager.get();
 
         // Define the toolbar
         Toolbar toolbar = findViewById(R.id.toolbarMain);
@@ -195,7 +195,7 @@ public class ListsActivity extends AppCompatActivity {
                 List list = new List(0, editText.getText().toString(), 0, 0, 0);
 
                 // Add this list to the database and get it id
-                long idList = listDAO.add(list);
+                long idList = listManager.add(list);
 
                 list.setId(idList);
 

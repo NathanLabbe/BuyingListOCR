@@ -1,8 +1,6 @@
 package com.example.buyinglistocr.model;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,7 +19,7 @@ import java.util.Map;
 /**
  * Allow to interact with the "List" table
  */
-public class ListDAO {
+public class ListManager {
 
     private Context context;
 
@@ -29,7 +27,7 @@ public class ListDAO {
      * The constructor of the class
      * @param context - The context
      */
-    public ListDAO(Context context) {
+    public ListManager(Context context) {
 
         this.context = context;
 
