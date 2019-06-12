@@ -279,7 +279,7 @@ public class ListManager {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("tag", "get");
-                params.put("idUser", SharedPrefManager.getInstance(context).getLogin());
+                params.put("idUser", Integer.toString(SharedPrefManager.getInstance(context).getId()));
                 return params;
 
             }
@@ -289,9 +289,10 @@ public class ListManager {
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
 
+        ArrayList<List> test = new ArrayList<>();
+        test.add(new List(1, "test", 0, 0, 0));
 
-
-        return ret;
+        return test;
 
     }
 
