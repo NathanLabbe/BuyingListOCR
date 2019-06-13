@@ -3,26 +3,14 @@ package com.example.buyinglistocr.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Represent the List object
- */
 public class List implements Parcelable {
 
-    // Different attributes of List
     private long id;
     private String name;
     private double spent;
     private int status;
     private long idUser;
 
-
-
-    /**
-     * The constructor of the class
-     * @param id - The id of the list
-     * @param name - The name of the list
-     * @param spent - The spent for the list
-     */
     public List(long id, String name, double spent, int status, long idUser) {
 
         this.id = id;
@@ -38,6 +26,66 @@ public class List implements Parcelable {
         id = in.readLong();
         name = in.readString();
         spent = in.readDouble();
+
+    }
+
+    public long getId() {
+
+        return this.id;
+
+    }
+
+    public void setId(long id) {
+
+        this.id = id;
+
+    }
+
+    public String getName() {
+
+        return this.name;
+
+    }
+
+    public void setName(String name) {
+
+        this.name = name;
+
+    }
+
+    public double getSpent() {
+
+        return this.spent;
+
+    }
+
+    public void setSpent(double spent) {
+
+        this.spent = spent;
+
+    }
+
+    public int getStatus() {
+
+        return status;
+
+    }
+
+    public void setStatus(int status) {
+
+        this.status = status;
+
+    }
+
+    public long getIdUser() {
+
+        return idUser;
+
+    }
+
+    public void setIdUser(long idUser) {
+
+        this.idUser = idUser;
 
     }
 
@@ -59,82 +107,6 @@ public class List implements Parcelable {
 
     };
 
-    /**
-     * Getter of the id attribute
-     * @return - The id
-     */
-    public long getId() {
-
-        return this.id;
-
-    }
-
-    /**
-     * Setter of the id attribute
-     * @param id - The id
-     */
-    public void setId(long id) {
-
-        this.id = id;
-
-    }
-
-    /**
-     * Getter of the name attribute
-     * @return - The name
-     */
-    public String getName() {
-
-        return this.name;
-
-    }
-
-    /**
-     * Setter of the name attribute
-     * @param name - The name
-     */
-    public void setName(String name) {
-
-        this.name = name;
-
-    }
-
-    /**
-     * Getter of the spent attribute
-     * @return - The spent
-     */
-    public double getSpent() {
-
-        return this.spent;
-
-    }
-
-    /**
-     * Setter of the spent attribute
-     * @param spent - The spent
-     */
-    public void setSpent(double spent) {
-
-        this.spent = spent;
-
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public long getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(long idUser) {
-        this.idUser = idUser;
-    }
-
     @Override
     public int describeContents() {
 
@@ -150,6 +122,7 @@ public class List implements Parcelable {
         parcel.writeDouble(this.spent);
 
     }
+
 }
 
 

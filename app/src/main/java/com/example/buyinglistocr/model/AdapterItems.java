@@ -2,7 +2,6 @@ package com.example.buyinglistocr.model;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -15,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,7 +95,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         // The ItemDAO
-        ItemDAO itemDAO;
+        ItemManager itemManager;
 
         // The Item
         private Item currentItem;
@@ -123,7 +120,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
             super(itemView);
 
-            itemDAO = new ItemDAO(context);
+            itemManager = new ItemManager(context);
 
             name = itemView.findViewById(R.id.name);
 
@@ -135,23 +132,23 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 public void onClick(View v) {
                     if(checkBox.isChecked()){
                         currentItem.setStatus(1);
-                        itemDAO.update(currentItem);
+                        itemManager.update(currentItem);
 
                         String sampleText = currentItem.getName() + " (" + currentItem.getQuantityDesired() + "/" + currentItem.getQuantityDesired() + ") ";
                         name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                         name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
                         name.setText(sampleText);
-                        System.out.println("Statu : "+ itemDAO.getItem(currentItem.getId()).getStatus());
+                        System.out.println("Statu : "+ itemManager.getItem(currentItem.getId()).getStatus());
                     }
                     else {
                         currentItem.setStatus(0);
-                        itemDAO.update(currentItem);
+                        itemManager.update(currentItem);
                         String sampleText = currentItem.getName() + " (" + currentItem.getQuantityGot() + "/" + currentItem.getQuantityDesired() + ") ";
                         name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
                         name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
 
                         name.setText(sampleText);
-                        System.out.println("Statu : "+ itemDAO.getItem(currentItem.getId()).getStatus());
+                        System.out.println("Statu : "+ itemManager.getItem(currentItem.getId()).getStatus());
                     }
                 }
             });
@@ -183,7 +180,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                             checkBox.setChecked(false);
                         }
                         currentItem.setQuantityGot(currentItem.getQuantityGot()-1);
-                        itemDAO.update(currentItem);
+                        itemManager.update(currentItem);
                         int index = items.indexOf(currentItem);
                         rv.getAdapter().notifyItemChanged(index);
                     } else {
@@ -204,11 +201,11 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     } else {
                         if(currentItem.getQuantityGot()<currentItem.getQuantityDesired()){
                             currentItem.setQuantityGot(currentItem.getQuantityGot()+1);
-                            itemDAO.update(currentItem);
+                            itemManager.update(currentItem);
                         }
                         if(currentItem.getQuantityGot()==currentItem.getQuantityDesired()){
                             currentItem.setStatus(1);
-                            itemDAO.update(currentItem);
+                            itemManager.update(currentItem);
                         }
                         int index = items.indexOf(currentItem);
                         rv.getAdapter().notifyItemChanged(index);
@@ -310,10 +307,10 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                         currentItem.setQuantityDesired(1);
                     }
 
-                    itemDAO.update(currentItem);
+                    itemManager.update(currentItem);
 
                     // TEST
-                    System.out.println("TEST ADAPTERITEMS - quantityDesired : " + itemDAO.getItem(currentItem.getId()).getQuantityDesired());
+                    System.out.println("TEST ADAPTERITEMS - quantityDesired : " + itemManager.getItem(currentItem.getId()).getQuantityDesired());
 
                     // Notify the recycler view that a data is inserted
                     rv.getAdapter().notifyItemChanged(position);
@@ -392,7 +389,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     name.setText(sampleText);
 
-                    itemDAO.delete(currentItem.getId());
+                    itemManager.delete(currentItem.getId());
 
                     int index = items.indexOf(currentItem);
 
@@ -427,7 +424,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             Boolean ret = false;
 
             // Get all items of our list
-            ArrayList<Item> items = itemDAO.get(idList);
+            ArrayList<Item> items = itemManager.get(idList);
 
             for(Item item : items) {
 

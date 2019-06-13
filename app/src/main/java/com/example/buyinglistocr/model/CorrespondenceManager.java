@@ -16,13 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Chi Linh on 2019--2019-06-11--12:29.
- */
-public class CorrespondenceDAO {
+public class CorrespondenceManager {
+
     public Context context;
 
-    public CorrespondenceDAO(Context context) {
+    public CorrespondenceManager(Context context) {
         this.context = context;
     }
 

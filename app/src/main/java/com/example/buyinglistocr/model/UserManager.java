@@ -22,10 +22,6 @@ public class UserManager {
 
     private Context context;
 
-    /**
-     * The constructor of the class
-     * @param context - The context
-     */
     public UserManager(Context context) {
 
         this.context = context;

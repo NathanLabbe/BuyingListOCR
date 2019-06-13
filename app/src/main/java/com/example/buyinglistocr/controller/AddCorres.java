@@ -1,15 +1,12 @@
 package com.example.buyinglistocr.controller;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.example.buyinglistocr.R;
-import com.example.buyinglistocr.model.AdapterItems;
-import com.example.buyinglistocr.model.Item;
-import com.example.buyinglistocr.model.Purchase;
 import com.example.buyinglistocr.model.SavePurchase;
 import com.example.buyinglistocr.model.SavePurchaseDAO;
 

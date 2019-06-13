@@ -1,8 +1,6 @@
 package com.example.buyinglistocr.model;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,28 +16,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Allow to interact with the "Item" table
- */
-public class ProductDAO {
+public class ProductManager {
 
-    // "Product" table
     private Context context;
 
-    /**
-     * The constructor of the class
-     * @param context - The context
-     */
-    public ProductDAO(Context context) {
+    public ProductManager(Context context) {
 
        this.context = context;
 
     }
 
-
     public long add(final Product product) {
-
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ProductIndex.php",
 
@@ -98,12 +85,6 @@ public class ProductDAO {
 
     }
 
-
-    public Product getProduct(long id) {
-
-       return null;
-
-    }
     public ArrayList<Product> getAll(final long shopKey) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ProductIndex.php",
@@ -161,7 +142,5 @@ public class ProductDAO {
         return null;
     }
 
-    public void clear() {
-    }
 
 }

@@ -37,12 +37,12 @@ import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.AdapterItems;
 import com.example.buyinglistocr.model.AnalyseData;
 import com.example.buyinglistocr.model.Item;
-import com.example.buyinglistocr.model.ItemDAO;
+import com.example.buyinglistocr.model.ItemManager;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
-import com.example.buyinglistocr.model.ProductDAO;
+import com.example.buyinglistocr.model.ProductManager;
 import com.example.buyinglistocr.model.SavePurchaseDAO;
-import com.example.buyinglistocr.model.ShopDAO;
+import com.example.buyinglistocr.model.ShopManager;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -65,9 +65,9 @@ public class ListView extends AppCompatActivity {
 
     // access to the database
     private ListManager listManager;
-    private ItemDAO itemDAO;
-    private ProductDAO productDAO;
-    private ShopDAO shopDAO;
+    private ItemManager itemManager;
+    private ProductManager productManager;
+    private ShopManager shopManager;
     private SavePurchaseDAO savePurchaseDAO;
 
     // The current list
@@ -126,14 +126,14 @@ public class ListView extends AppCompatActivity {
         listName = list.getName();
 
         // Get the list and the idem DAO
-        itemDAO = new ItemDAO(ListView.this);
+        itemManager = new ItemManager(ListView.this);
 
-        productDAO = new ProductDAO(ListView.this);
-        shopDAO = new ShopDAO(ListView.this);
+        productManager = new ProductManager(ListView.this);
+        shopManager = new ShopManager(ListView.this);
         createShop();
-        System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productDAO.getAll(666).size());
+        System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productManager.getAll(666).size());
         // Get the data
-        items = itemDAO.get(list.getId());
+        items = itemManager.get(list.getId());
 
         // Define the recycler view
         rv = findViewById(R.id.items);
@@ -409,13 +409,13 @@ public class ListView extends AppCompatActivity {
                     }
 
                     // Create the new item with the data of the edit text
-                    Item item = new Item(editText.getText().toString(), quantityDesired, 0, new String(), 0, list.getId());
+                    Item item = new Item(0, editText.getText().toString(), quantityDesired, 0, new String(), 0, list.getId());
 
                     // Add this item to the database and get it id
-                    long idItem = itemDAO.add(item);
+                    long idItem = itemManager.add(item);
 
                     // TEST
-                    System.out.println("TEST LISTVIEW - quantityDesired : " + itemDAO.getItem(idItem).getQuantityDesired());
+                    System.out.println("TEST LISTVIEW - quantityDesired : " + itemManager.getItem(idItem).getQuantityDesired());
 
                     item.setId(idItem);
 
@@ -496,7 +496,7 @@ public class ListView extends AppCompatActivity {
         Boolean ret = false;
 
         // Get all items of our list
-        ArrayList<Item> items = itemDAO.get(idList);
+        ArrayList<Item> items = itemManager.get(idList);
 
         for(Item item : items) {
 

@@ -1,6 +1,5 @@
 package com.example.buyinglistocr.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -16,22 +15,15 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Allow to interact with the "Item" table
- */
-public class ShopDAO {
+public class ShopManager {
 
     private Context context;
-    /**
-     * The constructor of the class
-     * @param context - The context
-     */
-    public ShopDAO(Context context) {
+
+    public ShopManager(Context context) {
 
         this.context = context;
 
     }
-
 
     public long add(final Shop shop) {
 

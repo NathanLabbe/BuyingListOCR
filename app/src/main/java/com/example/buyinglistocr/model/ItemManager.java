@@ -16,18 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Allow to interact with the "Product" table
- */
-public class ItemDAO {
+public class ItemManager {
 
     private Context context;
 
-    /**
-     * The constructor of the class
-     * @param context - The context
-     */
-    public ItemDAO(Context context) {
+    public ItemManager(Context context) {
 
         this.context = context;
 
@@ -345,14 +338,6 @@ public class ItemDAO {
 
         return null;
 
-    }
-
-    /**
-     *
-     */
-    public void clear() {
-
-        
     }
 
 }

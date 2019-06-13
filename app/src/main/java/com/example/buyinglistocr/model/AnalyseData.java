@@ -13,8 +13,8 @@ public class AnalyseData {
     private long idList;
     private Context context;
 
-    private ProductDAO productDao;
-    private ItemDAO itemDAO;
+    private ProductManager productManager;
+    private ItemManager itemManager;
 
     public AnalyseData(String c) {
         this.textBrut= c;
@@ -48,8 +48,8 @@ public class AnalyseData {
         this.textBrut = text;
         this.context = context;
         this.idList = idList;
-        productDao = new ProductDAO(context);
-        itemDAO = new ItemDAO(context);
+        productManager = new ProductManager(context);
+        itemManager = new ItemManager(context);
     }
 
 
@@ -290,7 +290,7 @@ public class AnalyseData {
      * @param table
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
-        ArrayList<Product> products = productDao.getAll(666);
+        ArrayList<Product> products = productManager.getAll(666);
         //System.out.println(products.get(0).getName());
         //System.out.println(products.get(0).getName());
         for (int k = 0; k < table.size(); k++){
@@ -324,7 +324,7 @@ public class AnalyseData {
     public double removePurchase (ArrayList<Purchase> correspondenceTable){
         double spent = 0.0;
         //List lists = list.getList(idList);
-        ArrayList<Item> items = itemDAO.get(idList);
+        ArrayList<Item> items = itemManager.get(idList);
         for(int i = 0; i<correspondenceTable.size(); i++){
             for(int j = 0; j<items.size(); j++){
 
@@ -336,18 +336,18 @@ public class AnalyseData {
                 if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase()) ){
                     if(items.get(j).getQuantityGot()<items.get(j).getQuantityDesired()){
                         items.get(j).setQuantityGot(items.get(j).getQuantityGot()+1);
-                        itemDAO.update(items.get(j));
+                        itemManager.update(items.get(j));
                         System.out.println(items.get(j).getName() + " : " + items.get(j).getQuantityGot());
                         if(items.get(j).getQuantityGot()==items.get(j).getQuantityDesired()){
 
                             items.get(j).setStatus(1);
-                            itemDAO.update(items.get(j));
+                            itemManager.update(items.get(j));
                         }
                         spent = spent + correspondenceTable.get(i).getPrice();
                         System.out.printf("Your spent is %s%n", spent);
                     } else if (items.get(j).getStatus()!=1){
                         items.get(j).setStatus(1);
-                        itemDAO.update(items.get(j));
+                        itemManager.update(items.get(j));
                     } else {
                         System.out.println(items.get(j).getName() + " STATUT : " + items.get(j).getStatus());
                     }
