@@ -231,9 +231,7 @@ public class ListManager {
      * Allow to get all list
      * @return - The ArrayList of list
      */
-    public ArrayList<List> get() {
-
-
+    public void get(final VolleyCallback volleyCallback) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
@@ -242,28 +240,7 @@ public class ListManager {
                 @Override
                 public void onResponse(String response) {
 
-                    try {
-
-                        JSONObject jsonObject = new JSONObject(response);
-
-                        JSONArray jsonArray = jsonObject.getJSONArray("lists");
-
-                        for (int i = 0 ; i < jsonArray.length() ; i++) {
-
-                            JSONObject jsonObjectList = jsonArray.getJSONObject(i);
-
-                            List list1 = new List(jsonObjectList.getLong("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getLong("idUser"));
-
-                            getLists().add(list1);
-
-                        }
-
-                    } catch(JSONException e) {
-
-                        e.printStackTrace();
-
-                    }
-
+                    volleyCallback.onSuccess(response);
 
                 }
 
@@ -296,14 +273,6 @@ public class ListManager {
 
         this.lists = new ArrayList<>();
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
-
-        Toast.makeText(context, Long.toString(lists.get(0).getId()), Toast.LENGTH_LONG).show();
-        Toast.makeText(context, lists.get(0).getName(), Toast.LENGTH_LONG).show();
-        Toast.makeText(context, Double.toString(lists.get(0).getSpent()), Toast.LENGTH_LONG).show();
-        Toast.makeText(context, Integer.toString(lists.get(0).getStatus()), Toast.LENGTH_LONG).show();
-        Toast.makeText(context, Long.toString(lists.get(0).getIdUser()), Toast.LENGTH_LONG).show();
-
-        return lists;
 
     }
 

@@ -19,6 +19,11 @@ import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
 import com.example.buyinglistocr.model.SharedPrefManager;
+import com.example.buyinglistocr.model.VolleyCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -54,8 +59,40 @@ public class ListsActivity extends AppCompatActivity {
         // Get the list DAO
         listManager = new ListManager(this);
 
+        lists = new ArrayList<>();
+
         // Get the data
-        lists = listManager.get();
+        listManager.get(new VolleyCallback() {
+
+            @Override
+            public void onSuccess(String response) {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("lists");
+
+                    for (int i = 0 ; i < jsonArray.length() ; i++) {
+
+                        JSONObject jsonObjectList = jsonArray.getJSONObject(i);
+
+                        lists.add(new List(jsonObjectList.getLong("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getLong("idUser")));
+
+                    }
+
+                } catch(JSONException e) {
+
+                    e.printStackTrace();
+
+                }
+
+                // Notify the data set changed
+                rv.getAdapter().notifyDataSetChanged();
+
+            }
+
+        });
 
         // Define the recycler view
         rv = findViewById(R.id.recyclerViewLists);
@@ -158,9 +195,6 @@ public class ListsActivity extends AppCompatActivity {
     public void onResume(){
 
         super.onResume();
-
-        // Notify the data set changed
-        rv.getAdapter().notifyDataSetChanged();
 
     }
 
