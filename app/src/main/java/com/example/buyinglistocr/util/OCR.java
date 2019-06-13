@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.model;
+package com.example.buyinglistocr.util;
 
 import android.Manifest;
 import android.app.Activity;

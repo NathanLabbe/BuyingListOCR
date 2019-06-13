@@ -1,6 +1,12 @@
-package com.example.buyinglistocr.model;
+package com.example.buyinglistocr.util;
 
 import android.content.Context;
+
+import com.example.buyinglistocr.model.Item;
+import com.example.buyinglistocr.model.ItemManager;
+import com.example.buyinglistocr.model.Product;
+import com.example.buyinglistocr.model.ProductManager;
+import com.example.buyinglistocr.model.Purchase;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

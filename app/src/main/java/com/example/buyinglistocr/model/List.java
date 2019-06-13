@@ -1,17 +1,14 @@
 package com.example.buyinglistocr.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+public class List {
 
-public class List implements Parcelable {
-
-    private long id;
+    private int id;
     private String name;
     private double spent;
     private int status;
-    private long idUser;
+    private int idUser;
 
-    public List(long id, String name, double spent, int status, long idUser) {
+    public List(int id, String name, double spent, int status, int idUser) {
 
         this.id = id;
         this.name = name;
@@ -21,21 +18,13 @@ public class List implements Parcelable {
 
     }
 
-    protected List(Parcel in) {
-
-        id = in.readLong();
-        name = in.readString();
-        spent = in.readDouble();
-
-    }
-
-    public long getId() {
+    public int getId() {
 
         return this.id;
 
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
 
         this.id = id;
 
@@ -77,49 +66,15 @@ public class List implements Parcelable {
 
     }
 
-    public long getIdUser() {
+    public int getIdUser() {
 
         return idUser;
 
     }
 
-    public void setIdUser(long idUser) {
+    public void setIdUser(int idUser) {
 
         this.idUser = idUser;
-
-    }
-
-    public static final Creator<List> CREATOR = new Creator<List>() {
-
-        @Override
-        public List createFromParcel(Parcel in) {
-
-            return new List(in);
-
-        }
-
-        @Override
-        public List[] newArray(int size) {
-
-            return new List[size];
-
-        }
-
-    };
-
-    @Override
-    public int describeContents() {
-
-        return 0;
-
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-        parcel.writeLong(this.id);
-        parcel.writeString(this.name);
-        parcel.writeDouble(this.spent);
 
     }
 

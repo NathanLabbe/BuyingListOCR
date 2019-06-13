@@ -1,5 +1,6 @@
 package com.example.buyinglistocr.controller;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,54 +16,43 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.buyinglistocr.R;
-import com.example.buyinglistocr.model.AdapterLists;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
-import com.example.buyinglistocr.model.SharedPrefManager;
-import com.example.buyinglistocr.model.VolleyCallback;
+import com.example.buyinglistocr.util.SharedPreferencesUser;
+import com.example.buyinglistocr.util.VolleyCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-/**
- * Allow to represent the main activity
- */
 public class ListsActivity extends AppCompatActivity {
 
-    // The list DAO
     private ListManager listManager;
 
-    // The ArrayList of list
     private ArrayList<List> lists;
 
-    // The recycler view
-    private RecyclerView rv;
+    private List list;
 
-    /**
-     * Method that be executed during the creation of the activity
-     * @param savedInstanceState
-     */
+    private RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
 
-        // Define the toolbar
-        Toolbar toolbar = findViewById(R.id.toolbarMain);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(SharedPrefManager.getInstance(this).getLogin() + " " + SharedPrefManager.getInstance(this).getId()+ " - My Lists");
-
-        // Get the list DAO
         listManager = new ListManager(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbarListsActivity);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Welcome " + SharedPreferencesUser.getInstance(this).getLogin() + " - My Lists");
 
         lists = new ArrayList<>();
 
-        // Get the data
-        listManager.get(new VolleyCallback() {
+        listManager.getAll(new VolleyCallback() {
 
             @Override
             public void onSuccess(String response) {
@@ -77,7 +67,7 @@ public class ListsActivity extends AppCompatActivity {
 
                         JSONObject jsonObjectList = jsonArray.getJSONObject(i);
 
-                        lists.add(new List(jsonObjectList.getLong("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getLong("idUser")));
+                        lists.add(new List(jsonObjectList.getInt("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getInt("idUser")));
 
                     }
 
@@ -87,26 +77,22 @@ public class ListsActivity extends AppCompatActivity {
 
                 }
 
-                // Notify the data set changed
-                rv.getAdapter().notifyDataSetChanged();
+                Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
 
             }
 
         });
 
-        // Define the recycler view
-        rv = findViewById(R.id.recyclerViewLists);
-        rv.setLayoutManager(new GridLayoutManager(this, 2));
-        rv.setAdapter(new AdapterLists(ListsActivity.this, lists));
+        recyclerView = findViewById(R.id.recyclerViewLists);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(new AdapterLists(ListsActivity.this, lists));
 
-        // Define the buttonAdd
-        FloatingActionButton buttonAdd = findViewById(R.id.floatingButtonAdd);
+        FloatingActionButton buttonAdd = findViewById(R.id.floatingButtonAddList);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                // Launch the alert dialog
                 showAlertDialogButtonClicked(view);
 
             }
@@ -115,11 +101,6 @@ public class ListsActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Allow to display the menu on the toolbar
-     * @param menu - The menu
-     * @return - A boolean
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -128,59 +109,14 @@ public class ListsActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
 
     }
-    /**
-     * Allow to define the action for each item
-     * @param item - The item
-     * @return - A boolean
-     */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        if(item.getItemId() == R.id.participate) {
 
-            case R.id.participate:
-
-               /** AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setTitle("Delete")
-                        .setMessage("Are you sure ?")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                listDAO.delete(list.getId());
-
-
-
-
-                                Intent MainIntent = new Intent(ListView.this, MainActivity.class);
-                                startActivity(MainIntent);
-
-                            }
-
-                        })
-
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                closeContextMenu();
-
-                            }
-
-                        })
-
-                        .create()
-                        .show();
-                        **/
-                Intent ParticipateIntent = new Intent(ListsActivity.this, AddCorres.class);
-                startActivity(ParticipateIntent);
-                break;
-
-
-
+            Intent ParticipateIntent = new Intent(ListsActivity.this, AddCorres.class);
+            startActivity(ParticipateIntent);
 
         }
 
@@ -188,35 +124,14 @@ public class ListsActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Method that be executed during the resume of the activity
-     */
-    @Override
-    public void onResume(){
-
-        super.onResume();
-
-    }
-
-    @Override
-    public void onBackPressed(){
-        finish();
-    }
-
-    /**
-     * Allow to define the alert dialog
-     * @param view - The view
-     */
     public void showAlertDialogButtonClicked(View view) {
 
-        // Create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // Set the custom layout
-        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
+        @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
         builder.setView(customLayout);
         builder.setTitle("Add List");
-        // Define the positive button
+
         builder.setPositiveButton("Make", new DialogInterface.OnClickListener() {
 
             @Override
@@ -224,39 +139,82 @@ public class ListsActivity extends AppCompatActivity {
 
                 EditText editText = customLayout.findViewById(R.id.name);
 
-                // Create the new list with the data of the edit text
-                List list = new List(0, editText.getText().toString(), 0, 0, 0);
+                list = new List(0, editText.getText().toString(), 0, 0, SharedPreferencesUser.getInstance(ListsActivity.this).getId());
 
-                // Add this list to the database and get it id
-                long idList = listManager.add(list);
+                listManager.add(list, new VolleyCallback() {
 
-                list.setId(idList);
+                    @Override
+                    public void onSuccess(String response) {
 
-                // Add this list to the ArrayList
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            list.setId(jsonObject.getInt("id"));
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+                    }
+
+                });
+
                 lists.add(list);
 
-                // Notify the recycler view that a data is inserted
-                rv.getAdapter().notifyItemInserted(lists.size() - 1);
+                Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(lists.size() - 1);
 
             }
 
         });
 
-        // Create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
 
-    public ArrayList<List> getLists() {
+    @Override
+    public void onResume(){
 
-        return lists;
+        super.onResume();
+
+        Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
 
     }
 
-    public void setLists(ArrayList<List> lists) {
+    @Override
+    public void onBackPressed(){
 
-        this.lists = lists;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Cancel")
+                .setMessage("Are you sure you want to leave the app ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        finish();
+
+                    }
+
+                })
+
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+
+                    }
+
+                })
+
+                .create()
+                .show();
 
     }
 

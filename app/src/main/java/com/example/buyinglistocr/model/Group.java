@@ -2,23 +2,23 @@ package com.example.buyinglistocr.model;
 
 public class Group {
 
-    private long id;
+    private int id;
     private String tag;
 
-    public Group(long id, String tag) {
+    public Group(int id, String tag) {
 
         this.id = id;
         this.tag = tag;
 
     }
 
-    public long getId() {
+    public int getId() {
 
         return id;
 
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
 
         this.id = id;
 

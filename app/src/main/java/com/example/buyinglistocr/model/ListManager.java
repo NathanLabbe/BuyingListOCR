@@ -8,6 +8,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.buyinglistocr.util.RequestHandler;
+import com.example.buyinglistocr.util.SharedPreferencesUser;
+import com.example.buyinglistocr.util.VolleyCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,12 +28,7 @@ public class ListManager {
 
     }
 
-    /**
-     * Allow to add a list in the "List" table
-     * @param list - The list
-     * @return - The id of the list
-     */
-    public long add(final List list) {
+    public void add(final List list, final VolleyCallback volleyCallback) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
@@ -39,18 +37,7 @@ public class ListManager {
                 @Override
                 public void onResponse(String response) {
 
-                    try {
-
-                        JSONObject jsonObject = new JSONObject(response);
-
-                        Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                    } catch(JSONException e) {
-
-                        e.printStackTrace();
-
-                    }
-
+                    volleyCallback.onSuccess(response);
 
                 }
 
@@ -86,13 +73,8 @@ public class ListManager {
 
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
-        return 0;
     }
 
-    /**
-     * Allow to delete a list in the "List" table
-     * @param id - The id of the list
-     */
     public void delete(final long id) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
@@ -147,10 +129,6 @@ public class ListManager {
 
     }
 
-    /**
-     * Allow to update a list in the "List" table
-     * @param list - The list to update
-     */
     public void update(final List list) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
@@ -210,60 +188,8 @@ public class ListManager {
 
     }
 
-    /**
-     * Allow to get all list
-     * @return - The ArrayList of list
-     */
-    public void get(final VolleyCallback volleyCallback) {
+    public void get(final int id, final VolleyCallback volleyCallback){
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
-
-            new Response.Listener<String>() {
-
-                @Override
-                public void onResponse(String response) {
-
-                    volleyCallback.onSuccess(response);
-
-                }
-
-            },
-
-            new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
-
-                }
-
-            }
-
-        ) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> params = new HashMap<>();
-                params.put("tag", "get");
-                params.put("idUser", Integer.toString(SharedPrefManager.getInstance(context).getId()));
-                return params;
-
-            }
-
-        };
-
-        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
-
-    }
-
-    /**
-     * Allow to get a specific list
-     * @param id - the id of the list
-     * @return - The list
-     */
-    public List getList(final long id){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
                 new Response.Listener<String>() {
@@ -305,8 +231,10 @@ public class ListManager {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("tag", "getList");
-                params.put("id", id+"");
+
+                params.put("tag", "get");
+                params.put("id", Integer.toString(id));
+
                 return params;
 
             }
@@ -315,9 +243,51 @@ public class ListManager {
 
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
+    }
 
+    public void getAll(final VolleyCallback volleyCallback) {
 
-        return null;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+
+            new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+
+                    volleyCallback.onSuccess(response);
+
+                }
+
+            },
+
+            new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+
+                params.put("tag", "getAll");
+                params.put("idUser", Integer.toString(SharedPreferencesUser.getInstance(context).getId()));
+
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
     }
 

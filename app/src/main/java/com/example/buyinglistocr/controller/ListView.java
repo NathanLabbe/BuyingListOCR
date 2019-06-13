@@ -34,8 +34,7 @@ import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
-import com.example.buyinglistocr.model.AdapterItems;
-import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.util.AnalyseData;
 import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemManager;
 import com.example.buyinglistocr.model.List;
@@ -77,7 +76,7 @@ public class ListView extends AppCompatActivity {
     private ArrayList<Item> items;
 
     // The List id
-    public static long idList;
+    public static int idList;
     public static String listName;
     ArrayList<String> listItems = new ArrayList<String>();
 
@@ -162,7 +161,7 @@ public class ListView extends AppCompatActivity {
 
         //
         textView2 = findViewById(R.id.textView2);
-        textView2.setText("SPENT : " +listManager.getList(idList).getSpent()+" €");
+        textView2.setText("SPENT : " /*+listManager.get(idList, null).getSpent()+" €"*/);
 
 
 
@@ -412,7 +411,7 @@ public class ListView extends AppCompatActivity {
                     Item item = new Item(0, editText.getText().toString(), quantityDesired, 0, new String(), 0, list.getId());
 
                     // Add this item to the database and get it id
-                    long idItem = itemManager.add(item);
+                    int idItem = itemManager.add(item);
 
                     // TEST
                     System.out.println("TEST LISTVIEW - quantityDesired : " + itemManager.getItem(idItem).getQuantityDesired());
@@ -671,7 +670,9 @@ public class ListView extends AppCompatActivity {
         test.tableToCorrespondenceTable(test.getTable());
         double spent = test.removePurchase(test.getCorrespondanceTable());
 
-        List lists = listManager.getList(idList);
+        List lists = null;
+
+        listManager.get(idList, null);
         spent = spent + lists.getSpent();
         lists.setSpent(spent);
         listManager.update(lists);

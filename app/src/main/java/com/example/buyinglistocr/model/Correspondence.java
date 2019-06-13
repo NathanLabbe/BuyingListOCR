@@ -2,23 +2,23 @@ package com.example.buyinglistocr.model;
 
 public class Correspondence {
 
-    public long id;
+    public int id;
     public String name;
 
-    public Correspondence(long id, String name) {
+    public Correspondence(int id, String name) {
 
         this.id = id;
         this.name = name;
 
     }
 
-    public long getId() {
+    public int getId() {
 
         return id;
 
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
 
         this.id = id;
 

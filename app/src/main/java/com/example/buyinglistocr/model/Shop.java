@@ -3,25 +3,23 @@ package com.example.buyinglistocr.model;
 public class Shop {
 
     // Different attributes of Shop
-    private long id;
+    private int id;
     private String name;
 
-    public Shop (long id, String name) {
-
-        super();
+    public Shop (int id, String name) {
 
         this.id = id;
         this.name = name;
 
     }
 
-    public long getId() {
+    public int getId() {
 
         return this.id;
 
     }
 
-    public void setId( long id) {
+    public void setId(int id) {
 
         this.id = id;
 
@@ -33,7 +31,7 @@ public class Shop {
 
     }
 
-    public void setName( String name) {
+    public void setName(String name) {
 
         this.name = name;
 

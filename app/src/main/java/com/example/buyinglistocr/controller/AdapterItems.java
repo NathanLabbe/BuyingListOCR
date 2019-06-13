@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.model;
+package com.example.buyinglistocr.controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.model.Item;
+import com.example.buyinglistocr.model.ItemManager;
 
 import java.util.ArrayList;
 

@@ -11,6 +11,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.buyinglistocr.controller.ListsActivity;
+import com.example.buyinglistocr.util.RequestHandler;
+import com.example.buyinglistocr.util.SharedPreferencesUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +49,7 @@ public class UserManager {
 
                         } else {
 
-                            SharedPrefManager.getInstance(context).userLogin(jsonObject.getInt("id"), jsonObject.getString("login"), jsonObject.getString("mail"));
+                            SharedPreferencesUser.getInstance(context).userLogin(jsonObject.getInt("id"), jsonObject.getString("login"), jsonObject.getString("mail"));
 
                             Intent intent = new Intent(context, ListsActivity.class);
                             context.startActivity(intent);
@@ -83,6 +85,7 @@ public class UserManager {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
+
                 params.put("tag", "login");
                 params.put("login", user.getLogin());
                 params.put("password", user.getPassword());
@@ -116,7 +119,7 @@ public class UserManager {
 
                         } else {
 
-                            SharedPrefManager.getInstance(context).userLogin(jsonObject.getInt("id"), jsonObject.getString("login"), jsonObject.getString("mail"));
+                            SharedPreferencesUser.getInstance(context).userLogin(jsonObject.getInt("id"), jsonObject.getString("login"), jsonObject.getString("mail"));
 
                             Intent intent = new Intent(context, ListsActivity.class);
                             context.startActivity(intent);
@@ -152,6 +155,7 @@ public class UserManager {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
+
                 params.put("tag", "register");
                 params.put("login", user.getLogin());
                 params.put("password", user.getPassword());

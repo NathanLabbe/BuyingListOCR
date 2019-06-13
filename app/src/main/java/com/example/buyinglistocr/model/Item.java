@@ -2,15 +2,15 @@ package com.example.buyinglistocr.model;
 
 public class Item {
 
-    private long id;
+    private int id;
     private String name;
     private int quantityDesired;
     private int quantityGot;
     private String note;
     private int status;
-    private long idList;
+    private int idList;
 
-    public Item(long id, String name, int quantityDesired, int quantityGot, String note, int status, long idList) {
+    public Item(int id, String name, int quantityDesired, int quantityGot, String note, int status, int idList) {
 
         this.id = id;
         this.name = name;
@@ -22,13 +22,13 @@ public class Item {
 
     }
 
-    public long getId() {
+    public int getId() {
 
         return this.id;
 
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
 
         this.id = id;
 
@@ -94,7 +94,7 @@ public class Item {
 
     }
 
-    public long getIdList() {
+    public int getIdList() {
 
         return idList;
 
