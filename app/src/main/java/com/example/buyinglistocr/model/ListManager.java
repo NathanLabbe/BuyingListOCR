@@ -24,6 +24,10 @@ public class ListManager {
 
     private Context context;
 
+    private List list;
+
+    private ArrayList<List> lists;
+
     /**
      * The constructor of the class
      * @param context - The context
@@ -31,6 +35,10 @@ public class ListManager {
     public ListManager(Context context) {
 
         this.context = context;
+
+        this.list = new List(0, null, 0, 0, 0);
+
+
 
     }
 
@@ -161,6 +169,7 @@ public class ListManager {
      * @param list - The list to update
      */
     public void update(final List list) {
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
                 new Response.Listener<String>() {
@@ -224,7 +233,7 @@ public class ListManager {
      */
     public ArrayList<List> get() {
 
-        final ArrayList<List> ret = new ArrayList<>();
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
@@ -243,11 +252,10 @@ public class ListManager {
 
                             JSONObject jsonObjectList = jsonArray.getJSONObject(i);
 
-                            Toast.makeText(context, jsonObjectList.getString("name"), Toast.LENGTH_LONG).show();
+                            List list1 = new List(jsonObjectList.getLong("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getLong("idUser"));
 
-                            List list = new List(jsonObjectList.getInt("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getInt("idUser"));
+                            getLists().add(list1);
 
-                            ret.add(list);
                         }
 
                     } catch(JSONException e) {
@@ -279,19 +287,23 @@ public class ListManager {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("tag", "get");
-                params.put("idUser", SharedPrefManager.getInstance(context).getLogin());
+                params.put("idUser", Integer.toString(SharedPrefManager.getInstance(context).getId()));
                 return params;
 
             }
 
         };
 
+        this.lists = new ArrayList<>();
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
+        Toast.makeText(context, Long.toString(lists.get(0).getId()), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, lists.get(0).getName(), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, Double.toString(lists.get(0).getSpent()), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, Integer.toString(lists.get(0).getStatus()), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, Long.toString(lists.get(0).getIdUser()), Toast.LENGTH_LONG).show();
 
-
-
-        return ret;
+        return lists;
 
     }
 
@@ -351,8 +363,34 @@ public class ListManager {
         };
 
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+
+
+
         return null;
 
     }
 
+    public List getList() {
+
+        return list;
+
+    }
+
+    public void setList(List list) {
+
+        this.list = list;
+
+    }
+
+    public ArrayList<List> getLists() {
+
+        return lists;
+
+    }
+
+    public void setLists(ArrayList<List> lists) {
+
+        this.lists = lists;
+
+    }
 }

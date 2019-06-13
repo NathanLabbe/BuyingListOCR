@@ -214,4 +214,16 @@ public class ListsActivity extends AppCompatActivity {
 
     }
 
+    public ArrayList<List> getLists() {
+
+        return lists;
+
+    }
+
+    public void setLists(ArrayList<List> lists) {
+
+        this.lists = lists;
+
+    }
+
 }
