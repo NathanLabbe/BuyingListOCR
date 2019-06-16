@@ -3,7 +3,6 @@ package com.example.buyinglistocr.model;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -57,7 +56,7 @@ public class ListManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("tag", "add");
@@ -114,7 +113,7 @@ public class ListManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("tag", "delete");
@@ -169,7 +168,7 @@ public class ListManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("tag", "update");
@@ -197,18 +196,7 @@ public class ListManager {
                     @Override
                     public void onResponse(String response) {
 
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                        } catch(JSONException e) {
-
-                            e.printStackTrace();
-
-                        }
-
+                        volleyCallback.onSuccess(response);
 
                     }
 
@@ -228,7 +216,7 @@ public class ListManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
 
@@ -274,7 +262,7 @@ public class ListManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
 

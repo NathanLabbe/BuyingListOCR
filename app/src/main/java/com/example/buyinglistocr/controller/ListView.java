@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.example.buyinglistocr.BuildConfig;
 import com.example.buyinglistocr.R;
-import com.example.buyinglistocr.util.AnalyseData;
 import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemManager;
 import com.example.buyinglistocr.model.List;
@@ -42,8 +41,14 @@ import com.example.buyinglistocr.model.ListManager;
 import com.example.buyinglistocr.model.ProductManager;
 import com.example.buyinglistocr.model.SavePurchaseDAO;
 import com.example.buyinglistocr.model.ShopManager;
+import com.example.buyinglistocr.util.AnalyseData;
+import com.example.buyinglistocr.util.SharedPreferencesList;
+import com.example.buyinglistocr.util.VolleyCallback;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -95,17 +100,6 @@ public class ListView extends AppCompatActivity {
      * Partie photo
      */
 
-
-    /**
-     * Method that be executed during the creation of the activity
-     * Create shop with some of product
-     */
-    public void createShop() {
-
-
-
-    }
-
     /**
      * Method that be executed during the creation of the activity
      * @param savedInstanceState
@@ -115,24 +109,23 @@ public class ListView extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
+
         listManager = new ListManager(ListView.this);
         savePurchaseDAO = new SavePurchaseDAO(ListView.this);
 
-        // Get the parameter
-        Intent intent = getIntent();
-        list = intent.getParcelableExtra("list");
-        idList = list.getId();
-        listName = list.getName();
+        list = SharedPreferencesList.getInstance(ListView.this).getList();
 
         // Get the list and the idem DAO
         itemManager = new ItemManager(ListView.this);
 
         productManager = new ProductManager(ListView.this);
         shopManager = new ShopManager(ListView.this);
-        createShop();
-        System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productManager.getAll(666).size());
+
+        // System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productManager.getAll(666).size());
         // Get the data
         items = itemManager.get(list.getId());
+
+        items = new ArrayList<>();
 
         // Define the recycler view
         rv = findViewById(R.id.items);
@@ -161,7 +154,7 @@ public class ListView extends AppCompatActivity {
 
         //
         textView2 = findViewById(R.id.textView2);
-        textView2.setText("SPENT : " /*+listManager.get(idList, null).getSpent()+" €"*/);
+        textView2.setText("SPENT : " + list.getSpent());
 
 
 
@@ -672,7 +665,12 @@ public class ListView extends AppCompatActivity {
 
         List lists = null;
 
-        listManager.get(idList, null);
+        listManager.get(SharedPreferencesList.getInstance(ListView.this).getId(), new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+
+            }
+        });
         spent = spent + lists.getSpent();
         lists.setSpent(spent);
         listManager.update(lists);

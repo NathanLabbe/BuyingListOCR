@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -82,7 +81,7 @@ public class UserManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
 
@@ -152,7 +151,7 @@ public class UserManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
 

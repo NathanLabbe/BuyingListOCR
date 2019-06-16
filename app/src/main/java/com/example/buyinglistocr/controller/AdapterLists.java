@@ -2,6 +2,7 @@ package com.example.buyinglistocr.controller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.util.SharedPreferencesList;
-import com.example.buyinglistocr.util.SharedPreferencesUser;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
 
     private ArrayList<List> lists;
 
-    public AdapterLists(Context context, ArrayList<List> lists) {
+    AdapterLists(Context context, ArrayList<List> lists) {
 
         this.context = context;
         this.lists = lists;
@@ -35,8 +35,9 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
 
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
@@ -47,20 +48,20 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         List list = lists.get(position);
         holder.display(list);
 
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         private List list;
 
         private final TextView textViewName;
 
-        public MyViewHolder(final View itemView) {
+        MyViewHolder(final View itemView) {
 
             super(itemView);
 
@@ -71,7 +72,7 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
                 @Override
                 public void onClick(View view) {
 
-                    SharedPreferencesList.getInstance(context).listChoose(list.getId());
+                    SharedPreferencesList.getInstance(context).setList(list);
 
                     Intent intent = new Intent(context, ListView.class);
                     context.startActivity(intent);
@@ -82,7 +83,7 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
 
         }
 
-        public void display(List list) {
+        void display(List list) {
 
             this.list = list;
             textViewName.setText(this.list.getName());

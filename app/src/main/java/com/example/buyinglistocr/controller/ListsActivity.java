@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.List;
@@ -61,13 +62,21 @@ public class ListsActivity extends AppCompatActivity {
 
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonArray = jsonObject.getJSONArray("lists");
+                    if(jsonObject.getBoolean("error")) {
 
-                    for (int i = 0 ; i < jsonArray.length() ; i++) {
+                        Toast.makeText(ListsActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
 
-                        JSONObject jsonObjectList = jsonArray.getJSONObject(i);
+                    } else {
 
-                        lists.add(new List(jsonObjectList.getInt("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getInt("idUser")));
+                        JSONArray jsonArray = jsonObject.getJSONArray("lists");
+
+                        for (int i = 0 ; i < jsonArray.length() ; i++) {
+
+                            JSONObject jsonObjectList = jsonArray.getJSONObject(i);
+
+                            lists.add(new List(jsonObjectList.getInt("id"), jsonObjectList.getString("name"), jsonObjectList.getDouble("spent"), jsonObjectList.getInt("status"), jsonObjectList.getInt("idUser")));
+
+                        }
 
                     }
 
@@ -150,7 +159,15 @@ public class ListsActivity extends AppCompatActivity {
 
                             JSONObject jsonObject = new JSONObject(response);
 
-                            list.setId(jsonObject.getInt("id"));
+                            if(jsonObject.getBoolean("error")) {
+
+                                Toast.makeText(ListsActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                            } else {
+
+                                list.setId(jsonObject.getInt("id"));
+
+                            }
 
                         } catch(JSONException e) {
 
