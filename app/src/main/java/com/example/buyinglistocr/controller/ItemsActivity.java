@@ -1,6 +1,7 @@
 package com.example.buyinglistocr.controller;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,17 +39,11 @@ import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemManager;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
-import com.example.buyinglistocr.model.ProductManager;
-import com.example.buyinglistocr.model.SavePurchaseDAO;
-import com.example.buyinglistocr.model.ShopManager;
 import com.example.buyinglistocr.util.AnalyseData;
 import com.example.buyinglistocr.util.SharedPreferencesList;
 import com.example.buyinglistocr.util.VolleyCallback;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,36 +53,24 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
-public class ListView extends AppCompatActivity {
+public class ItemsActivity extends AppCompatActivity {
 
-    // The recycler view
-    private RecyclerView rv;
-
-    //
-    TextView textView2;
-
-    // access to the database
     private ListManager listManager;
     private ItemManager itemManager;
-    private ProductManager productManager;
-    private ShopManager shopManager;
-    private SavePurchaseDAO savePurchaseDAO;
 
-    // The current list
     private List list;
 
-    // The ArrayList of Item
     private ArrayList<Item> items;
 
-    // The List id
-    public static int idList;
-    public static String listName;
-    ArrayList<String> listItems = new ArrayList<String>();
+    private TextView textViewSpent;
 
-    /**
+    private RecyclerView recyclerView;
+
+    /***********************************************************************************************
      * Partie photo
-     */
+     **********************************************************************************************/
 
     public static final String TESS_DATA = "/tessdata";
     private static final String TAG = ListsActivity.class.getSimpleName();
@@ -96,50 +79,37 @@ public class ListView extends AppCompatActivity {
     private Uri outputFileDir;
     private String mCurrentPhotoPath;
 
-    /**
+    /***********************************************************************************************
      * Partie photo
-     */
+     **********************************************************************************************/
 
-    /**
-     * Method that be executed during the creation of the activity
-     * @param savedInstanceState
-     */
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_view);
+        setContentView(R.layout.activity_items);
 
-        listManager = new ListManager(ListView.this);
-        savePurchaseDAO = new SavePurchaseDAO(ListView.this);
+        listManager = new ListManager(ItemsActivity.this);
+        itemManager = new ItemManager(ItemsActivity.this);
 
-        list = SharedPreferencesList.getInstance(ListView.this).getList();
+        list = SharedPreferencesList.getInstance(ItemsActivity.this).getList();
 
-        // Get the list and the idem DAO
-        itemManager = new ItemManager(ListView.this);
+        Toolbar toolbar = findViewById(R.id.toolbarList);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(list.getName());
 
-        productManager = new ProductManager(ListView.this);
-        shopManager = new ShopManager(ListView.this);
-
-        // System.out.println("PUTAIN DE TAILLE DE PRODUCTS : "+productManager.getAll(666).size());
-        // Get the data
-        items = itemManager.get(list.getId());
+        textViewSpent = findViewById(R.id.textViewSpent);
+        textViewSpent.setText(textViewSpent.getText() + " " + list.getSpent());
 
         items = new ArrayList<>();
 
-        // Define the recycler view
-        rv = findViewById(R.id.items);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setAdapter(new AdapterItems(this, items, rv));
+        recyclerView = findViewById(R.id.recyclerViewItems);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new AdapterItems(this, items, recyclerView));
 
-        // Define the toolbar
-        Toolbar toolbar = findViewById(R.id.toolbarList);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(list.getName());
-
-        // Define the buttonAddItem
-        FloatingActionButton buttonAddItem = findViewById(R.id.buttonAddItem);
+        FloatingActionButton buttonAddItem = findViewById(R.id.floatingButtonAddItems);
         buttonAddItem.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -152,21 +122,15 @@ public class ListView extends AppCompatActivity {
 
         });
 
-        //
-        textView2 = findViewById(R.id.textView2);
-        textView2.setText("SPENT : " + list.getSpent());
-
-
-
         /*******************************************************************************************
-         * Photo
-         *******************************************************************************************/
+         * Partie photo
+         ******************************************************************************************/
 
         final Activity activity = this;
 
         checkPermission();
 
-        this.findViewById(R.id.buttonTakePhoto).setOnClickListener(new View.OnClickListener() {
+        this.findViewById(R.id.floatingButtonCamera).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -183,53 +147,71 @@ public class ListView extends AppCompatActivity {
          *******************************************************************************************/
 
     }
-    @Override
-    public void onBackPressed(){
-        finish();
-    }
 
-    /**
-     * Method that be executed during the resume of the activity
-     */
-    @Override
-    public void onResume(){
-
-        super.onResume();
-
-        // Notify the data set changed
-        rv.getAdapter().notifyDataSetChanged();
-
-    }
-
-    /**
-     * Allow to display the menu on the toolbar
-     * @param menu - The menu
-     * @return - A boolean
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_listview,menu);
+        getMenuInflater().inflate(R.menu.menu_items,menu);
 
         return super.onCreateOptionsMenu(menu);
 
     }
 
-    /**
-     * Allow to define the action for each item
-     * @param item - The item
-     * @return - A boolean
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()){
 
-            case R.id.delete:
+            case R.id.itemModify:
+
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+
+                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_modify_list, null);
+                builder2.setView(customLayout);
+
+                builder2.setTitle("Modify")
+
+                        .setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                EditText editText = customLayout.findViewById(R.id.name);
+
+                                list.setName(editText.getText().toString());
+
+                                getSupportActionBar().setTitle(list.getName());
+
+                                SharedPreferencesList.getInstance(ItemsActivity.this).setList(list);
+
+                                listManager.update(list);
+
+                            }
+
+                        })
+
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                closeContextMenu();
+
+                            }
+
+                        });
+
+                AlertDialog dialog = builder2.create();
+                dialog.show();
+
+                break;
+
+            case R.id.itemDelete:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 builder.setTitle("Delete")
+
                     .setMessage("Are you sure ?")
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
@@ -238,11 +220,11 @@ public class ListView extends AppCompatActivity {
 
                             listManager.delete(list.getId());
 
+                            list.setName(null);
 
+                            SharedPreferencesList.getInstance(ItemsActivity.this).setList(list);
 
-
-                            Intent MainIntent = new Intent(ListView.this, ListsActivity.class);
-                            startActivity(MainIntent);
+                            ItemsActivity.this.finish();
 
                         }
 
@@ -263,91 +245,10 @@ public class ListView extends AppCompatActivity {
                     .show();
 
                 break;
-            case R.id.share:
 
-              /**  AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setTitle("Delete")
-                        .setMessage("Are you sure ?")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                listDAO.delete(list.getId());
-
-
-
-
-                                Intent MainIntent = new Intent(ListView.this, MainActivity.class);
-                                startActivity(MainIntent);
-
-                            }
-
-                        })
-
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                closeContextMenu();
-
-                            }
-
-                        })
-
-                        .create()
-                        .show();**/
+            case R.id.itemShare:
 
                 break;
-
-            case R.id.modify:
-
-                // Create an alert builder
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-
-                // Set the custom layout
-                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_modify_list, null);
-                builder2.setView(customLayout);
-
-                // Define the positive button
-                builder2.setTitle("Modify")
-
-                    .setPositiveButton("Rename", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            EditText editText = customLayout.findViewById(R.id.name);
-
-                            list.setName(editText.getText().toString());
-
-                            listManager.update(list);
-
-                            recreate();
-
-                        }
-
-                    })
-
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            closeContextMenu();
-
-                        }
-
-                    });
-
-                // Create and show the alert dialog
-                AlertDialog dialog = builder2.create();
-                dialog.show();
-
-                break;
-
 
         }
 
@@ -414,7 +315,7 @@ public class ListView extends AppCompatActivity {
                     // Add this item to the ArrayList
                     items.add(item);
                     // Notify the recycler view that a data is inserted
-                    rv.getAdapter().notifyItemInserted(items.size() - 1);
+                    recyclerView.getAdapter().notifyItemInserted(items.size() - 1);
 
                 }
 
@@ -655,8 +556,8 @@ public class ListView extends AppCompatActivity {
         tessBaseAPI.end();
 
         /**Analyse Data*/
-        AnalyseData test = new AnalyseData(retStr, ListView.this, idList);
-        System.out.println("IdList is : "+idList);
+        AnalyseData test = new AnalyseData(retStr, ItemsActivity.this, list.getId());
+        System.out.println("IdList is : "+list.getId());
         System.out.println(test.getTextBrut());
 
         test.clean(test.getTextBrut());
@@ -665,7 +566,7 @@ public class ListView extends AppCompatActivity {
 
         List lists = null;
 
-        listManager.get(SharedPreferencesList.getInstance(ListView.this).getId(), new VolleyCallback() {
+        listManager.get(SharedPreferencesList.getInstance(ItemsActivity.this).getId(), new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
 
@@ -691,4 +592,14 @@ public class ListView extends AppCompatActivity {
 
         return retStr;
     }
+
+    @Override
+    public void onResume(){
+
+        super.onResume();
+
+        recyclerView.getAdapter().notifyDataSetChanged();
+
+    }
+
 }

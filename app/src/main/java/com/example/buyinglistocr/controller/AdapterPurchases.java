@@ -86,7 +86,7 @@ public class AdapterPurchases extends RecyclerView.Adapter<AdapterPurchases.MyVi
                 public void onClick(View view) {
 
                     // Start the new activity with the current list that parameter
-                    Intent intent = new Intent(context, ListView.class);
+                    Intent intent = new Intent(context, ItemsActivity.class);
                     intent.putExtra("savePurchase", currentSavePurchase);
                     context.startActivity(intent);
 

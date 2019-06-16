@@ -74,7 +74,7 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
 
                     SharedPreferencesList.getInstance(context).setList(list);
 
-                    Intent intent = new Intent(context, ListView.class);
+                    Intent intent = new Intent(context, ItemsActivity.class);
                     context.startActivity(intent);
 
                 }

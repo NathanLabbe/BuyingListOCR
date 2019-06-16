@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
+import com.example.buyinglistocr.util.SharedPreferencesList;
 import com.example.buyinglistocr.util.SharedPreferencesUser;
 import com.example.buyinglistocr.util.VolleyCallback;
 
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class ListsActivity extends AppCompatActivity {
@@ -49,7 +51,7 @@ public class ListsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbarListsActivity);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Welcome " + SharedPreferencesUser.getInstance(this).getLogin() + " - My Lists");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("My Lists");
 
         lists = new ArrayList<>();
 
@@ -113,7 +115,7 @@ public class ListsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_lists,menu);
 
         return super.onCreateOptionsMenu(menu);
 
@@ -122,7 +124,7 @@ public class ListsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.participate) {
+        if(item.getItemId() == R.id.itemParticipate) {
 
             Intent ParticipateIntent = new Intent(ListsActivity.this, AddCorres.class);
             startActivity(ParticipateIntent);
@@ -196,6 +198,34 @@ public class ListsActivity extends AppCompatActivity {
     public void onResume(){
 
         super.onResume();
+
+        List listChanged = SharedPreferencesList.getInstance(ListsActivity.this).getList();
+
+        Iterator<List> iterator = lists.iterator();
+
+        boolean isFind = false;
+
+        while (iterator.hasNext() && !isFind) {
+
+            List currentList = iterator.next();
+
+            if (currentList.getId() == listChanged.getId()) {
+
+                if(!SharedPreferencesList.getInstance(ListsActivity.this).isDeleted()) {
+
+                    lists.set(lists.indexOf(currentList), listChanged);
+
+                } else {
+
+                    lists.remove(lists.indexOf(currentList));
+
+                }
+
+                isFind = true;
+
+            }
+
+        }
 
         Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
 

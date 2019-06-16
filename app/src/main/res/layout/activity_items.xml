@@ -3,18 +3,16 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".controller.ListView">
+    android:layout_height="fill_parent">
 
     <include
         android:id="@+id/toolbarList"
         layout="@layout/toolbar"/>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewSpent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
@@ -24,14 +22,14 @@
         android:textSize="18dp"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/items"
+        android:id="@+id/recyclerViewItems"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
         android:drawSelectorOnTop="false"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/buttonAddItem"
+        android:id="@+id/floatingButtonAddItems"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -44,7 +42,7 @@
         app:borderWidth="0dp" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/buttonTakePhoto"
+        android:id="@+id/floatingButtonCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

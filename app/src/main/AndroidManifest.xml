@@ -37,7 +37,7 @@
 
         <activity android:name=".controller.ListsActivity"/>
 
-        <activity android:name=".controller.ListView"/>
+        <activity android:name=".controller.ItemsActivity"/>
 
         <activity android:name=".controller.AddCorres"/>
 

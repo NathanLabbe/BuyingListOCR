@@ -76,4 +76,20 @@ public class SharedPreferencesList {
 
     }
 
+    public boolean isDeleted() {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, context.MODE_PRIVATE);
+
+        if(sharedPreferences.getString(KEY_NAME, null) == null) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
 }
