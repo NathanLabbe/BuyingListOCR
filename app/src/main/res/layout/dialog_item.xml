@@ -9,7 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
-        android:hint="List name" />
+        android:hint="Item name"
+        android:singleLine="true"/>
 
+    <EditText
+        android:id="@+id/quantities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:inputType="number"
+        android:hint="Quantity" />
 
 </LinearLayout>

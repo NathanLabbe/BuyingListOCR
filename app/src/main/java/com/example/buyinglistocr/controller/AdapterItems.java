@@ -3,6 +3,7 @@ package com.example.buyinglistocr.controller;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -22,38 +23,24 @@ import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemManager;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-/**
- * Allow to custom the recycler view
- */
 public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder> {
 
-    // The context of the recycler view
     private Context context;
 
-    // The ArrayList of list
     private ArrayList<Item> items;
 
-    // The recycler view
-    private RecyclerView rv;
+    private RecyclerView recyclerView;
 
-    /**
-     * The constructor of the class
-     * @param context - The context
-     * @param items - The ArrayList of the list
-     */
-    public AdapterItems(Context context, ArrayList<Item> items, RecyclerView rv) {
+    AdapterItems(Context context, ArrayList<Item> items, RecyclerView recyclerView) {
 
         this.context = context;
         this.items = items;
-        this.rv = rv;
+        this.recyclerView = recyclerView;
 
     }
 
-    /**
-     * Allow to know the number of list
-     * @return - The number of list
-     */
     @Override
     public int getItemCount() {
 
@@ -61,14 +48,9 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
     }
 
-    /**
-     * Allow to create the view holder
-     * @param parent - The parent
-     * @param viewType - The view type
-     * @return - The view holder
-     */
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
@@ -78,158 +60,172 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
     }
 
-    /**
-     * Allow to bind the data which the view holder
-     * @param holder - The view holder
-     * @param position - the position in the data list
-     */
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Item item = items.get(position);
         holder.display(item, position);
 
     }
 
-    /**
-     * Allow to represent the view holder of a data
-     */
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
-        // The ItemDAO
-        ItemManager itemManager;
+        private ItemManager itemManager;
 
-        // The Item
-        private Item currentItem;
+        private Item item;
 
-        // It position
         private int position;
 
-        // The name of the view holder
-        private final TextView name;
-
-        // The buttons of the view holder
-       // private final Button buttonModify;
-        private final Button buttonDelete;
-        private final Button buttonPlus;
         private CheckBox checkBox;
 
-        /**
-         * The constructor of the class
-         * @param itemView - The item view
-         */
-        public MyViewHolder(final View itemView) {
+        private final TextView name;
+
+        private final Button buttonDelete;
+        private final Button buttonPlus;
+
+        MyViewHolder(final View itemView) {
 
             super(itemView);
 
             itemManager = new ItemManager(context);
 
-            name = itemView.findViewById(R.id.name);
-
             checkBox = itemView.findViewById(R.id.checkBox);
-
             checkBox.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    if(checkBox.isChecked()){
-                        currentItem.setStatus(1);
-                        itemManager.update(currentItem);
 
-                        String sampleText = currentItem.getName() + " (" + currentItem.getQuantityDesired() + "/" + currentItem.getQuantityDesired() + ") ";
+                    if(checkBox.isChecked()){
+
+                        item.setStatus(1);
+                        item.setQuantityGot(item.getQuantityDesired());
+
+                        itemManager.update(item);
+
+                        String sampleText = item.getName() + " (" + item.getQuantityDesired() + "/" + item.getQuantityDesired() + ") ";
+
                         name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                         name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
                         name.setText(sampleText);
-                        System.out.println("Statu : "+ itemManager.getItem(currentItem.getId()).getStatus());
-                    }
-                    else {
-                        currentItem.setStatus(0);
-                        itemManager.update(currentItem);
-                        String sampleText = currentItem.getName() + " (" + currentItem.getQuantityGot() + "/" + currentItem.getQuantityDesired() + ") ";
+
+                    } else {
+
+                        item.setStatus(0);
+                        item.setQuantityGot(0);
+
+                        itemManager.update(item);
+
+                        String sampleText = item.getName() + " (" + item.getQuantityGot() + "/" + item.getQuantityDesired() + ") ";
+
                         name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
                         name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-
                         name.setText(sampleText);
-                        System.out.println("Statu : "+ itemManager.getItem(currentItem.getId()).getStatus());
+
                     }
+
                 }
+
             });
 
+            name = itemView.findViewById(R.id.name);
             name.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
+
                     showAlertDialogNameClicked(v);
+
                 }
+
             });
 
             name.setOnLongClickListener(new View.OnLongClickListener() {
+
                 @Override
                 public boolean onLongClick(View v) {
+
                     showAlertDialogSuppr(v);
+
                     return true;
+
                 }
             });
 
-            //Reduce the quantity got. If the quantity got = 0 the button delete the item.
-            buttonDelete = itemView.findViewById(R.id.delete);
+            buttonDelete = itemView.findViewById(R.id.sub);
             buttonDelete.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
-                    if(currentItem.getQuantityGot()>0){
-                        if(currentItem.getQuantityGot()==currentItem.getQuantityDesired() && currentItem.getStatus() == 1){
-                            currentItem.setStatus(0);
+
+                    if(item.getQuantityGot() > 0){
+
+                        if(item.getQuantityGot()==item.getQuantityDesired() && item.getStatus() == 1){
+
+                            item.setStatus(0);
                             checkBox.setChecked(false);
+
                         }
-                        currentItem.setQuantityGot(currentItem.getQuantityGot()-1);
-                        itemManager.update(currentItem);
-                        int index = items.indexOf(currentItem);
-                        rv.getAdapter().notifyItemChanged(index);
+
+                        item.setQuantityGot(item.getQuantityGot()-1);
+                        itemManager.update(item);
+                        int index = items.indexOf(item);
+
+                        Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(index);
+
                     } else {
+
                         showAlertDialogSuppr(view);
+
                     }
+
                 }
 
             });
 
-            //Up the quantity got
-            buttonPlus = itemView.findViewById(R.id.plus);
+            buttonPlus = itemView.findViewById(R.id.add);
             buttonPlus.setOnClickListener((new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
-                    if(currentItem.getStatus()==1){
-                        Toast toast = Toast.makeText(context, "Already max", Toast.LENGTH_SHORT);
-                        toast.show();
+
+                    if(item.getStatus() == 1){
+
+                        Toast.makeText(context, "Already max", Toast.LENGTH_LONG).show();
+
                     } else {
-                        if(currentItem.getQuantityGot()<currentItem.getQuantityDesired()){
-                            currentItem.setQuantityGot(currentItem.getQuantityGot()+1);
-                            itemManager.update(currentItem);
+
+                        if(item.getQuantityGot() < item.getQuantityDesired()){
+
+                            item.setQuantityGot(item.getQuantityGot() + 1);
+                            itemManager.update(item);
+
                         }
-                        if(currentItem.getQuantityGot()==currentItem.getQuantityDesired()){
-                            currentItem.setStatus(1);
-                            itemManager.update(currentItem);
+
+                        if(item.getQuantityGot()==item.getQuantityDesired()){
+
+                            item.setStatus(1);
+                            itemManager.update(item);
+
                         }
-                        int index = items.indexOf(currentItem);
-                        rv.getAdapter().notifyItemChanged(index);
+
+                        int index = items.indexOf(item);
+                        Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(index);
+
                     }
 
                 }
+
             }));
 
         }
 
-        /**
-         * Display the data in the view holder
-         * @param item - The item
-         */
         public void display(Item item, int position) {
 
-            currentItem = item;
+            this.item = item;
             this.position = position;
-            name.setText(currentItem.getName() + " (" + currentItem.getQuantityGot() + "/" + currentItem.getQuantityDesired() + ") ");
+            name.setText(this.item.getName() + " (" + this.item.getQuantityGot() + "/" + this.item.getQuantityDesired() + ") ");
 
-            //gère la coche
-            if(currentItem.getStatus()==1) {
+            if(this.item.getStatus()==1) {
                 checkBox.setChecked(true);
                 String sampleText = name.getText().toString();
                 name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -242,38 +238,29 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
                 name.setText(sampleText);
             }
-        /**
-         * The constructor of the class
-         * @param itemView - The item view
-         */
 
 
 
         }
 
-        /**
-         * Allow to define the alert dialog
-         * @param view - The view
-         */
         public void showAlertDialogNameClicked(View view) {
 
-            // Create an alert builder
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
             // Set the custom layout
-           // final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_create_item, null);
-            final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_modify_item,null);
+           // final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_item, null);
+            final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_item,null);
             builder.setView(customLayout);
 
             final EditText editText = customLayout.findViewById(R.id.name);
-            editText.setText(currentItem.getName());
+            editText.setText(item.getName());
 
             final EditText editTextQte = customLayout.findViewById(R.id.quantities);
-            editTextQte.setText(""+currentItem.getQuantityDesired());
+            editTextQte.setText(""+item.getQuantityDesired());
 
 
             builder.setTitle("Update Product");
-            // Define the positive button
+
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
 
                 @Override
@@ -288,34 +275,34 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     }
                     final String getText = tmp.substring(0, index+1);
 
-                    if(isPresent(getText, currentItem.getIdList())){
+                    /*if(isPresent(getText, item.getIdList())){
                         Toast toast = Toast.makeText(context, "This name already exist", Toast.LENGTH_SHORT);
                         toast.show();
                     }
                     else if (getText.length() > 0) {
 
-                        currentItem.setName(getText);
+                        item.setName(getText);
 
                     } else {
 
-                    }
+                    }*/
 
                     if (editTextQte.getText().length() > 0 && Integer.parseInt(editTextQte.getText().toString())>0) {
 
-                        currentItem.setQuantityDesired(Integer.parseInt(editTextQte.getText().toString()));
+                        item.setQuantityDesired(Integer.parseInt(editTextQte.getText().toString()));
 
 
                     } else if (editTextQte.getText().length()==0){
-                        currentItem.setQuantityDesired(1);
+                        item.setQuantityDesired(1);
                     }
 
-                    itemManager.update(currentItem);
+                    itemManager.update(item);
 
                     // TEST
-                    System.out.println("TEST ADAPTERITEMS - quantityDesired : " + itemManager.getItem(currentItem.getId()).getQuantityDesired());
+                    System.out.println("TEST ADAPTERITEMS - quantityDesired : " + itemManager.getItem(item.getId()).getQuantityDesired());
 
                     // Notify the recycler view that a data is inserted
-                    rv.getAdapter().notifyItemChanged(position);
+                    Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(position);
 
                 }
 
@@ -384,20 +371,19 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-
                     checkBox.setChecked(false);
                     String sampleText = name.getText().toString();
                     name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
                     name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     name.setText(sampleText);
 
-                    itemManager.delete(currentItem.getId());
+                    itemManager.delete(item.getId());
 
-                    int index = items.indexOf(currentItem);
+                    int index = items.indexOf(item);
 
-                    items.remove(currentItem);
+                    items.remove(item);
 
-                    rv.getAdapter().notifyItemRemoved(index);
+                    recyclerView.getAdapter().notifyItemRemoved(index);
 
                 }
 
@@ -412,33 +398,6 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
             final AlertDialog dialog = builder.create();
             dialog.show();
-        }
-
-        /**
-         * Allow to know if an item exist with the same name in this list
-         * @param name - The name
-         * @param idList - The list id
-         * @return - True if the name exist, false else
-         */
-        public boolean isPresent(String name, long idList) {
-
-            // The return value
-            Boolean ret = false;
-
-            // Get all items of our list
-            ArrayList<Item> items = itemManager.get(idList);
-
-            for(Item item : items) {
-
-                if(item.getName().toLowerCase().equals(name.toLowerCase())) {
-
-                    ret = true;
-
-                }
-
-            }
-
-            return ret;
 
         }
 

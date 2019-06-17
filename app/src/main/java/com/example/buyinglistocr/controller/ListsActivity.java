@@ -142,7 +142,7 @@ public class ListsActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
+        @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_list, null);
         builder.setView(customLayout);
         builder.setTitle("Add List");
 
@@ -172,6 +172,10 @@ public class ListsActivity extends AppCompatActivity {
 
                                 list.setId(jsonObject.getInt("id"));
 
+                                lists.add(list);
+
+                                Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(lists.size() - 1);
+
                             }
 
                         } catch(JSONException e) {
@@ -183,10 +187,6 @@ public class ListsActivity extends AppCompatActivity {
                     }
 
                 });
-
-                lists.add(list);
-
-                Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(lists.size() - 1);
 
             }
 

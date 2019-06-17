@@ -205,7 +205,7 @@ public class ItemsActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 
-                @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_modify_list, null);
+                @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_list, null);
                 builder2.setView(customLayout);
 
                 builder2.setTitle("Modify")
@@ -299,7 +299,7 @@ public class ItemsActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
+        @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_item, null);
         builder.setView(customLayout);
         builder.setTitle("Add Product");
 
@@ -330,6 +330,10 @@ public class ItemsActivity extends AppCompatActivity {
 
                                 item.setId(jsonObject.getInt("id"));
 
+                                items.add(item);
+
+                                Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(items.size() - 1);
+
                             }
 
                         } catch(JSONException e) {
@@ -341,10 +345,6 @@ public class ItemsActivity extends AppCompatActivity {
                     }
 
                 });
-
-                items.add(item);
-
-                Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(items.size() - 1);
 
 
             }
