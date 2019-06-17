@@ -37,9 +37,11 @@
 
         <activity android:name=".controller.ListsActivity"/>
 
-        <activity android:name=".controller.ItemsActivity"/>
+        <activity android:name=".controller.ItemsActivity"
+                  android:parentActivityName=".controller.ListsActivity"/>
 
-        <activity android:name=".controller.AddCorres"/>
+        <activity android:name=".controller.AddCorres"
+                  android:parentActivityName=".controller.ListsActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
