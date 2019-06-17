@@ -6,17 +6,15 @@ public class Item {
     private String name;
     private int quantityDesired;
     private int quantityGot;
-    private String note;
     private int status;
     private int idList;
 
-    public Item(int id, String name, int quantityDesired, int quantityGot, String note, int status, int idList) {
+    public Item(int id, String name, int quantityDesired, int quantityGot, int status, int idList) {
 
         this.id = id;
         this.name = name;
         this.quantityDesired = quantityDesired;
         this.quantityGot = quantityGot;
-        this.note = note;
         this.status = status;
         this.idList = idList;
 
@@ -67,18 +65,6 @@ public class Item {
     public void setQuantityGot(int quantityGot) {
 
         this.quantityGot = quantityGot;
-
-    }
-
-    public String getNote() {
-
-        return this.note;
-
-    }
-
-    public void setNote(String note) {
-
-        this.note = note;
 
     }
 

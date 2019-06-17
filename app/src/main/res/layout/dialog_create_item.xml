@@ -11,6 +11,7 @@
         android:layout_marginHorizontal="15dp"
         android:hint="Product name"
         android:singleLine="true"/>
+
     <EditText
         android:id="@+id/quantities"
         android:layout_width="match_parent"

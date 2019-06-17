@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -143,14 +146,14 @@ public class ListsActivity extends AppCompatActivity {
         builder.setView(customLayout);
         builder.setTitle("Add List");
 
+        final EditText editTextName = customLayout.findViewById(R.id.name);
+
         builder.setPositiveButton("Make", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                EditText editText = customLayout.findViewById(R.id.name);
-
-                list = new List(0, editText.getText().toString(), 0, 0, SharedPreferencesUser.getInstance(ListsActivity.this).getId());
+                list = new List(0, editTextName.getText().toString(), 0, 0, SharedPreferencesUser.getInstance(ListsActivity.this).getId());
 
                 listManager.add(list, new VolleyCallback() {
 
@@ -189,8 +192,35 @@ public class ListsActivity extends AppCompatActivity {
 
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        editTextName.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(TextUtils.isEmpty(editable)) {
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                } else {
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+
+                }
+
+            }
+
+        });
 
     }
 
@@ -217,7 +247,7 @@ public class ListsActivity extends AppCompatActivity {
 
                 } else {
 
-                    lists.remove(lists.indexOf(currentList));
+                    lists.remove(currentList);
 
                 }
 

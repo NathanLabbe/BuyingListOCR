@@ -10,7 +10,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.buyinglistocr.util.RequestHandler;
 import com.example.buyinglistocr.util.SharedPreferencesList;
-import com.example.buyinglistocr.util.SharedPreferencesUser;
 import com.example.buyinglistocr.util.VolleyCallback;
 
 import org.json.JSONException;
@@ -30,27 +29,16 @@ public class ItemManager {
 
     }
 
-    public int add(final Item item) {
+    public int add(final Item item, final VolleyCallback volleyCallback) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ItemIndex.php",
 
                 new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
 
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                        } catch(JSONException e) {
-
-                            e.printStackTrace();
-
-                        }
-
+                        volleyCallback.onSuccess(response);
 
                     }
 
@@ -70,16 +58,17 @@ public class ItemManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
+
                 params.put("tag","add");
-                params.put("name", ""+ item.getName());
-                params.put("quantityDesired", ""+ item.getQuantityDesired());
-                params.put("quantityGot", ""+ item.getQuantityGot());
-                params.put("note", ""+item.getNote());
-                params.put("status", ""+item.getStatus());
-                params.put("idList", ""+item.getIdList());
+                params.put("name", item.getName());
+                params.put("quantityDesired", Integer.toString(item.getQuantityDesired()));
+                params.put("quantityGot", Integer.toString(item.getQuantityGot()));
+                params.put("status", Integer.toString(item.getStatus()));
+                params.put("idList", Integer.toString(item.getIdList()));
+
                 return params;
 
             }
@@ -184,7 +173,6 @@ public class ItemManager {
                 params.put("name", ""+ item.getName());
                 params.put("quantityDesired", ""+ item.getQuantityDesired());
                 params.put("quantityGot", ""+ item.getQuantityGot());
-                params.put("note", ""+item.getNote());
                 params.put("status", ""+item.getStatus());
                 params.put("idList", ""+item.getIdList());
                 return params;

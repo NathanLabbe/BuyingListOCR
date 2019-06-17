@@ -3,7 +3,6 @@ package com.example.buyinglistocr.controller;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -68,24 +67,23 @@ public class ItemsActivity extends AppCompatActivity {
 
     private ArrayList<Item> items;
 
-    private TextView textViewSpent;
+    private Item item;
 
     private RecyclerView recyclerView;
 
-    /***********************************************************************************************
-     * Partie photo
-     **********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //                                      Camera                                            //
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
     public static final String TESS_DATA = "/tessdata";
     private static final String TAG = ListsActivity.class.getSimpleName();
-    private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/Tess";
     private TessBaseAPI tessBaseAPI;
     private Uri outputFileDir;
     private String mCurrentPhotoPath;
 
-    /***********************************************************************************************
-     * Partie photo
-     **********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //                                      Camera                                            //
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -104,7 +102,7 @@ public class ItemsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(list.getName());
 
-        textViewSpent = findViewById(R.id.textViewSpent);
+        TextView textViewSpent = findViewById(R.id.textViewSpent);
         textViewSpent.setText(textViewSpent.getText() + " " + list.getSpent());
 
         items = new ArrayList<>();
@@ -130,7 +128,7 @@ public class ItemsActivity extends AppCompatActivity {
 
                             JSONObject jsonObjectItem = jsonArray.getJSONObject(i);
 
-                            items.add(new Item(jsonObjectItem.getInt("id"), jsonObjectItem.getString("name"), jsonObjectItem.getInt("quantityDesired"), jsonObjectItem.getInt("quantityGot"), jsonObjectItem.getString("note"), jsonObjectItem.getInt("status"), jsonObjectItem.getInt("idList")));
+                            items.add(new Item(jsonObjectItem.getInt("id"), jsonObjectItem.getString("name"), jsonObjectItem.getInt("quantityDesired"), jsonObjectItem.getInt("quantityGot"), jsonObjectItem.getInt("status"), jsonObjectItem.getInt("idList")));
 
                         }
 
@@ -152,8 +150,8 @@ public class ItemsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new AdapterItems(this, items, recyclerView));
 
-        FloatingActionButton buttonAddItem = findViewById(R.id.floatingButtonAddItems);
-        buttonAddItem.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton floatingActionButtonAddItem = findViewById(R.id.floatingButtonAddItems);
+        floatingActionButtonAddItem.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -164,15 +162,14 @@ public class ItemsActivity extends AppCompatActivity {
 
         });
 
-        /*******************************************************************************************
-         * Partie photo
-         ******************************************************************************************/
-
-        final Activity activity = this;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        //                                      Camera                                            //
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         checkPermission();
 
-        this.findViewById(R.id.floatingButtonCamera).setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton floatingActionButtonCamera = findViewById(R.id.floatingButtonCamera);
+        floatingActionButtonCamera.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -184,9 +181,9 @@ public class ItemsActivity extends AppCompatActivity {
 
         });
 
-        /*******************************************************************************************
-         * Photo
-         *******************************************************************************************/
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        //                                      Camera                                            //
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 
@@ -208,7 +205,7 @@ public class ItemsActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 
-                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_modify_list, null);
+                @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_modify_list, null);
                 builder2.setView(customLayout);
 
                 builder2.setTitle("Modify")
@@ -222,7 +219,7 @@ public class ItemsActivity extends AppCompatActivity {
 
                                 list.setName(editText.getText().toString());
 
-                                getSupportActionBar().setTitle(list.getName());
+                                Objects.requireNonNull(getSupportActionBar()).setTitle(list.getName());
 
                                 SharedPreferencesList.getInstance(ItemsActivity.this).setList(list);
 
@@ -298,66 +295,85 @@ public class ItemsActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Allow to define the alert dialog
-     * @param view - The view
-     */
     public void showAlertDialogButtonClicked(View view) {
 
-        final Context context = this;
-
-        // Create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // Set the custom layout
-        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
+        @SuppressLint("InflateParams") final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_item, null);
         builder.setView(customLayout);
         builder.setTitle("Add Product");
-        final EditText editText = customLayout.findViewById(R.id.name);
 
-        final EditText editTextQte = customLayout.findViewById(R.id.quantities);
-        // Define the positive button
+        final EditText editTextName = customLayout.findViewById(R.id.name);
+        final EditText editTextQuantity = customLayout.findViewById(R.id.quantities);
+
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                item = new Item(0, editTextName.getText().toString(), Integer.parseInt(editTextQuantity.getText().toString()), 0, 0, list.getId());
 
-                if(isPresent(editText.getText().toString(), list.getId())) {
+                itemManager.add(item, new VolleyCallback() {
 
-                    Toast toast = Toast.makeText(context, "This name already exist", Toast.LENGTH_SHORT);
-                    toast.show();
+                    @Override
+                    public void onSuccess(String response) {
 
-                }
+                        try {
 
+                            JSONObject jsonObject = new JSONObject(response);
 
+                            if(jsonObject.getBoolean("error")) {
 
-                    else {
+                                Toast.makeText(ItemsActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
 
-                    int quantityDesired = 1;
+                            } else {
 
-                    if (editTextQte.getText().length() > 0) {
-                        System.out.println("true");
-                        if (Integer.parseInt(editTextQte.getText().toString())>0){
-                            quantityDesired = Integer.parseInt(editTextQte.getText().toString());
+                                item.setId(jsonObject.getInt("id"));
+
+                            }
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
                         }
+
                     }
 
-                    // Create the new item with the data of the edit text
-                    Item item = new Item(0, editText.getText().toString(), quantityDesired, 0, new String(), 0, list.getId());
+                });
 
-                    // Add this item to the database and get it id
-                    int idItem = itemManager.add(item);
+                items.add(item);
 
-                    // TEST
-                   // System.out.println("TEST LISTVIEW - quantityDesired : " + itemManager.getItem(idItem).getQuantityDesired());
+                Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(items.size() - 1);
 
-                    item.setId(idItem);
 
-                    // Add this item to the ArrayList
-                    items.add(item);
-                    // Notify the recycler view that a data is inserted
-                    recyclerView.getAdapter().notifyItemInserted(items.size() - 1);
+            }
+
+        });
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        editTextName.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                } else {
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 
                 }
 
@@ -365,91 +381,37 @@ public class ItemsActivity extends AppCompatActivity {
 
         });
 
-        // Create and show the alert dialog
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        editTextQuantity.addTextChangedListener(new TextWatcher() {
 
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(editText.getText().length()<1){
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (!editText.getText().toString().startsWith(" ") && (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0)){
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        editTextQte.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(editTextQte.getText().length()>0) {
-                    if (Integer.parseInt(editTextQte.getText().toString()) <= 0) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                        Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                    }
-                } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")){
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                }
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable editable) {
+
+                if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                } else {
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+
+                }
 
             }
+
         });
-    }
-
-    /**
-     * Allow to know if an item exist with the same name in this list
-     * @param name - The name
-     * @param idList - The list id
-     * @return - True if the name exist, false else
-     */
-    public boolean isPresent(String name, long idList) {
-
-        // The return value
-        Boolean ret = false;
-
-        // Get all items of our list
-        //ArrayList<Item> items = itemManager.get(idList);
-
-        for(Item item : items) {
-
-            if(item.getName().equals(name)) {
-
-                ret = true;
-
-            }
-
-        }
-
-        return ret;
 
     }
 
-    /*******************************************************************************************
-     * Photo
-     *******************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //                                      Camera                                            //
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
     //Gestion Des Permissions
     private void checkPermission() {
@@ -634,6 +596,10 @@ public class ItemsActivity extends AppCompatActivity {
 
         return retStr;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //                                      Camera                                            //
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void onResume(){
