@@ -8,46 +8,28 @@ import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductManager;
 import com.example.buyinglistocr.model.Purchase;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class AnalyseData {
     private String textBrut;
     public static ArrayList<Purchase> table = new ArrayList<>();
     private ArrayList<Purchase> correspondanceTable = new ArrayList<>();
-    private int nbProduct;
     private long idList;
     private Context context;
 
     private ProductManager productManager;
     private ItemManager itemManager;
 
-    public AnalyseData(String c) {
-        this.textBrut= c;
-    }
-
     public String getTextBrut() {
         return textBrut;
-    }
-
-    public void setTextBrut(String textBrut) {
-        this.textBrut = textBrut;
     }
 
     public ArrayList<Purchase> getTable() {
         return table;
     }
 
-    public void setTable(ArrayList<Purchase> table) {
-        this.table = table;
-    }
-
     public ArrayList<Purchase> getCorrespondanceTable() {
         return correspondanceTable;
-    }
-
-    public void setCorrespondanceTable(ArrayList<Purchase> correspondanceTable) {
-        this.correspondanceTable = correspondanceTable;
     }
 
     public AnalyseData(String text, Context context, long idList) {
@@ -59,67 +41,12 @@ public class AnalyseData {
     }
 
 
-    // Corriger les mots cles comme TEL, MONTANT, Nombre
-    public void correction(String text) {
-        String[] tokens = text.split("[ \\n]+");
-        String res = "";
-        int count=0;
-        boolean start = false;
-        for (int i = 0; i < tokens.length; i++) {
-            if (start) {count++;}
-            if (count == 3){
-                if (!(Hamming(tokens[i], "N°")==0)){
-                    res = res + "\n";
-                } else {
-                    count = -1;
-                }
-
-            }
-            if (Hamming(tokens[i], "TEL") < 2) {
-                start = true;
-                tokens[i] = "\nTEL";
-                res = res +" "+ tokens[i];
-            }
-            else if (Hamming(tokens[i], "N°")==0){
-                tokens[i] = "\nN°";
-                res = res +" "+ tokens[i]+ tokens[i+1];
-            }
-            else if (Hamming(tokens[i], "MONTANT") < 2) {
-                tokens[i] = "MONTANT";
-                res = res +" "+ tokens[i];
-            }
-            else if (Hamming(tokens[i], "Nombre") < 2) {
-                tokens[i] = "Nombre";
-                res = res +" "+ tokens[i];
-            }
-            else if (Hamming(tokens[i], "TOTAL") < 2){
-                tokens[i] = "\nTOTAL";
-                res = res + " "+ tokens[i];
-            }
-            else if (tokens[i].equals("A")||tokens[i].equals("B")||tokens[i].equals("C")){
-                res = res + " A\n";
-            }
-            else if (Hamming(tokens[i], "EUR")<2 && i<tokens.length-1 && !tokens[i+1].equals("A")){
-                res = res + " EUR\n";
-            }
-            else if (i==0 || res.endsWith("\n")){
-                res = res + tokens[i];
-            }else {res = res +" "+ tokens[i];}
-        }
-        this.setTextBrut(res);
-
-    }
-
-    //Enleve les donnees inutiles et le mettre en Table
+    //Choisit les donnees utiles et le mettre en Table de purchase
     public void clean(String text) {
         text= text.replace(',','.');
-        //int nbProduct = findNbProduct(text);
-        //System.out.println("Nombre de product is "+ nbProduct);
         String[] tokens = text.split("\\n");
-        int i = 0;
-        System.out.println("CLEAN" + "tokens.length : " + tokens.length + "i : " + i);
-        for (int j = i; j < tokens.length-1; j++) {
-            //System.out.println("CLEAN j");
+
+        for (int j = 0; j < tokens.length-1; j++) {
             String[] ligne = tokens[j].split(" ");
             String nom = "";
             double prix = 0.0;
@@ -142,63 +69,9 @@ public class AnalyseData {
                         table.add(p);
                 }
             }
-
         }
-        //i= i+6;// cet ligne depend s'il ya "N° Sirit"
-        //System.out.println(i);
-        /*for (int j = i; j < (i+nbProduct-1); j++ ){
-            String[] lignes = tokens[j].split(" ");
-            String nom ="";
-            double prix;
-            if (lignes[lignes.length-1].length() == 1) {
-                prix = Double.parseDouble(lignes[lignes.length - 3]);
-                for (int k = 0; k < lignes.length - 3; k++) {
-                    nom = nom + " " + lignes[k];
-                }
-            }else {
-                for (int k = 0; k < lignes.length; k++) {
-                    nom = nom + " " + lignes[k];
-                }
-                lignes = tokens[j+1].split(" ");
-                prix = Double.parseDouble(lignes[lignes.length - 3]);
-                j++;
-                i++;
-            }
-            Purchase p = new Purchase(nom, prix, 1);// quantite defaut
-            table.add(p);
-        }*/
-
     }
 
-
-    //Cherche le nombre de produit total
-    public int findNbProduct(String text) {
-        String[] tokens = text.split("\\n");
-        for (int i = 0; i < tokens.length; i++){
-            String[] words = tokens[i].split(" ");
-            // for (int j = 0; j < words.length; j++ ){
-            if(Hamming(words[0],"Nombre") < 2) {
-                nbProduct = Integer.parseInt(words[words.length-1]);
-                //System.out.println("nb Product is"+nbProduct);
-                break;
-            }
-            //}
-        }
-        return nbProduct;
-
-    }
-
-
-    //Affichage la Table
-    public String list (String text) {
-        clean(text);
-        //findNbProduct(text);
-        String res ="";
-        for (int i = 0; i < table.size(); i++) {
-            res = res + table.get(i).getName() + "   " + table.get(i).getPrice() + "    " + table.get(i).getQuantite()+"\n";
-        }
-        return res;
-    }
 
     // ajouter une lettre en n'importe position de mot pour le Hamming
     public String ajouteChar(String s, int i) {
@@ -268,6 +141,7 @@ public class AnalyseData {
         return res;
     }
 
+    // Hamming pour une list des mots
     public boolean HammList(String s1, String s2){
         int res = 0;
         int longeur = s1.split(" ").length;
@@ -297,19 +171,13 @@ public class AnalyseData {
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
         ArrayList<Product> products = productManager.getAll(666);
-        //System.out.println(products.get(0).getName());
-        //System.out.println(products.get(0).getName());
         for (int k = 0; k < table.size(); k++){
             correspondanceTable.add(table.get(k));
         }
-        //int hamming = 50;
         int res = -1;
         for(int i = 0; i<table.size(); i++){
             for(int j = 0; j<products.size(); j++){
-                //int tmp = Hamming(table.get(i).getName(), products.get(j).getName());
-                //System.out.println(table.get(i).getName());
                 if (HammList(table.get(i).getName(), products.get(j).getName())){
-                    //hamming = tmp;
                     res = j;
                 }
             }
@@ -318,8 +186,6 @@ public class AnalyseData {
                 //System.out.println("Name is "+ products.get(res).getCorrespondence());
                 res = -1;
             }
-            //hamming = 50;
-
         }
     }
 
@@ -329,58 +195,31 @@ public class AnalyseData {
      */
     public double removePurchase (ArrayList<Purchase> correspondenceTable){
         double spent = 0.0;
-        //List lists = list.getList(idList);
         ArrayList<Item> items = itemManager.get(idList);
         for(int i = 0; i<correspondenceTable.size(); i++){
             for(int j = 0; j<items.size(); j++){
-
-                long idItem = 0;
-                long idProduct = 0;
-                String name ="";
-                String correspondence = "";
-
                 if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase()) ){
                     if(items.get(j).getQuantityGot()<items.get(j).getQuantityDesired()){
                         items.get(j).setQuantityGot(items.get(j).getQuantityGot()+1);
                         itemManager.update(items.get(j));
-                        System.out.println(items.get(j).getName() + " : " + items.get(j).getQuantityGot());
+                        //System.out.println(items.get(j).getName() + " : " + items.get(j).getQuantityGot());
                         if(items.get(j).getQuantityGot()==items.get(j).getQuantityDesired()){
 
                             items.get(j).setStatus(1);
                             itemManager.update(items.get(j));
                         }
                         spent = spent + correspondenceTable.get(i).getPrice();
-                        System.out.printf("Your spent is %s%n", spent);
+                        //System.out.printf("Your spent is %s%n", spent);
                     } else if (items.get(j).getStatus()!=1){
                         items.get(j).setStatus(1);
                         itemManager.update(items.get(j));
                     } else {
-                        System.out.println(items.get(j).getName() + " STATUT : " + items.get(j).getStatus());
+                        //System.out.println(items.get(j).getName() + " STATUT : " + items.get(j).getStatus());
                     }
                 }
             }
         }
-        //lists.setSpent(spent);
-        //list.update(lists);
         return spent;
-    }
-    public static void main(String[] args) throws FileNotFoundException {
-
-        String c = " SAS RENGAST \n Au capital de 48 000 E \n1 Rue Mexandre Lefas \n35700 Rennes \nTel 2 02 99 36 29 24 \n***+************4+*w\nREPRISE EICKET \nNR CAISSEz 005 \nRANOU ALLUMETTES NAT 1,47 EUR A \nRANUU ALLUMETTES NAT 1.47 EUR A \nGLADE REFRESH FR.SDM 2.30 EUR B \nPASS 8 PAINS tHOED I 1,64 EUR A \nPLORETTE HACHE 1258 1.85 EUR A \nJANZ CUIS PLT LR BLC 3,85 EUR A\nNECTARINE BLANCHE VR \n0,830 kg X 3,99EURO/kg 3.31 EUR A \nCERISETKQRUEêTTE 750 319ê8E%BRA \nESPECES 21f90 EUR \nNombre dàrt1c1es vendusz 8\n";
-        AnalyseData a = new AnalyseData(c);
-        a.clean(c);
-        System.out.println(a.list(a.textBrut));
-        System.out.println(a.HammList(" BIO PAT LT UHT 1/ZEC", "BIO PAT LT UHT 1/2EC"));
-        System.out.println("RANOU ALLUMETTES NAT".split(" ").length);
-        //System.out.println("misss");
-        //AnalyseData a = new AnalyseData(c);
-        //System.out.println(a.Hamming("MONTANT", "MONTTT"));
-        //System.out.println(a.correction(a.textBrut));
-        //System.out.println(a.findNbProduct(a.textBrut));
-        //System.out.println(a.Table.size());
-        //System.out.println("sdrtdyddrt"+ a.list(a.textBrut));
-
-
     }
 
 
