@@ -9,6 +9,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.buyinglistocr.util.RequestHandler;
+import com.example.buyinglistocr.util.SharedPreferencesList;
+import com.example.buyinglistocr.util.SharedPreferencesUser;
+import com.example.buyinglistocr.util.VolleyCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,11 +30,6 @@ public class ItemManager {
 
     }
 
-    /**
-     * Allow to add an item in the "Item" table
-     * @param item - The item
-     * @return - The id of the item
-     */
     public int add(final Item item) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
@@ -94,30 +92,16 @@ public class ItemManager {
 
     }
 
-    /**
-     * Allow to delete an item in the "Item" table
-     * @param id - The id of the item
-     */
-    public void delete(final long id) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+    public void getAll(final VolleyCallback volleyCallback) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ItemIndex.php",
 
                 new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
 
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                        } catch(JSONException e) {
-
-                            e.printStackTrace();
-
-                        }
-
+                        volleyCallback.onSuccess(response);
 
                     }
 
@@ -137,11 +121,13 @@ public class ItemManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("tag","delete");
-                params.put("id", ""+id);
+
+                params.put("tag", "getAll");
+                params.put("idList", Integer.toString(SharedPreferencesList.getInstance(context).getId()));
+
                 return params;
 
             }
@@ -150,14 +136,8 @@ public class ItemManager {
 
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
-
-
     }
 
-    /**
-     * Allow to update an item in the "Item" table
-     * @param item - The item to update
-     */
     public void update(final Item item) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
@@ -220,12 +200,7 @@ public class ItemManager {
 
     }
 
-    /**
-     * Allow to get all item
-     * @param listKey - The idList
-     * @return - The ArrayList of item
-     */
-    public ArrayList<Item> get(final long listKey) {
+    public void delete(final long id) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
 
                 new Response.Listener<String>() {
@@ -267,8 +242,8 @@ public class ItemManager {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("tag","get");
-                params.put("listKey", "" + listKey);
+                params.put("tag","delete");
+                params.put("id", ""+id);
                 return params;
 
             }
@@ -277,69 +252,13 @@ public class ItemManager {
 
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
-        return null;
+
+
     }
 
-    /**
-     * Allow to get a specific item
-     * @param id - The id
-     * @return - The item
-     */
-    public Item getItem(final long id) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ListIndex.php",
+    public ArrayList<Item> get(long id) { return new ArrayList<>(); }
 
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                        } catch(JSONException e) {
-
-                            e.printStackTrace();
-
-                        }
-
-
-                    }
-
-                },
-
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
-
-                }
-
-        ) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> params = new HashMap<>();
-                params.put("tag","getItem");
-                params.put("id", ""+ id);
-                return params;
-
-            }
-
-        };
-
-        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
-
-        return null;
-
-    }
+    public Item getItem(long id) { return null; }
 
 }
 

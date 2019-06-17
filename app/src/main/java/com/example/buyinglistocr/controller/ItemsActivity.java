@@ -45,6 +45,10 @@ import com.example.buyinglistocr.util.VolleyCallback;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -105,6 +109,45 @@ public class ItemsActivity extends AppCompatActivity {
 
         items = new ArrayList<>();
 
+        itemManager.getAll(new VolleyCallback() {
+
+            @Override
+            public void onSuccess(String response) {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if(jsonObject.getBoolean("error")) {
+
+                        Toast.makeText(ItemsActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                    } else {
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("items");
+
+                        for (int i = 0 ; i < jsonArray.length() ; i++) {
+
+                            JSONObject jsonObjectItem = jsonArray.getJSONObject(i);
+
+                            items.add(new Item(jsonObjectItem.getInt("id"), jsonObjectItem.getString("name"), jsonObjectItem.getInt("quantityDesired"), jsonObjectItem.getInt("quantityGot"), jsonObjectItem.getString("note"), jsonObjectItem.getInt("status"), jsonObjectItem.getInt("idList")));
+
+                        }
+
+                    }
+
+                } catch(JSONException e) {
+
+                    e.printStackTrace();
+
+                }
+
+                Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
+
+            }
+
+        });
+
         recyclerView = findViewById(R.id.recyclerViewItems);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new AdapterItems(this, items, recyclerView));
@@ -115,7 +158,6 @@ public class ItemsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // Launch the alert dialog
                 showAlertDialogButtonClicked(view);
 
             }
@@ -308,7 +350,7 @@ public class ItemsActivity extends AppCompatActivity {
                     int idItem = itemManager.add(item);
 
                     // TEST
-                    System.out.println("TEST LISTVIEW - quantityDesired : " + itemManager.getItem(idItem).getQuantityDesired());
+                   // System.out.println("TEST LISTVIEW - quantityDesired : " + itemManager.getItem(idItem).getQuantityDesired());
 
                     item.setId(idItem);
 
@@ -389,7 +431,7 @@ public class ItemsActivity extends AppCompatActivity {
         Boolean ret = false;
 
         // Get all items of our list
-        ArrayList<Item> items = itemManager.get(idList);
+        //ArrayList<Item> items = itemManager.get(idList);
 
         for(Item item : items) {
 
