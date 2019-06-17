@@ -310,7 +310,23 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    /**
+
+                     if(editText.getText().length()<1){
+                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                     Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
+                     toast.show();
+                     } else if (!editText.getText().toString().startsWith(" ") && (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0)){
+                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                     }
+
+
+                     **/
+
+
+                }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
@@ -336,7 +352,25 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    /**
+
+                     if(editTextQte.getText().length()>0) {
+                     if (Integer.parseInt(editTextQte.getText().toString()) <= 0) {
+                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                     Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
+                     toast.show();
+                     } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")) {
+                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                     }
+                     } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")){
+                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                     }
+
+                     **/
+
+                }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
