@@ -279,8 +279,10 @@ public class ListManager {
             protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
+
                 params.put("tag", "delete");
                 params.put("id", Integer.toString(id));
+
                 return params;
 
             }

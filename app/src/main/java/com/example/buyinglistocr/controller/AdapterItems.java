@@ -1,5 +1,6 @@
 package com.example.buyinglistocr.controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
@@ -80,8 +81,8 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
         private final TextView name;
 
-        private final Button buttonDelete;
-        private final Button buttonPlus;
+        private final Button buttonAdd;
+        private final Button buttonSub;
 
         MyViewHolder(final View itemView) {
 
@@ -131,9 +132,9 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             name.setOnClickListener(new View.OnClickListener() {
 
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
 
-                    showAlertDialogNameClicked(v);
+                    showAlertDialogButtonClicked();
 
                 }
 
@@ -144,72 +145,64 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 @Override
                 public boolean onLongClick(View v) {
 
-                    showAlertDialogSuppr(v);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                    builder.setTitle("Delete")
+
+                            .setMessage("Are you sure ?")
+                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    itemManager.delete(item.getId());
+
+                                    items.remove(item);
+
+                                    Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
+
+                                }
+
+                            })
+
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) { }
+
+                            })
+
+                            .create()
+                            .show();
 
                     return true;
 
                 }
             });
 
-            buttonDelete = itemView.findViewById(R.id.sub);
-            buttonDelete.setOnClickListener(new View.OnClickListener() {
+            buttonAdd = itemView.findViewById(R.id.add);
+            buttonAdd.setOnClickListener((new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
 
-                    if(item.getQuantityGot() > 0){
+                    if(item.getQuantityGot() < item.getQuantityDesired()){
 
-                        if(item.getQuantityGot()==item.getQuantityDesired() && item.getStatus() == 1){
-
-                            item.setStatus(0);
-                            checkBox.setChecked(false);
-
-                        }
-
-                        item.setQuantityGot(item.getQuantityGot()-1);
+                        item.setQuantityGot(item.getQuantityGot() + 1);
                         itemManager.update(item);
-                        int index = items.indexOf(item);
 
-                        Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(index);
-
-                    } else {
-
-                        showAlertDialogSuppr(view);
-
-                    }
-
-                }
-
-            });
-
-            buttonPlus = itemView.findViewById(R.id.add);
-            buttonPlus.setOnClickListener((new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    if(item.getStatus() == 1){
-
-                        Toast.makeText(context, "Already max", Toast.LENGTH_LONG).show();
-
-                    } else {
-
-                        if(item.getQuantityGot() < item.getQuantityDesired()){
-
-                            item.setQuantityGot(item.getQuantityGot() + 1);
-                            itemManager.update(item);
-
-                        }
-
-                        if(item.getQuantityGot()==item.getQuantityDesired()){
+                        if(item.getQuantityGot() == item.getQuantityDesired()) {
 
                             item.setStatus(1);
                             itemManager.update(item);
 
                         }
 
-                        int index = items.indexOf(item);
-                        Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(index);
+                        Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(items.indexOf(item));
+
+                    } else {
+
+                        Toast.makeText(context, "Already max", Toast.LENGTH_LONG).show();
 
                     }
 
@@ -217,187 +210,150 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
             }));
 
-        }
-
-        public void display(Item item, int position) {
-
-            this.item = item;
-            this.position = position;
-            name.setText(this.item.getName() + " (" + this.item.getQuantityGot() + "/" + this.item.getQuantityDesired() + ") ");
-
-            if(this.item.getStatus()==1) {
-                checkBox.setChecked(true);
-                String sampleText = name.getText().toString();
-                name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
-                name.setText(sampleText);
-            }else{
-                String sampleText = name.getText().toString();
-                name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
-                name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-
-                name.setText(sampleText);
-            }
-
-
-
-        }
-
-        public void showAlertDialogNameClicked(View view) {
-
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-            // Set the custom layout
-           // final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_item, null);
-            final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_item,null);
-            builder.setView(customLayout);
-
-            final EditText editText = customLayout.findViewById(R.id.name);
-            editText.setText(item.getName());
-
-            final EditText editTextQte = customLayout.findViewById(R.id.quantities);
-            editTextQte.setText(""+item.getQuantityDesired());
-
-
-            builder.setTitle("Update Product");
-
-            builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            buttonSub = itemView.findViewById(R.id.sub);
+            buttonSub.setOnClickListener(new View.OnClickListener() {
 
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String tmp = editText.getText().toString();
-                    int index = tmp.length()-1;
+                public void onClick(View view) {
 
-                    for (int i = index; i>0; i--){
-                        if(tmp.charAt(i) == ' ') {
-                            index--;
-                        } else break;
-                    }
-                    final String getText = tmp.substring(0, index+1);
+                    if(item.getQuantityGot() > 0){
 
-                    /*if(isPresent(getText, item.getIdList())){
-                        Toast toast = Toast.makeText(context, "This name already exist", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                    else if (getText.length() > 0) {
+                        if(item.getQuantityGot() == item.getQuantityDesired()){
 
-                        item.setName(getText);
+                            item.setStatus(0);
+                            checkBox.setChecked(false);
+
+                        }
+
+                        item.setQuantityGot(item.getQuantityGot() - 1);
+                        itemManager.update(item);
+
+                        Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(items.indexOf(item));
 
                     } else {
 
-                    }*/
+                        Toast.makeText(context, "Already null", Toast.LENGTH_LONG).show();
 
-                    if (editTextQte.getText().length() > 0 && Integer.parseInt(editTextQte.getText().toString())>0) {
-
-                        item.setQuantityDesired(Integer.parseInt(editTextQte.getText().toString()));
-
-
-                    } else if (editTextQte.getText().length()==0){
-                        item.setQuantityDesired(1);
                     }
+
+                }
+
+            });
+
+        }
+
+        void display(Item item, int position) {
+
+            this.item = item;
+            this.position = position;
+
+            name.setText(this.item.getName() + " (" + this.item.getQuantityGot() + "/" + this.item.getQuantityDesired() + ") ");
+
+            if(this.item.getStatus() == 1) {
+
+                checkBox.setChecked(true);
+
+                String sampleText = name.getText().toString();
+
+                name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
+                name.setText(sampleText);
+
+            } else {
+
+                String sampleText = name.getText().toString();
+
+                name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
+                name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
+                name.setText(sampleText);
+
+            }
+
+        }
+
+        void showAlertDialogButtonClicked() {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            @SuppressLint("InflateParams") final View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_item, null);
+            builder.setView(customLayout);
+            builder.setTitle("Update Product");
+
+            final EditText editTextName = customLayout.findViewById(R.id.name);
+            final EditText editTextQuantity = customLayout.findViewById(R.id.quantities);
+
+            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    item.setName(editTextName.getText().toString());
+                    item.setQuantityDesired(Integer.parseInt(editTextQuantity.getText().toString()));
+                    item.setQuantityGot(0);
 
                     itemManager.update(item);
 
-                    // TEST
-                    System.out.println("TEST ADAPTERITEMS - quantityDesired : " + itemManager.getItem(item.getId()).getQuantityDesired());
-
-                    // Notify the recycler view that a data is inserted
                     Objects.requireNonNull(recyclerView.getAdapter()).notifyItemChanged(position);
 
                 }
 
             });
 
-            // Create and show the alert dialog
-            final AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.show();
 
-            editText.addTextChangedListener(new TextWatcher() {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+            editTextName.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                    if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
+
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                    } else {
+
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+
+                    }
+
+                }
+
+            });
+
+            editTextQuantity.addTextChangedListener(new TextWatcher() {
+
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(editText.getText().length()<1){
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                        Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else if (!editText.getText().toString().startsWith(" ")  && (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0)){
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                    if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
+
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                    } else {
+
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+
                     }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-            editTextQte.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(editTextQte.getText().length()>0) {
-                        if (Integer.parseInt(editTextQte.getText().toString()) <= 0) {
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                            Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
-                            toast.show();
-                        } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")) {
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                        }
-                    } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")){
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-
-        }
-        public void showAlertDialogSuppr(View view) {
-            // Create an alert builder
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Delete Product");
-            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    checkBox.setChecked(false);
-                    String sampleText = name.getText().toString();
-                    name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
-                    name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-                    name.setText(sampleText);
-
-                    itemManager.delete(item.getId());
-
-                    int index = items.indexOf(item);
-
-                    items.remove(item);
-
-                    recyclerView.getAdapter().notifyItemRemoved(index);
 
                 }
 
             });
-
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Nothing
-                }
-            });
-
-            final AlertDialog dialog = builder.create();
-            dialog.show();
 
         }
 
