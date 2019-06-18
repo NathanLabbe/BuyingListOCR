@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/itemModify"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
         android:orderInCategory="100"
         android:title="Modify"
         app:showAsAction="always" />
