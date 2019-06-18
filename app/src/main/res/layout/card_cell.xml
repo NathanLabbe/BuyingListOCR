@@ -6,22 +6,26 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="10dp"
-
     >
+
+
 
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/ic_icontestombre" />
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_icontestombre"
+        />
 
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="24dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="" />
+
+
 
 </LinearLayout>
