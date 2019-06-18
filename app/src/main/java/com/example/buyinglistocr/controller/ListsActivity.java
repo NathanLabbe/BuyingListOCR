@@ -99,7 +99,7 @@ public class ListsActivity extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.recyclerViewLists);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(new AdapterLists(ListsActivity.this, lists));
 
         FloatingActionButton buttonAdd = findViewById(R.id.floatingButtonAddList);
