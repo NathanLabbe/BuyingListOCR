@@ -10,10 +10,9 @@
 
     <ImageView
         android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="75dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_sales_bag_shopping_bargain_retail_icon_icons_com_55340_32px"
+        android:src="@drawable/ic_icontestombre"
         />
 
     <TextView
