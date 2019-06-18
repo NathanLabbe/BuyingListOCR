@@ -2,6 +2,7 @@ package com.example.buyinglistocr.util;
 
 import android.content.Context;
 
+import com.example.buyinglistocr.model.CorrespondenceManager;
 import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemManager;
 import com.example.buyinglistocr.model.Product;
@@ -19,6 +20,7 @@ public class AnalyseData {
 
     private ProductManager productManager;
     private ItemManager itemManager;
+    private CorrespondenceManager correspondenceManager;
 
     public String getTextBrut() {
         return textBrut;
@@ -182,6 +184,7 @@ public class AnalyseData {
                 }
             }
             if(res != -1){
+
                 //correspondanceTable.get(i).setName(products.get(res).getCorrespondence());
                 //System.out.println("Name is "+ products.get(res).getCorrespondence());
                 res = -1;

@@ -1,8 +1,6 @@
-package com.example.buyinglistocr.model;
+package com.example.buyinglistocr.Tmp;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 
 import java.util.ArrayList;
 

@@ -26,6 +26,6 @@
         app:borderWidth="0dp"
         android:elevation="4dp"
         android:tint="@android:color/white"
-        android:backgroundTint="@android:color/holo_red_light"/>
+        android:backgroundTint="@color/colorUni"/>
 
 </android.support.design.widget.CoordinatorLayout>

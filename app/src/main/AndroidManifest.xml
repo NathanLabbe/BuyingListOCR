@@ -40,7 +40,7 @@
         <activity android:name=".controller.ItemsActivity"
                   android:parentActivityName=".controller.ListsActivity"/>
 
-        <activity android:name=".controller.AddCorres"
+        <activity android:name=".Tmp.AddCorres"
                   android:parentActivityName=".controller.ListsActivity"/>
 
         <provider

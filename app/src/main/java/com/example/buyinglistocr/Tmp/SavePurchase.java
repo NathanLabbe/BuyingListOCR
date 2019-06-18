@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.model;
+package com.example.buyinglistocr.Tmp;
 
 import android.os.Parcel;
 import android.os.Parcelable;

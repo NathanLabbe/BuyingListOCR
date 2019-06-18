@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
-import com.example.buyinglistocr.model.SavePurchase;
+import com.example.buyinglistocr.Tmp.SavePurchase;
 
 import java.util.ArrayList;
 

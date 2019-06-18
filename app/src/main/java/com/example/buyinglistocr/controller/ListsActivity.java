@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.Tmp.AddCorres;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
 import com.example.buyinglistocr.util.SharedPreferencesList;

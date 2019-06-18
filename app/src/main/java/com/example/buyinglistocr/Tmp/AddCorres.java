@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.Tmp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.example.buyinglistocr.R;
-import com.example.buyinglistocr.model.SavePurchase;
-import com.example.buyinglistocr.model.SavePurchaseDAO;
 
 import java.util.ArrayList;
 

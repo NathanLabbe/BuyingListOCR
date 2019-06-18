@@ -3,6 +3,7 @@ package com.example.buyinglistocr.controller;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -262,7 +263,6 @@ public class ItemsActivity extends AppCompatActivity {
                             list.setName(null);
 
                             SharedPreferencesList.getInstance(ItemsActivity.this).setList(list);
-
                             ItemsActivity.this.finish();
 
                         }
@@ -274,7 +274,6 @@ public class ItemsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            closeContextMenu();
 
                         }
 
@@ -305,14 +304,18 @@ public class ItemsActivity extends AppCompatActivity {
 
         final EditText editTextName = customLayout.findViewById(R.id.name);
         final EditText editTextQuantity = customLayout.findViewById(R.id.quantities);
+        final Context context = this;
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                item = new Item(0, editTextName.getText().toString(), Integer.parseInt(editTextQuantity.getText().toString()), 0, 0, list.getId());
-
+                if(editTextQuantity.getText().length() > 0) {
+                    item = new Item(0, editTextName.getText().toString(), Integer.parseInt(editTextQuantity.getText().toString()), 0, 0, list.getId());
+                } else {
+                    item = new Item(0, editTextName.getText().toString(), 1, 0, 0, list.getId());
+                }
                 itemManager.add(item, new VolleyCallback() {
 
                     @Override
@@ -351,62 +354,58 @@ public class ItemsActivity extends AppCompatActivity {
 
         });
 
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        // Create and show the alert dialog
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
         editTextName.addTextChangedListener(new TextWatcher() {
-
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
-
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-
-                } else {
-
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-
-                }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(editTextName.getText().length()<1){
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else if (!editTextName.getText().toString().startsWith(" ") && (editTextQuantity.getText().length()<1 || Integer.parseInt(editTextQuantity.getText().toString()) > 0)){
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
-
         editTextQuantity.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
-
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-
-                } else {
-
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(editTextQuantity.getText().length()>0) {
+                    if (Integer.parseInt(editTextQuantity.getText().toString()) <= 0) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                        Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (editTextName.getText().length()>1 && !editTextName.getText().toString().startsWith(" ")) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    }
+                } else if (editTextName.getText().length()>1 && !editTextName.getText().toString().startsWith(" ")){
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 }
-
             }
 
-        });
+            @Override
+            public void afterTextChanged(Editable s) {
 
+            }
+        });
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
