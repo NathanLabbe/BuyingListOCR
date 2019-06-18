@@ -86,7 +86,7 @@ public class ProductManager {
 
     }
 
-    public ArrayList<Product> getAll(final long shopKey) {
+    public HashMap<Product, ArrayList<Correspondence>> getAll(final long shopKey) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ProductIndex.php",
 

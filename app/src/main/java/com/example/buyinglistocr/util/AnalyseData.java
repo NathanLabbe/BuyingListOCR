@@ -2,6 +2,7 @@ package com.example.buyinglistocr.util;
 
 import android.content.Context;
 
+import com.example.buyinglistocr.model.Correspondence;
 import com.example.buyinglistocr.model.CorrespondenceManager;
 import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemManager;
@@ -10,11 +11,17 @@ import com.example.buyinglistocr.model.ProductManager;
 import com.example.buyinglistocr.model.Purchase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class AnalyseData {
     private String textBrut;
     public static ArrayList<Purchase> table = new ArrayList<>();
-    private ArrayList<Purchase> correspondanceTable = new ArrayList<>();
+    private ArrayList<ArrayList<Purchase>> correspondanceTable = new ArrayList<>();
+    private HashMap<Product, ArrayList<Correspondence>> productAndCorrespondences = new HashMap<>();
+
+
+
     private long idList;
     private Context context;
 
@@ -30,7 +37,7 @@ public class AnalyseData {
         return table;
     }
 
-    public ArrayList<Purchase> getCorrespondanceTable() {
+    public ArrayList<ArrayList<Purchase>> getCorrespondanceTable() {
         return correspondanceTable;
     }
 
@@ -172,55 +179,70 @@ public class AnalyseData {
      * @param table
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
-        ArrayList<Product> products = productManager.getAll(666);
-        for (int k = 0; k < table.size(); k++){
-            correspondanceTable.add(table.get(k));
-        }
-        int res = -1;
-        for(int i = 0; i<table.size(); i++){
-            for(int j = 0; j<products.size(); j++){
-                if (HammList(table.get(i).getName(), products.get(j).getName())){
-                    res = j;
+        productAndCorrespondences = productManager.getAll(1);
+
+        for (HashMap.Entry<Product, ArrayList<Correspondence>> productSet : productAndCorrespondences.entrySet()) {
+            for(int i = 0; i < table.size(); i++) {
+                if (HammList(table.get(i).getName(), productSet.getKey().getName())) {
+                    for(int j = 0; j < productSet.getValue().size(); j++){
+                        ArrayList<Purchase> tmp = new ArrayList<>();
+                        Purchase purchaseTmp = table.get(i);
+                        purchaseTmp.setName(productSet.getValue().get(j).name);
+                        tmp.add(purchaseTmp);
+                        correspondanceTable.add(tmp);
+                    }
                 }
             }
-            if(res != -1){
-
-                //correspondanceTable.get(i).setName(products.get(res).getCorrespondence());
-                //System.out.println("Name is "+ products.get(res).getCorrespondence());
-                res = -1;
-            }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     /**
      * We compare the correspondance table to the elements on our list and we delete
      * @param correspondenceTable
      */
-    public double removePurchase (ArrayList<Purchase> correspondenceTable){
+    public double removePurchase (ArrayList<ArrayList<Purchase>> correspondenceTable) {
         double spent = 0.0;
         ArrayList<Item> items = itemManager.get(idList);
-        for(int i = 0; i<correspondenceTable.size(); i++){
-            for(int j = 0; j<items.size(); j++){
-                if(correspondenceTable.get(i).getName().toLowerCase().equals(items.get(j).getName().toLowerCase()) ){
-                    if(items.get(j).getQuantityGot()<items.get(j).getQuantityDesired()){
-                        items.get(j).setQuantityGot(items.get(j).getQuantityGot()+1);
-                        itemManager.update(items.get(j));
-                        //System.out.println(items.get(j).getName() + " : " + items.get(j).getQuantityGot());
-                        if(items.get(j).getQuantityGot()==items.get(j).getQuantityDesired()){
+        for (int i = 0; i < correspondenceTable.size(); i++) {
+            for (int j = 0; j < items.size(); j++) {
+                for (int k = 0; k < correspondenceTable.get(i).size(); k++) {
+                    if (correspondenceTable.get(i).get(k).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())) {
+                        if (items.get(j).getQuantityGot() < items.get(j).getQuantityDesired()) {
+                            items.get(j).setQuantityGot(items.get(j).getQuantityGot() + 1);
+                            itemManager.update(items.get(j));
+                            //System.out.println(items.get(j).getName() + " : " + items.get(j).getQuantityGot());
+                            if (items.get(j).getQuantityGot() == items.get(j).getQuantityDesired()) {
 
+                                items.get(j).setStatus(1);
+                                itemManager.update(items.get(j));
+                            }
+                            spent = spent + correspondenceTable.get(i).get(k).getPrice();
+                            //System.out.printf("Your spent is %s%n", spent);
+                        } else if (items.get(j).getStatus() != 1) {
                             items.get(j).setStatus(1);
                             itemManager.update(items.get(j));
+                        } else {
+                            //System.out.println(items.get(j).getName() + " STATUT : " + items.get(j).getStatus());
                         }
-                        spent = spent + correspondenceTable.get(i).getPrice();
-                        //System.out.printf("Your spent is %s%n", spent);
-                    } else if (items.get(j).getStatus()!=1){
-                        items.get(j).setStatus(1);
-                        itemManager.update(items.get(j));
-                    } else {
-                        //System.out.println(items.get(j).getName() + " STATUT : " + items.get(j).getStatus());
+                        break;
                     }
                 }
             }
+
         }
         return spent;
     }
