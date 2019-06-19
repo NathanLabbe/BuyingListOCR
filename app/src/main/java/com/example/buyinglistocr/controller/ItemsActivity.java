@@ -72,6 +72,8 @@ public class ItemsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
+    private AnalyseData analyseData;
+
     ////////////////////////////////////////////////////////////////////////////////////////////
     //                                      Camera                                            //
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,6 +153,9 @@ public class ItemsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new AdapterItems(this, items, recyclerView));
 
+        analyseData = new AnalyseData(null, ItemsActivity.this, 0);
+
+
         FloatingActionButton floatingActionButtonAddItem = findViewById(R.id.floatingButtonAddItems);
         floatingActionButtonAddItem.setOnClickListener(new View.OnClickListener() {
 
@@ -158,6 +163,8 @@ public class ItemsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 showAlertDialogButtonClicked(view);
+
+                analyseData.toString();
 
             }
 

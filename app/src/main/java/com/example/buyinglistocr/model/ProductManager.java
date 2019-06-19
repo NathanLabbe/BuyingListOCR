@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.buyinglistocr.util.RequestHandler;
+import com.example.buyinglistocr.util.VolleyCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,7 +87,7 @@ public class ProductManager {
 
     }
 
-    public HashMap<Product, ArrayList<Correspondence>> getAll(final long shopKey) {
+    public void getAll(final int idShop, final VolleyCallback volleyCallback) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ProductIndex.php",
 
@@ -95,18 +96,7 @@ public class ProductManager {
                     @Override
                     public void onResponse(String response) {
 
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                        } catch(JSONException e) {
-
-                            e.printStackTrace();
-
-                        }
-
+                        volleyCallback.onSuccess(response);
 
                     }
 
@@ -126,11 +116,11 @@ public class ProductManager {
         ) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("tag", "getAll");
-                params.put("idShop",shopKey+"");
+                params.put("tag", "getAllProductAndCorrespondence");
+                params.put("idShop",Integer.toString(idShop));
 
                 return params;
 
@@ -140,7 +130,6 @@ public class ProductManager {
 
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
 
-        return null;
     }
 
 

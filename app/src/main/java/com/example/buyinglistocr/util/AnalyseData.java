@@ -1,6 +1,8 @@
 package com.example.buyinglistocr.util;
 
 import android.content.Context;
+import android.util.Pair;
+import android.widget.Toast;
 
 import com.example.buyinglistocr.model.Correspondence;
 import com.example.buyinglistocr.model.CorrespondenceManager;
@@ -10,17 +12,19 @@ import com.example.buyinglistocr.model.Product;
 import com.example.buyinglistocr.model.ProductManager;
 import com.example.buyinglistocr.model.Purchase;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class AnalyseData {
+
     private String textBrut;
     public static ArrayList<Purchase> table = new ArrayList<>();
+
     private ArrayList<ArrayList<Purchase>> correspondanceTable = new ArrayList<>();
-    private HashMap<Product, ArrayList<Correspondence>> productAndCorrespondences = new HashMap<>();
-
-
+    private ArrayList<Pair<Product, ArrayList<Correspondence>>> productAndCorrespondences = new ArrayList<>();
 
     private long idList;
     private Context context;
@@ -42,13 +46,115 @@ public class AnalyseData {
     }
 
     public AnalyseData(String text, Context context, long idList) {
+
         this.textBrut = text;
         this.context = context;
         this.idList = idList;
         productManager = new ProductManager(context);
         itemManager = new ItemManager(context);
+
+        initialize();
+
     }
 
+    public void initialize() {
+
+        productManager.getAll(1, new VolleyCallback() {
+
+            @Override
+            public void onSuccess(String response) {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if(jsonObject.getBoolean("error")) {
+
+                        Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                    } else {
+
+                        JSONArray jsonArrayProducts = jsonObject.getJSONArray("products");
+                        JSONArray jsonArrayCorrespondences = jsonObject.getJSONArray("correspondences");
+
+                        int j = 0;
+                        JSONObject jsonObjectCorrespondence = jsonArrayCorrespondences.getJSONObject(j);
+
+                        for(int i = 0 ; i < jsonArrayProducts.length() ; i++) {
+
+                            JSONObject jsonObjectProduct = jsonArrayProducts.getJSONObject(i);
+
+                            Product product = new Product(jsonObjectProduct.getInt("id"), jsonObjectProduct.getString("name"), jsonObjectProduct.getInt("idShop"));
+
+                            productAndCorrespondences.add(Pair.create(product, new ArrayList<Correspondence>()));
+
+                            while(j < jsonArrayCorrespondences.length() && jsonObjectCorrespondence.getInt("idProduct") == jsonObjectProduct.getInt("id")) {
+
+                                productAndCorrespondences.get(i).second.add(new Correspondence(jsonObjectCorrespondence.getInt("id"), jsonObjectCorrespondence.getString("name")));
+
+                                j++;
+                                jsonObjectCorrespondence = jsonArrayCorrespondences.getJSONObject(j);
+
+                            }
+
+                        }
+
+                    }
+
+                } catch(JSONException e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
+        });
+
+    }
+
+    public String toString() {
+
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("                                 Hey");
+        System.out.println("-------------------------------------------------------------------------");
+
+        for(int i = 0 ; i < productAndCorrespondences.size() ; i++) {
+
+            System.out.println(" - " + productAndCorrespondences.get(i).first.getId() + " " + productAndCorrespondences.get(i).first.getName() + " " + productAndCorrespondences.get(i).first.getIdShop());
+
+            for(int j = 0 ; j < productAndCorrespondences.get(i).second.size() ; j++) {
+
+                System.out.println("    > " + productAndCorrespondences.get(i).second.get(j).getId() + " " + productAndCorrespondences.get(i).second.get(j).getName());
+
+            }
+
+        }
+
+
+        /*
+
+        for(Product product : productAndCorrespondences.)
+
+        for (Product product : productAndCorrespondences.keySet()) {
+
+            System.out.println(" - " + product.getId() + " " + product.getName() + " " + product.getIdShop());
+
+        }
+
+        for(ArrayList<Correspondence> arrayList : productAndCorrespondences.values()) {
+
+            for(int i = 0 ; i < arrayList.size() ; i++) {
+
+                System.out.println(" - " + arrayList.get(i).getId() + " " + arrayList.get(i).getName());
+
+            }
+
+        }*/
+
+        return null;
+
+    }
 
     //Choisit les donnees utiles et le mettre en Table de purchase
     public void clean(String text) {
@@ -179,9 +285,8 @@ public class AnalyseData {
      * @param table
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
-        productAndCorrespondences = productManager.getAll(1);
 
-        for (HashMap.Entry<Product, ArrayList<Correspondence>> productSet : productAndCorrespondences.entrySet()) {
+        /*for (HashMap.Entry<Product, ArrayList<Correspondence>> productSet : productAndCorrespondences.entrySet()) {
             for(int i = 0; i < table.size(); i++) {
                 if (HammList(table.get(i).getName(), productSet.getKey().getName())) {
                     for(int j = 0; j < productSet.getValue().size(); j++){
@@ -193,7 +298,7 @@ public class AnalyseData {
                     }
                 }
             }
-        }
+        }*/
 
 
 
