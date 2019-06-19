@@ -254,6 +254,67 @@ public class ItemManager {
 
     }
 
+    public void deleteAllList() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://51.83.70.93/android/BuyingListOCR/ItemIndex.php",
+
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            if(jsonObject.getBoolean("error")) {
+
+                                Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                            }
+
+                        } catch(JSONException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+
+                    }
+
+                },
+
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+
+                params.put("tag", "deleteAllList");
+                params.put("idList", Integer.toString(SharedPreferencesList.getInstance(context).getId()));
+
+                return params;
+
+            }
+
+        };
+
+        RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+
+    }
+
     public ArrayList<Item> get(long id) { return new ArrayList<>(); }
 
 }

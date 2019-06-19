@@ -232,7 +232,35 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
                     } else {
 
-                        Toast.makeText(context, "Already null", Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                        builder.setTitle("Delete")
+
+                                .setMessage("Are you sure ?")
+                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        itemManager.delete(item.getId());
+
+                                        items.remove(item);
+
+                                        Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
+
+                                    }
+
+                                })
+
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) { }
+
+                                })
+
+                                .create()
+                                .show();
 
                     }
 

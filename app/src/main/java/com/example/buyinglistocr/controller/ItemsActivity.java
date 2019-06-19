@@ -258,11 +258,13 @@ public class ItemsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
+                            itemManager.deleteAllList();
                             listManager.delete(list.getId());
 
                             list.setName(null);
 
                             SharedPreferencesList.getInstance(ItemsActivity.this).setList(list);
+
                             ItemsActivity.this.finish();
 
                         }
