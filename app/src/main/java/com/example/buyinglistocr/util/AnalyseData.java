@@ -93,7 +93,12 @@ public class AnalyseData {
                                 productAndCorrespondences.get(i).second.add(new Correspondence(jsonObjectCorrespondence.getInt("id"), jsonObjectCorrespondence.getString("name")));
 
                                 j++;
-                                jsonObjectCorrespondence = jsonArrayCorrespondences.getJSONObject(j);
+
+                                if(j != jsonArrayCorrespondences.length()) {
+
+                                    jsonObjectCorrespondence = jsonArrayCorrespondences.getJSONObject(j);
+
+                                }
 
                             }
 
