@@ -11,15 +11,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
         >
 
         <ImageView
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
             android:layout_marginBottom="60dp"
-            android:src="@drawable/ic_icontestombre" />
+            android:src="@drawable/ic_iconlogin" />
 
     </RelativeLayout>
 

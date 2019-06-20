@@ -291,19 +291,20 @@ public class AnalyseData {
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
 
-        /*for (HashMap.Entry<Product, ArrayList<Correspondence>> productSet : productAndCorrespondences.entrySet()) {
+        //private ArrayList<Pair<Product, ArrayList<Correspondence>>> productAndCorrespondences = new ArrayList<>();
+        for (int k = 0; k<productAndCorrespondences.size(); k++) {
             for(int i = 0; i < table.size(); i++) {
-                if (HammList(table.get(i).getName(), productSet.getKey().getName())) {
-                    for(int j = 0; j < productSet.getValue().size(); j++){
+                if (HammList(table.get(i).getName(), productAndCorrespondences.get(k).first.getName())) {
+                    for(int j = 0; j < productAndCorrespondences.get(k).second.size(); j++){
                         ArrayList<Purchase> tmp = new ArrayList<>();
                         Purchase purchaseTmp = table.get(i);
-                        purchaseTmp.setName(productSet.getValue().get(j).name);
+                        purchaseTmp.setName(productAndCorrespondences.get(k).second.get(j).name);
                         tmp.add(purchaseTmp);
                         correspondanceTable.add(tmp);
                     }
                 }
             }
-        }*/
+        }
 
 
 

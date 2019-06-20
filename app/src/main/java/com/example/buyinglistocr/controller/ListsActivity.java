@@ -149,6 +149,7 @@ public class ListsActivity extends AppCompatActivity {
 
         final EditText editTextName = customLayout.findViewById(R.id.name);
 
+
         builder.setPositiveButton("Make", new DialogInterface.OnClickListener() {
 
             @Override
