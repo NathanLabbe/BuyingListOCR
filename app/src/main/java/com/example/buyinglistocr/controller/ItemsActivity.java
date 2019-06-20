@@ -153,7 +153,7 @@ public class ItemsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new AdapterItems(this, items, recyclerView));
 
-        analyseData = new AnalyseData(null, ItemsActivity.this, 0);
+        analyseData = new AnalyseData(null, ItemsActivity.this, list.getId());
 
 
         FloatingActionButton floatingActionButtonAddItem = findViewById(R.id.floatingButtonAddItems);
@@ -568,29 +568,40 @@ public class ItemsActivity extends AppCompatActivity {
         tessBaseAPI.end();
 
         /**Analyse Data*/
-        AnalyseData test = new AnalyseData(retStr, ItemsActivity.this, list.getId());
+        analyseData.setTextBrut(retStr);
+        //AnalyseData test = new AnalyseData(retStr, ItemsActivity.this, list.getId());
         System.out.println("IdList is : "+list.getId());
-        System.out.println(test.getTextBrut());
+        System.out.println(analyseData.getTextBrut());
 
-        test.clean(test.getTextBrut());
-        test.tableToCorrespondenceTable(test.getTable());
-        double spent = test.removePurchase(test.getCorrespondanceTable());
+        analyseData.clean(analyseData.getTextBrut());
+        System.out.println("CLEAN");
+        analyseData.tableToCorrespondenceTable(analyseData.getTable());
+        System.out.println("TABLETOCORESS");
+
+        //Ici on récupere le spent du ticket
+        double spent = analyseData.removePurchase(analyseData.getCorrespondanceTable());
+        System.out.println("REMOVEPURCHASE");
 
         List lists = null;
 
-        listManager.get(SharedPreferencesList.getInstance(ItemsActivity.this).getId(), new VolleyCallback() {
+
+        //ici on veut recup la liste
+        /**listManager.get(SharedPreferencesList.getInstance(ItemsActivity.this).getId(), new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
 
             }
         });
+
+         ici on veut ajouter le spent du ticket et de la list
         spent = spent + lists.getSpent();
         lists.setSpent(spent);
         listManager.update(lists);
-
-        for(int i = 0; i<test.getCorrespondanceTable().size(); i++) {
-            for(int j = 0; j<test.getCorrespondanceTable().get(i).size(); j++) {
-                System.out.println("Element TABLE CORRES numéro " + i + " " + test.getCorrespondanceTable().get(i).get(j).getName());
+         */
+        System.out.println("TAILLE CORESS : " + analyseData.getCorrespondanceTable().size());
+        for(int i = 0; i<analyseData.getCorrespondanceTable().size(); i++) {
+            for(int j = 0; j<analyseData.getCorrespondanceTable().get(i).size(); j++) {
+                System.out.println("Element TABLE CORRES numéro " + i + " " + analyseData.getCorrespondanceTable().get(i).get(j).getName());
             }
             /** AJOUTER DANS SAVEPURCHASE ?????  **/
             /**if(test.getCorrespondanceTable().get(i).isFindCores()){

@@ -25,6 +25,7 @@ public class AnalyseData {
 
     private ArrayList<ArrayList<Purchase>> correspondanceTable = new ArrayList<>();
     private ArrayList<Pair<Product, ArrayList<Correspondence>>> productAndCorrespondences = new ArrayList<>();
+    private ArrayList<Item> items = new ArrayList<>();
 
     private long idList;
     private Context context;
@@ -45,6 +46,10 @@ public class AnalyseData {
         return correspondanceTable;
     }
 
+    public void setTextBrut(String textBrut) {
+        this.textBrut = textBrut;
+    }
+
     public AnalyseData(String text, Context context, long idList) {
 
         this.textBrut = text;
@@ -52,12 +57,11 @@ public class AnalyseData {
         this.idList = idList;
         productManager = new ProductManager(context);
         itemManager = new ItemManager(context);
-
         initialize();
-
     }
 
     public void initialize() {
+
 
         productManager.getAll(1, new VolleyCallback() {
 
@@ -264,12 +268,19 @@ public class AnalyseData {
     // Hamming pour une list des mots
     public boolean HammList(String s1, String s2){
         int res = 0;
-        int longeur = s1.split(" ").length;
+
         String h1 = "";
         if (s1.charAt(0) == ' '){
             for (int k = 1; k< s1.length(); k++){
                 h1 = h1 + s1.charAt(k);
             }
+        } else {
+            h1=s1;
+        }
+        int longeur1 = h1.split(" ").length;
+        int longeur2 = s2.split(" ").length;
+        if (Math.abs(longeur1 - longeur2) > 1){
+            return false;
         }
         String[] token1 = h1.split(" ");
         String[] token2 = s2.split(" ");
@@ -282,7 +293,7 @@ public class AnalyseData {
                 res = res + Hamming(token1[j], token2[j]);
             }
         }
-        return res <= longeur;
+        return res <= Math.min(longeur1,longeur2);
     }
 
     /**
@@ -290,14 +301,17 @@ public class AnalyseData {
      * @param table
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
-
+        System.out.println("JE SUIS RENTRE DANS TTC");
         //private ArrayList<Pair<Product, ArrayList<Correspondence>>> productAndCorrespondences = new ArrayList<>();
         for (int k = 0; k<productAndCorrespondences.size(); k++) {
             for(int i = 0; i < table.size(); i++) {
                 if (HammList(table.get(i).getName(), productAndCorrespondences.get(k).first.getName())) {
+                    System.out.println(table.get(i).getName() +" //// "+productAndCorrespondences.get(k).first.getName());
+                    System.out.println("CA CORRESPOND");
                     for(int j = 0; j < productAndCorrespondences.get(k).second.size(); j++){
+                        System.out.println("size second :" + productAndCorrespondences.get(k).second.size());
                         ArrayList<Purchase> tmp = new ArrayList<>();
-                        Purchase purchaseTmp = table.get(i);
+                        Purchase purchaseTmp = new Purchase(table.get(i).getName(),table.get(i).getPrice(),table.get(i).getQuantite());
                         purchaseTmp.setName(productAndCorrespondences.get(k).second.get(j).name);
                         tmp.add(purchaseTmp);
                         correspondanceTable.add(tmp);
@@ -326,12 +340,18 @@ public class AnalyseData {
      * @param correspondenceTable
      */
     public double removePurchase (ArrayList<ArrayList<Purchase>> correspondenceTable) {
+        System.out.println("Je suis rentre dans remove");
         double spent = 0.0;
-        ArrayList<Item> items = itemManager.get(idList);
+        System.out.println("ITEM MANAGER GET");
         for (int i = 0; i < correspondenceTable.size(); i++) {
+            System.out.println("R : Taille coress :  "+ correspondenceTable.size());
             for (int j = 0; j < items.size(); j++) {
+                System.out.println("R : Taille items :  "+ items.size());
                 for (int k = 0; k < correspondenceTable.get(i).size(); k++) {
+                    System.out.println("R : Taille coress 2 :  "+ correspondenceTable.get(i).size());
                     if (correspondenceTable.get(i).get(k).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())) {
+                        System.out.println("CORRESS = "+correspondenceTable.get(i).get(k).getName().toLowerCase()+"////ITEM = "+items.get(i).getName().toLowerCase());
+                        System.out.println("ITEM = CORRES");
                         if (items.get(j).getQuantityGot() < items.get(j).getQuantityDesired()) {
                             items.get(j).setQuantityGot(items.get(j).getQuantityGot() + 1);
                             itemManager.update(items.get(j));
