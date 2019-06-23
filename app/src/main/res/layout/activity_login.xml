@@ -39,7 +39,8 @@
         <EditText
             android:id="@+id/editTextLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:singleLine="true"/>
 
         <TextView
             android:layout_width="match_parent"

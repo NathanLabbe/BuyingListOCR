@@ -50,7 +50,11 @@ public class AnalyseData {
         this.textBrut = textBrut;
     }
 
-    public AnalyseData(String text, Context context, long idList) {
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
+    public AnalyseData(String text, Context context, long idList, ArrayList<Item> items) {
 
         this.textBrut = text;
         this.context = context;
@@ -58,6 +62,7 @@ public class AnalyseData {
         productManager = new ProductManager(context);
         itemManager = new ItemManager(context);
         initialize();
+        this.items = items;
     }
 
     public void initialize() {

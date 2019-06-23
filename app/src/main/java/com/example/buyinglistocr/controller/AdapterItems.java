@@ -99,7 +99,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     if(checkBox.isChecked()){
 
                         item.setStatus(1);
-                        item.setQuantityGot(item.getQuantityDesired());
+                        //Pourquoi ? item.setQuantityGot(item.getQuantityDesired());
 
                         itemManager.update(item);
 
@@ -112,7 +112,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     } else {
 
                         item.setStatus(0);
-                        item.setQuantityGot(0);
+                        //POURQUOI ? item.setQuantityGot(0);
 
                         itemManager.update(item);
 
@@ -310,14 +310,33 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             final EditText editTextName = customLayout.findViewById(R.id.name);
             final EditText editTextQuantity = customLayout.findViewById(R.id.quantities);
 
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    item.setName(editTextName.getText().toString());
-                    item.setQuantityDesired(Integer.parseInt(editTextQuantity.getText().toString()));
-                    item.setQuantityGot(0);
+                    if(editTextQuantity.getText().length()<1){
+                        item.setName(editTextName.getText().toString());
+                        item.setQuantityDesired(item.getQuantityDesired());
+                    } else {
+                        if (editTextName.getText().length()>=1) {
+
+                        item.setName(editTextName.getText().toString());
+                        }
+                        item.setQuantityDesired(Integer.parseInt(editTextQuantity.getText().toString()));
+                        if (item.getQuantityGot() > Integer.parseInt(editTextQuantity.getText().toString())) {
+                            item.setQuantityGot(Integer.parseInt(editTextQuantity.getText().toString()));
+                        }
+                        if (item.getQuantityGot() < Integer.parseInt(editTextQuantity.getText().toString()) && item.getStatus() == 1) {
+                            item.setStatus(0);
+                            checkBox.setChecked(false);
+                        }
+                        if (item.getQuantityGot() == Integer.parseInt(editTextQuantity.getText().toString()) && item.getStatus() == 0) {
+                            item.setStatus(1);
+                        }
+                    }
+                        // pourquoi ? item.setQuantityGot(0);
+
 
                     itemManager.update(item);
 
@@ -340,35 +359,24 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    /**
 
-                     if(editText.getText().length()<1){
-                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                     if(editTextName.getText().length()<1){
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                      Toast toast = Toast.makeText(context, "You need to choose a name", Toast.LENGTH_SHORT);
                      toast.show();
-                     } else if (!editText.getText().toString().startsWith(" ") && (editTextQte.getText().length()<1 || Integer.parseInt(editTextQte.getText().toString()) > 0)){
-                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                     } else if (!editTextName.getText().toString().startsWith(" ") && (editTextQuantity.getText().length()<1 || Integer.parseInt(editTextQuantity.getText().toString()) > 0)){
+                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                      }
 
 
-                     **/
+
 
 
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-
-                    if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
-
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-
-                    } else {
-
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-
-                    }
-
                 }
 
             });
@@ -382,36 +390,24 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    /**
 
-                     if(editTextQte.getText().length()>0) {
-                     if (Integer.parseInt(editTextQte.getText().toString()) <= 0) {
-                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                     Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
-                     toast.show();
-                     } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")) {
-                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                     }
-                     } else if (editText.getText().length()>1 && !editText.getText().toString().startsWith(" ")){
-                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                     }
-
-                     **/
-
+                    if (editTextQuantity.getText().length() > 0) {
+                        if (Integer.parseInt(editTextQuantity.getText().toString()) <= 0) {
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                            Toast toast = Toast.makeText(context, "Impossible to set a quantity at 0", Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else if (editTextName.getText().length() > 1 && !editTextName.getText().toString().startsWith(" ")) {
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                        } else if (editTextName.getText().length() < 1){
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                    } else if (editTextName.getText().length() > 1 && !editTextName.getText().toString().startsWith(" ")) {
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-
-                    if(editTextName.length() == 0 || editTextQuantity.length() == 0) {
-
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-
-                    } else {
-
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-
-                    }
 
                 }
 

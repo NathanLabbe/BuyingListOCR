@@ -153,7 +153,7 @@ public class ItemsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new AdapterItems(this, items, recyclerView));
 
-        analyseData = new AnalyseData(null, ItemsActivity.this, list.getId());
+        analyseData = new AnalyseData(null, ItemsActivity.this, list.getId(), items);
 
 
         FloatingActionButton floatingActionButtonAddItem = findViewById(R.id.floatingButtonAddItems);
@@ -567,8 +567,13 @@ public class ItemsActivity extends AppCompatActivity {
 
         tessBaseAPI.end();
 
-        /**Analyse Data*/
+
+        /**Analyse Data**/
+
+
         analyseData.setTextBrut(retStr);
+        analyseData.setItems(items);
+
         //AnalyseData test = new AnalyseData(retStr, ItemsActivity.this, list.getId());
         System.out.println("IdList is : "+list.getId());
         System.out.println(analyseData.getTextBrut());
