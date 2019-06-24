@@ -5,6 +5,7 @@ The application looks like a classic shopping list application but you can take 
 ### Prerequisites
 A android mobile with android Lolipop (5.0) or better.  
 Or an android 5.0 (or better) emulator.
+An internet connection.
 ## Build with
 Android studio - devellopement  
 TessTwo (Tesseract fork) - OCR
