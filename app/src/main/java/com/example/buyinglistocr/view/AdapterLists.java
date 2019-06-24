@@ -1,10 +1,8 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.view;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
+import com.example.buyinglistocr.controller.ItemsActivity;
 import com.example.buyinglistocr.model.List;
-import com.example.buyinglistocr.model.ListManager;
-import com.example.buyinglistocr.util.SharedPreferencesList;
+import com.example.buyinglistocr.model.SharedPreferencesList;
 
 import java.util.ArrayList;
 
@@ -26,7 +24,7 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
 
     private ArrayList<List> lists;
 
-    AdapterLists(Context context, ArrayList<List> lists) {
+    public AdapterLists(Context context, ArrayList<List> lists) {
 
         this.context = context;
         this.lists = lists;

@@ -39,9 +39,10 @@ import com.example.buyinglistocr.model.Item;
 import com.example.buyinglistocr.model.ItemManager;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
-import com.example.buyinglistocr.util.AnalyseData;
-import com.example.buyinglistocr.util.SharedPreferencesList;
-import com.example.buyinglistocr.util.VolleyCallback;
+import com.example.buyinglistocr.model.AnalyseData;
+import com.example.buyinglistocr.model.SharedPreferencesList;
+import com.example.buyinglistocr.model.VolleyCallback;
+import com.example.buyinglistocr.view.AdapterItems;
 import com.googlecode.leptonica.android.WriteFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 

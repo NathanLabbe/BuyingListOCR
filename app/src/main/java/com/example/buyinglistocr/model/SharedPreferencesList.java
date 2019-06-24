@@ -1,9 +1,7 @@
-package com.example.buyinglistocr.util;
+package com.example.buyinglistocr.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.example.buyinglistocr.model.List;
 
 public class SharedPreferencesList {
 

@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -34,7 +34,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
     private RecyclerView recyclerView;
 
-    AdapterItems(Context context, ArrayList<Item> items, RecyclerView recyclerView) {
+    public AdapterItems(Context context, ArrayList<Item> items, RecyclerView recyclerView) {
 
         this.context = context;
         this.items = items;

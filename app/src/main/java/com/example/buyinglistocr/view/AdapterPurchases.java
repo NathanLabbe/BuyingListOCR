@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.controller;
+package com.example.buyinglistocr.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.Tmp.SavePurchase;
+import com.example.buyinglistocr.controller.ItemsActivity;
 
 import java.util.ArrayList;
 

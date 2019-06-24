@@ -1,4 +1,4 @@
-package com.example.buyinglistocr.util;
+package com.example.buyinglistocr.model;
 
 public interface VolleyCallback {
 

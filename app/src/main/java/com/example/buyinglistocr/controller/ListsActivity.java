@@ -23,9 +23,10 @@ import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.Tmp.AddCorres;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
-import com.example.buyinglistocr.util.SharedPreferencesList;
-import com.example.buyinglistocr.util.SharedPreferencesUser;
-import com.example.buyinglistocr.util.VolleyCallback;
+import com.example.buyinglistocr.model.SharedPreferencesList;
+import com.example.buyinglistocr.model.SharedPreferencesUser;
+import com.example.buyinglistocr.model.VolleyCallback;
+import com.example.buyinglistocr.view.AdapterLists;
 
 import org.json.JSONArray;
 import org.json.JSONException;

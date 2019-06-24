@@ -1,16 +1,8 @@
-package com.example.buyinglistocr.util;
+package com.example.buyinglistocr.model;
 
 import android.content.Context;
 import android.util.Pair;
 import android.widget.Toast;
-
-import com.example.buyinglistocr.model.Correspondence;
-import com.example.buyinglistocr.model.CorrespondenceManager;
-import com.example.buyinglistocr.model.Item;
-import com.example.buyinglistocr.model.ItemManager;
-import com.example.buyinglistocr.model.Product;
-import com.example.buyinglistocr.model.ProductManager;
-import com.example.buyinglistocr.model.Purchase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
