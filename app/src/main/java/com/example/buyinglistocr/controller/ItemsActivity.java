@@ -609,13 +609,6 @@ public class ItemsActivity extends AppCompatActivity {
             for(int j = 0; j<analyseData.getCorrespondanceTable().get(i).size(); j++) {
                 System.out.println("Element TABLE CORRES numéro " + i + " " + analyseData.getCorrespondanceTable().get(i).get(j).getName());
             }
-            /** AJOUTER DANS SAVEPURCHASE ?????  **/
-            /**if(test.getCorrespondanceTable().get(i).isFindCores()){
-                SavePurchase s = new SavePurchase(test.getCorrespondanceTable().get(i).getName());
-                savePurchaseDAO.add(s);
-            }*/
-
-
         }
 
 
