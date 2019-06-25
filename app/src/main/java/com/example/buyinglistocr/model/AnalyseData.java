@@ -1,7 +1,5 @@
 package com.example.buyinglistocr.model;
 
-import java.math.RoundingMode;
-import java.math.BigDecimal;
 
 
 import android.content.Context;

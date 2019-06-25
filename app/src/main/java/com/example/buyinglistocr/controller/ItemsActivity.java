@@ -1,5 +1,7 @@
 package com.example.buyinglistocr.controller;
 
+import java.math.RoundingMode;
+import java.math.BigDecimal;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -594,7 +596,10 @@ public class ItemsActivity extends AppCompatActivity {
 
 
         spent = spent + list.getSpent();
+        BigDecimal bd = new BigDecimal(spent).setScale(2, RoundingMode.HALF_EVEN);
+        spent = bd.doubleValue();
         list.setSpent(spent);
+
         listManager.update(list);
         System.out.println("TAILLE CORESS : " + analyseData.getCorrespondanceTable().size());
         for(int i = 0; i<analyseData.getCorrespondanceTable().size(); i++) {
