@@ -15,6 +15,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -77,6 +78,8 @@ public class ItemsActivity extends AppCompatActivity {
 
     private AnalyseData analyseData;
 
+    private TextView textViewSpent;
+
     ////////////////////////////////////////////////////////////////////////////////////////////
     //                                      Camera                                            //
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,19 +100,27 @@ public class ItemsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
+        list = SharedPreferencesList.getInstance(ItemsActivity.this).getList();
+
 
         listManager = new ListManager(ItemsActivity.this);
         itemManager = new ItemManager(ItemsActivity.this);
 
-        list = SharedPreferencesList.getInstance(ItemsActivity.this).getList();
 
+        //TOOLBAR
         Toolbar toolbar = findViewById(R.id.toolbarList);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(list.getName());
 
-        TextView textViewSpent = findViewById(R.id.textViewSpent);
-        textViewSpent.setText(textViewSpent.getText() + " " + list.getSpent()+" €");
+
+        //TEXTVIEW for the spent
+        java.text.DecimalFormat df = new java.text.DecimalFormat("0.##");
+        textViewSpent = findViewById(R.id.textViewSpent);
+        textViewSpent.setText(textViewSpent.getText() + " " + df.format(list.getSpent())+" €");
+        System.out.println(textViewSpent.getText());
+
+
 
         items = new ArrayList<>();
 
@@ -594,13 +605,16 @@ public class ItemsActivity extends AppCompatActivity {
         System.out.println("Price = " + spent);
 
 
-
+        //SPENT
         spent = spent + list.getSpent();
         BigDecimal bd = new BigDecimal(spent).setScale(2, RoundingMode.HALF_EVEN);
         spent = bd.doubleValue();
         list.setSpent(spent);
 
         listManager.update(list);
+        String sSpent = spent+" €";
+        textViewSpent.setText(sSpent);
+
         System.out.println("TAILLE CORESS : " + analyseData.getCorrespondanceTable().size());
         for(int i = 0; i<analyseData.getCorrespondanceTable().size(); i++) {
             for(int j = 0; j<analyseData.getCorrespondanceTable().get(i).size(); j++) {
