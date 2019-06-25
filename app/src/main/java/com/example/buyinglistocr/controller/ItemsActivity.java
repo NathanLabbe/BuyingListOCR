@@ -55,6 +55,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -601,6 +603,8 @@ public class ItemsActivity extends AppCompatActivity {
 
         //ici on veut ajouter le spent du ticket et de la list
         spent = spent + lists.getSpent();
+        BigDecimal bd = new BigDecimal(spent).setScale(2, RoundingMode.HALF_EVEN);
+        spent = bd.doubleValue();
         lists.setSpent(spent);
         listManager.update(lists);
 

@@ -377,8 +377,7 @@ public class AnalyseData {
 
         }
 
-        BigDecimal bd = new BigDecimal(spent).setScale(2, RoundingMode.HALF_EVEN);
-        spent = bd.doubleValue();
+
         return spent;
     }
 
