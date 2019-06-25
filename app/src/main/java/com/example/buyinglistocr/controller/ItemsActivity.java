@@ -55,8 +55,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -109,7 +107,7 @@ public class ItemsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(list.getName());
 
         TextView textViewSpent = findViewById(R.id.textViewSpent);
-        textViewSpent.setText(textViewSpent.getText() + " " + list.getSpent());
+        textViewSpent.setText(textViewSpent.getText() + " " + list.getSpent()+" €");
 
         items = new ArrayList<>();
 
@@ -531,7 +529,9 @@ public class ItemsActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+        System.out.println("RECREATE");
         recreate();
+        System.out.println("RECREATE 2");
     }
 
     //ORIENTATION BITMAP
@@ -589,25 +589,13 @@ public class ItemsActivity extends AppCompatActivity {
         //Ici on récupere le spent du ticket
         double spent = analyseData.removePurchase(analyseData.getCorrespondanceTable());
         System.out.println("REMOVEPURCHASE");
+        System.out.println("Price = " + spent);
 
-        List lists = null;
 
 
-        //ici on veut recup la liste
-        listManager.get(SharedPreferencesList.getInstance(ItemsActivity.this).getId(), new VolleyCallback() {
-            @Override
-            public void onSuccess(String response) {
-
-            }
-        });
-
-        //ici on veut ajouter le spent du ticket et de la list
-        spent = spent + lists.getSpent();
-        BigDecimal bd = new BigDecimal(spent).setScale(2, RoundingMode.HALF_EVEN);
-        spent = bd.doubleValue();
-        lists.setSpent(spent);
-        listManager.update(lists);
-
+        spent = spent + list.getSpent();
+        list.setSpent(spent);
+        listManager.update(list);
         System.out.println("TAILLE CORESS : " + analyseData.getCorrespondanceTable().size());
         for(int i = 0; i<analyseData.getCorrespondanceTable().size(); i++) {
             for(int j = 0; j<analyseData.getCorrespondanceTable().get(i).size(); j++) {
@@ -630,6 +618,7 @@ public class ItemsActivity extends AppCompatActivity {
         super.onResume();
 
         recyclerView.getAdapter().notifyDataSetChanged();
+
 
     }
 

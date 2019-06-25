@@ -168,6 +168,7 @@ public class AnalyseData {
 
     //Choisit les donnees utiles et le mettre en Table de purchase
     public void clean(String text) {
+        table.clear();
         text= text.replace(',','.');
         String[] tokens = text.split("\\n");
 
@@ -302,6 +303,7 @@ public class AnalyseData {
      * @param table
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
+        correspondanceTable.clear();
         System.out.println("JE SUIS RENTRE DANS TTC");
         //private ArrayList<Pair<Product, ArrayList<Correspondence>>> productAndCorrespondences = new ArrayList<>();
         for (int k = 0; k<productAndCorrespondences.size(); k++) {
@@ -351,7 +353,7 @@ public class AnalyseData {
                 for (int k = 0; k < correspondenceTable.get(i).size(); k++) {
                     System.out.println("R : Taille coress 2 :  "+ correspondenceTable.get(i).size());
                     if (correspondenceTable.get(i).get(k).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())) {
-                        System.out.println("CORRESS = "+correspondenceTable.get(i).get(k).getName().toLowerCase()+"////ITEM = "+items.get(i).getName().toLowerCase());
+                        System.out.println("CORRESS = "+correspondenceTable.get(i).get(k).getName().toLowerCase()+"////ITEM = "+items.get(j).getName().toLowerCase());
                         System.out.println("ITEM = CORRES");
                         if (items.get(j).getQuantityGot() < items.get(j).getQuantityDesired()) {
                             items.get(j).setQuantityGot(items.get(j).getQuantityGot() + 1);
