@@ -1,5 +1,9 @@
 package com.example.buyinglistocr.model;
 
+import java.math.RoundingMode;
+import java.math.BigDecimal;
+
+
 import android.content.Context;
 import android.util.Pair;
 import android.widget.Toast;
@@ -372,6 +376,9 @@ public class AnalyseData {
             }
 
         }
+
+        BigDecimal bd = new BigDecimal(spent).setScale(2, RoundingMode.HALF_EVEN);
+        spent = bd.doubleValue();
         return spent;
     }
 

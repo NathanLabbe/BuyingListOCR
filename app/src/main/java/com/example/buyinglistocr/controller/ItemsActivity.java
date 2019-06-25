@@ -592,18 +592,18 @@ public class ItemsActivity extends AppCompatActivity {
 
 
         //ici on veut recup la liste
-        /**listManager.get(SharedPreferencesList.getInstance(ItemsActivity.this).getId(), new VolleyCallback() {
+        listManager.get(SharedPreferencesList.getInstance(ItemsActivity.this).getId(), new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
 
             }
         });
 
-         ici on veut ajouter le spent du ticket et de la list
+        //ici on veut ajouter le spent du ticket et de la list
         spent = spent + lists.getSpent();
         lists.setSpent(spent);
         listManager.update(lists);
-         */
+
         System.out.println("TAILLE CORESS : " + analyseData.getCorrespondanceTable().size());
         for(int i = 0; i<analyseData.getCorrespondanceTable().size(); i++) {
             for(int j = 0; j<analyseData.getCorrespondanceTable().get(i).size(); j++) {
