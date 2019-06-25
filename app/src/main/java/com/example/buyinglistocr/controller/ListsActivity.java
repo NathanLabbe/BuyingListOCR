@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.buyinglistocr.R;
-import com.example.buyinglistocr.Tmp.AddCorres;
 import com.example.buyinglistocr.model.List;
 import com.example.buyinglistocr.model.ListManager;
 import com.example.buyinglistocr.model.SharedPreferencesList;
@@ -129,12 +128,6 @@ public class ListsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.itemParticipate) {
-
-            Intent ParticipateIntent = new Intent(ListsActivity.this, AddCorres.class);
-            startActivity(ParticipateIntent);
-
-        }
 
         return super.onOptionsItemSelected(item);
 
