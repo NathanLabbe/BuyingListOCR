@@ -16,8 +16,9 @@ Take a picture to validate products in a list
 Create a user group to share lists between users  
 Feed the database linked to a store's products directly from the application
 ## Build with
-Android studio - devellopement  
-TessTwo (Tesseract fork) - OCR
+Android studio - devellopement (java)  
+TessTwo (Tesseract fork) - OCR  
+Php and MySQL
 ## License
 This project is licensed under the terms of the MIT license.
 ## Autors
