@@ -42,7 +42,7 @@
         <activity
             android:name=".controller.PreferenceActivity"
             android:parentActivityName=".controller.ListsActivity"/>
-            <!--android:label="@string/preference"-->
+
 
 
 
