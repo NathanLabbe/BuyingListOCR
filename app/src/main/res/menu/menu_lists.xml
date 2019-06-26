@@ -5,10 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/itemParticipate"
+        android:id="@+id/Settings"
         android:orderInCategory="100"
-        android:title="Participate"
-        android:icon="@drawable/ic_send_black_24dp"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="always"/>
 
 </menu>

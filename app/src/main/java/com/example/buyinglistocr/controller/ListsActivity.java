@@ -128,6 +128,20 @@ public class ListsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        switch (item.getItemId()){
+
+            case R.id.Settings:
+
+
+                Intent intent = new Intent(ListsActivity.this, PreferenceActivity.class);
+                startActivity(intent);
+
+
+                break;
+
+
+
+        }
 
         return super.onOptionsItemSelected(item);
 

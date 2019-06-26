@@ -39,6 +39,13 @@
 
         <activity android:name=".controller.ItemsActivity"
                   android:parentActivityName=".controller.ListsActivity"/>
+        <activity
+            android:name=".controller.PreferenceActivity"
+            android:parentActivityName=".controller.ListsActivity"/>
+            <!--android:label="@string/preference"-->
+
+
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

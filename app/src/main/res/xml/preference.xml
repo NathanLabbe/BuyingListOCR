@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <PreferenceCategory android:title="OCR Settings">
+
+        <CheckBoxPreference
+            android:key="checkBoxPref"
+            android:title="90° rotation"
+            android:summaryOn="Allows to operate the OCR with samsung devices"
+            android:summaryOff="Allows to operate the OCR with samsung devices"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
