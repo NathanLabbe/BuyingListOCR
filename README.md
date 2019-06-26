@@ -18,6 +18,8 @@ Feed the database linked to a store's products directly from the application
 ## Build with
 Android studio - devellopement  
 TessTwo (Tesseract fork) - OCR
+## License
+This project is licensed under the terms of the MIT license.
 ## Autors
 Nathan Labbe  
 Bastien Ricard  
