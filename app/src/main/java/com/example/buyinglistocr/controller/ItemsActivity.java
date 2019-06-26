@@ -534,16 +534,13 @@ public class ItemsActivity extends AppCompatActivity {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = false;
             options.inSampleSize = 6;
-            System.out.println(options.toString());
 
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, options);
             String result = this.getText(bitmap);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        System.out.println("RECREATE");
         recreate();
-        System.out.println("RECREATE 2");
     }
 
     //ORIENTATION BITMAP
