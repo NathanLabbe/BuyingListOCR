@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,7 +16,6 @@ import com.example.buyinglistocr.R;
 import com.example.buyinglistocr.model.User;
 import com.example.buyinglistocr.model.UserManager;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -65,13 +63,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please, fill all the fields ", Toast.LENGTH_LONG).show();
 
                 } else {
-                    preferences.edit().putString("username",editTextLogin.getText().toString()).commit();
+                    preferences.edit().putString("username",editTextLogin.getText().toString()).apply();
                     if(checkBoxRemember.isChecked()){
-                        preferences.edit().putInt("check",1).commit();
-                        preferences.edit().putString("password",editTextPassword.getText().toString()).commit();
+                        preferences.edit().putInt("check",1).apply();
+                        preferences.edit().putString("password",editTextPassword.getText().toString()).apply();
                     }else{
-                        preferences.edit().putInt("check",0).commit();
-                        preferences.edit().putString("password","").commit();
+                        preferences.edit().putInt("check",0).apply();
+                        preferences.edit().putString("password","").apply();
                     }
                     userManager.login(new User(0, editTextLogin.getText().toString(), editTextPassword.getText().toString(), null));
 

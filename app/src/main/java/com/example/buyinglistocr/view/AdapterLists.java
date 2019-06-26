@@ -20,7 +20,6 @@ public class AdapterLists extends RecyclerView.Adapter<AdapterLists.MyViewHolder
 
     private Context context;
 
-    private RecyclerView rv;
 
     private ArrayList<List> lists;
 

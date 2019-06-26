@@ -11,6 +11,7 @@ import com.example.buyinglistocr.R;
 
 import java.util.Objects;
 
+
 public class PreferenceActivity extends AppCompatActivity {
 
     @Override
@@ -18,9 +19,9 @@ public class PreferenceActivity extends AppCompatActivity {
     {
 
         getLayoutInflater().inflate(R.layout.toolbar, (ViewGroup)findViewById(android.R.id.content));
-        Toolbar toolbar = (Toolbar)findViewById(R.id.tool);
+        Toolbar toolbar = findViewById(R.id.tool);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         getSupportActionBar().setTitle("Settings");
         super.onCreate(savedInstanceState);
