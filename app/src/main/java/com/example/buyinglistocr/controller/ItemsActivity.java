@@ -568,8 +568,10 @@ public class ItemsActivity extends AppCompatActivity {
         String dataPath = getExternalFilesDir("/").getPath() + "/";
         tessBaseAPI.init(dataPath, "fra",TessBaseAPI.OEM_TESSERACT_ONLY);
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "aàAbBcçCdDeEéèêfFgGhHiIjJkKlLmMnNoôOpPqQrRsStTuùUvVwWxXyYzZ1234567890°\',.;+*-_%/ ");
-        /**
-         * Selon le téléphone commentez
+
+
+        /**Preference pour rotation image OCR samsung
+         *
          */
         if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("checkBoxPref",false)){
         tessBaseAPI.setImage(rotateBitmap(bitmap, 90));

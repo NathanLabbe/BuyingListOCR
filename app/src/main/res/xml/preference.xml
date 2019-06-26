@@ -13,6 +13,7 @@
             android:summaryOff="Allows to operate the OCR with samsung devices"
             android:defaultValue="false"/>
 
+
     </PreferenceCategory>
 
 </PreferenceScreen>
