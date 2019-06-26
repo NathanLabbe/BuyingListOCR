@@ -139,27 +139,6 @@ public class AnalyseData {
 
         }
 
-
-        /*
-
-        for(Product product : productAndCorrespondences.)
-
-        for (Product product : productAndCorrespondences.keySet()) {
-
-            System.out.println(" - " + product.getId() + " " + product.getName() + " " + product.getIdShop());
-
-        }
-
-        for(ArrayList<Correspondence> arrayList : productAndCorrespondences.values()) {
-
-            for(int i = 0 ; i < arrayList.size() ; i++) {
-
-                System.out.println(" - " + arrayList.get(i).getId() + " " + arrayList.get(i).getName());
-
-            }
-
-        }*/
-
         return null;
 
     }
@@ -302,13 +281,9 @@ public class AnalyseData {
      */
     public void tableToCorrespondenceTable (ArrayList<Purchase> table){
         correspondanceTable.clear();
-        System.out.println("JE SUIS RENTRE DANS TTC");
-        //private ArrayList<Pair<Product, ArrayList<Correspondence>>> productAndCorrespondences = new ArrayList<>();
         for (int k = 0; k<productAndCorrespondences.size(); k++) {
             for(int i = 0; i < table.size(); i++) {
                 if (HammList(table.get(i).getName(), productAndCorrespondences.get(k).first.getName())) {
-                    System.out.println(table.get(i).getName() +" //// "+productAndCorrespondences.get(k).first.getName());
-                    System.out.println("CA CORRESPOND");
                     for(int j = 0; j < productAndCorrespondences.get(k).second.size(); j++){
                         System.out.println("size second :" + productAndCorrespondences.get(k).second.size());
                         ArrayList<Purchase> tmp = new ArrayList<>();
@@ -345,30 +320,20 @@ public class AnalyseData {
         double spent = 0.0;
         System.out.println("ITEM MANAGER GET");
         for (int i = 0; i < correspondenceTable.size(); i++) {
-            System.out.println("R : Taille coress :  "+ correspondenceTable.size());
             for (int j = 0; j < items.size(); j++) {
-                System.out.println("R : Taille items :  "+ items.size());
                 for (int k = 0; k < correspondenceTable.get(i).size(); k++) {
-                    System.out.println("R : Taille coress 2 :  "+ correspondenceTable.get(i).size());
                     if (correspondenceTable.get(i).get(k).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())) {
-                        System.out.println("CORRESS = "+correspondenceTable.get(i).get(k).getName().toLowerCase()+"////ITEM = "+items.get(j).getName().toLowerCase());
-                        System.out.println("ITEM = CORRES");
                         if (items.get(j).getQuantityGot() < items.get(j).getQuantityDesired()) {
                             items.get(j).setQuantityGot(items.get(j).getQuantityGot() + 1);
                             itemManager.update(items.get(j));
-                            //System.out.println(items.get(j).getName() + " : " + items.get(j).getQuantityGot());
                             if (items.get(j).getQuantityGot() == items.get(j).getQuantityDesired()) {
-
                                 items.get(j).setStatus(1);
                                 itemManager.update(items.get(j));
                             }
                             spent = spent + correspondenceTable.get(i).get(k).getPrice();
-                            //System.out.printf("Your spent is %s%n", spent);
                         } else if (items.get(j).getStatus() != 1) {
                             items.get(j).setStatus(1);
                             itemManager.update(items.get(j));
-                        } else {
-                            //System.out.println(items.get(j).getName() + " STATUT : " + items.get(j).getStatus());
                         }
                         break;
                     }
