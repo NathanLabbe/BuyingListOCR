@@ -309,9 +309,6 @@ public class ItemsActivity extends AppCompatActivity {
 
                 break;
 
-            case R.id.itemShare:
-
-                break;
 
         }
 
