@@ -594,19 +594,13 @@ public class ItemsActivity extends AppCompatActivity {
         analyseData.setTextBrut(retStr);
         analyseData.setItems(items);
 
-        //AnalyseData test = new AnalyseData(retStr, ItemsActivity.this, list.getId());
-        System.out.println("IdList is : "+list.getId());
         System.out.println(analyseData.getTextBrut());
 
         analyseData.clean(analyseData.getTextBrut());
-        System.out.println("CLEAN");
         analyseData.tableToCorrespondenceTable(analyseData.getTable());
-        System.out.println("TABLETOCORESS");
 
         //Ici on récupere le spent du ticket
         double spent = analyseData.removePurchase(analyseData.getCorrespondanceTable());
-        System.out.println("REMOVEPURCHASE");
-        System.out.println("Price = " + spent);
 
         //SPENT
         spent = spent + list.getSpent();
