@@ -604,14 +604,15 @@ public class ItemsActivity extends AppCompatActivity {
         System.out.println("REMOVEPURCHASE");
         System.out.println("Price = " + spent);
 
-
         //SPENT
         spent = spent + list.getSpent();
         BigDecimal bd = new BigDecimal(spent).setScale(2, RoundingMode.HALF_EVEN);
         spent = bd.doubleValue();
         list.setSpent(spent);
+        SharedPreferencesList.getInstance(ItemsActivity.this).setList(list);
 
         listManager.update(list);
+
         String sSpent = spent+" €";
         textViewSpent.setText(sSpent);
 
