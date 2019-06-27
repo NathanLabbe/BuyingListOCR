@@ -118,7 +118,6 @@ public class ItemsActivity extends AppCompatActivity {
         java.text.DecimalFormat df = new java.text.DecimalFormat("0.##");
         textViewSpent = findViewById(R.id.textViewSpent);
         textViewSpent.setText(textViewSpent.getText() + " " + df.format(list.getSpent())+" €");
-        System.out.println(textViewSpent.getText());
 
 
 
@@ -588,7 +587,6 @@ public class ItemsActivity extends AppCompatActivity {
         analyseData.setTextBrut(retStr);
         analyseData.setItems(items);
 
-        System.out.println(analyseData.getTextBrut());
 
         analyseData.clean(analyseData.getTextBrut());
         analyseData.tableToCorrespondenceTable(analyseData.getTable());
@@ -608,12 +606,7 @@ public class ItemsActivity extends AppCompatActivity {
         String sSpent = spent+" €";
         textViewSpent.setText(sSpent);
 
-        System.out.println("TAILLE CORESS : " + analyseData.getCorrespondanceTable().size());
-        for(int i = 0; i<analyseData.getCorrespondanceTable().size(); i++) {
-            for(int j = 0; j<analyseData.getCorrespondanceTable().get(i).size(); j++) {
-                System.out.println("Element TABLE CORRES numéro " + i + " " + analyseData.getCorrespondanceTable().get(i).get(j).getName());
-            }
-        }
+
 
 
 

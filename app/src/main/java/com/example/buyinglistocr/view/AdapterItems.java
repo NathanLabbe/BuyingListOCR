@@ -91,6 +91,7 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
             itemManager = new ItemManager(context);
 
             checkBox = itemView.findViewById(R.id.checkBox);
+
             checkBox.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -99,7 +100,6 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     if(checkBox.isChecked()){
 
                         item.setStatus(1);
-                        //Pourquoi ? item.setQuantityGot(item.getQuantityDesired());
 
                         itemManager.update(item);
 
@@ -112,7 +112,6 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     } else {
 
                         item.setStatus(0);
-                        //POURQUOI ? item.setQuantityGot(0);
 
                         itemManager.update(item);
 
@@ -123,7 +122,11 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                         name.setText(sampleText);
 
                     }
-
+                    if(item.getStatus()==1){
+                        checkBox.setChecked(true);
+                    }else{
+                        checkBox.setChecked(false);
+                    }
                 }
 
             });
@@ -192,9 +195,8 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                         itemManager.update(item);
 
                         if(item.getQuantityGot() == item.getQuantityDesired()) {
-
-                            item.setStatus(1);
-                            itemManager.update(item);
+                                item.setStatus(1);
+                                itemManager.update(item);
 
                         }
 
@@ -203,9 +205,15 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     } else {
 
                         Toast.makeText(context, "Already max", Toast.LENGTH_LONG).show();
+                        itemManager.update(item);
+
 
                     }
-
+                    if(item.getStatus()==1){
+                        checkBox.setChecked(true);
+                    }else{
+                        checkBox.setChecked(false);
+                    }
                 }
 
             }));
@@ -219,9 +227,8 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                     if(item.getQuantityGot() > 0){
 
                         if(item.getQuantityGot() == item.getQuantityDesired()){
-
-                            item.setStatus(0);
-                            checkBox.setChecked(false);
+                                item.setStatus(0);
+                                checkBox.setChecked(false);
 
                         }
 
@@ -263,7 +270,11 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                                 .show();
 
                     }
-
+                    if(item.getStatus()==1){
+                        checkBox.setChecked(true);
+                    }else{
+                        checkBox.setChecked(false);
+                    }
                 }
 
             });
@@ -281,22 +292,31 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
 
                 checkBox.setChecked(true);
 
-                String sampleText = name.getText().toString();
+                String sampleText = this.item.getName() + " (" + this.item.getQuantityDesired() + "/" + this.item.getQuantityDesired() + ") ";
+
 
                 name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 name.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
                 name.setText(sampleText);
+                itemManager.update(item);
+
 
             } else {
 
-                String sampleText = name.getText().toString();
+                String sampleText = this.item.getName() + " (" + this.item.getQuantityGot() + "/" + this.item.getQuantityDesired() + ") ";
 
                 name.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
                 name.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                 name.setText(sampleText);
+                itemManager.update(item);
+
 
             }
-
+            if(item.getStatus()==1){
+                checkBox.setChecked(true);
+            }else{
+                checkBox.setChecked(false);
+            }
         }
 
         void showAlertDialogButtonClicked() {
@@ -335,7 +355,6 @@ public class AdapterItems extends RecyclerView.Adapter<AdapterItems.MyViewHolder
                             item.setStatus(1);
                         }
                     }
-                        // pourquoi ? item.setQuantityGot(0);
 
 
                     itemManager.update(item);
