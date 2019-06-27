@@ -165,11 +165,11 @@ public class AnalyseData {
                     nom = nom + " " + ligne[k];
                 }
                 String[] ligne2 = tokens[j+1].split(" ");
-                if (ligne2.length > 2 && ligne2[1].equals("kg")) {
-                        prix = Double.parseDouble(ligne2[ligne2.length - 3]);
-                        j++;
-                        Purchase p = new Purchase(nom, prix, 1);// quantite defaut
-                        table.add(p);
+                if (ligne2.length > 2 && (ligne2[1].equals("kg") || ligne2[1].equals("x") || ligne2[1].equals("X"))) {
+                    prix = Double.parseDouble(ligne2[ligne2.length - 3]);
+                    j++;
+                    Purchase p = new Purchase(nom, prix, 1);// quantite defaut
+                    table.add(p);
                 }
             }
         }
@@ -246,6 +246,8 @@ public class AnalyseData {
 
     // Hamming pour une list des mots
     public boolean HammList(String s1, String s2){
+        s1 = s1.toLowerCase();
+        s2 = s2.toLowerCase();
         int res = 0;
 
         String h1 = "";
@@ -258,7 +260,7 @@ public class AnalyseData {
         }
         int longeur1 = h1.split(" ").length;
         int longeur2 = s2.split(" ").length;
-        if (Math.abs(longeur1 - longeur2) > 1){
+        if (Math.abs(longeur1 - longeur2) >= 1){
             return false;
         }
         String[] token1 = h1.split(" ");
@@ -283,7 +285,9 @@ public class AnalyseData {
         correspondanceTable.clear();
         for (int k = 0; k<productAndCorrespondences.size(); k++) {
             for(int i = 0; i < table.size(); i++) {
+                System.out.println("CORRESSPONDANCE : " +table.get(i).getName() +"////"+productAndCorrespondences.get(k).first.getName());
                 if (HammList(table.get(i).getName(), productAndCorrespondences.get(k).first.getName())) {
+
                     for(int j = 0; j < productAndCorrespondences.get(k).second.size(); j++){
                         System.out.println("size second :" + productAndCorrespondences.get(k).second.size());
                         ArrayList<Purchase> tmp = new ArrayList<>();
@@ -322,7 +326,9 @@ public class AnalyseData {
         for (int i = 0; i < correspondenceTable.size(); i++) {
             for (int j = 0; j < items.size(); j++) {
                 for (int k = 0; k < correspondenceTable.get(i).size(); k++) {
+                    System.out.println(correspondenceTable.get(i).get(k).getName().toLowerCase()+"/////"+items.get(j).getName().toLowerCase());
                     if (correspondenceTable.get(i).get(k).getName().toLowerCase().equals(items.get(j).getName().toLowerCase())) {
+
                         if (items.get(j).getQuantityGot() < items.get(j).getQuantityDesired()) {
                             items.get(j).setQuantityGot(items.get(j).getQuantityGot() + 1);
                             itemManager.update(items.get(j));
