@@ -20,7 +20,7 @@ Android studio - devellopement (java)
 TessTwo (Tesseract fork) - OCR  
 Php and MySQL
 ## License
-This project is licensed under the terms of the MIT license.
+This project is licensed under CC-BY-NC
 ## Autors
 Nathan Labbe  
 Bastien Ricard  
