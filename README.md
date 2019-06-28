@@ -1,4 +1,4 @@
-# BuyingListOCR
+# ScanTicket
 A shared shoping list application with an OCR feature.  
 The application looks like a classic shopping list application but you can take a picture of your receipt to automatically delete your items and calculate how much they costed.
 Présentation : https://drive.google.com/drive/folders/1myXAS06udcCQ1U8i9OePGioUV6cP9nrr?usp=sharing
